@@ -1,0 +1,91 @@
+frontend
+  -create reactive form with ngsubmit
+  -import reactive and form module with ts form group with control.
+  -create service using "ng g s name" and use in constructor with function.
+backend
+  -create folder and open with command
+  -use command "npm init"
+  -user cmd "npm i express mongoose body-parser --save"
+  -create db.js file in this and past to connect db
+	const mongoose=require('mongoose');
+	mongoose.connect('mongodb://localhost:27017/Crud',(err) => {
+    		if(!err)
+  		 console.log('connection successfull');
+    		else
+		 console.log('mongodb error'+JSON.stringify(err,undefined,2));
+	});
+
+	module.exports=mongoose;
+
+  -npm i -g nodemon
+  -Create file which is provided in package.json as index.js and paste same
+	const express=require('express');
+	const bodyParser=require('body-parser');
+	const {mongoose}=require('./db.js');
+	var app=express();
+	app.use(bodyParser.json());
+	app.listen(3000,()=>console.log('server started at 3000 port !!!'));
+
+	or for cor access control
+
+	const express = require('express');
+	const bodyParser = require('body-parser');
+	const { mongoose } = require('./db.js');
+	var productController = require('./controllers/productController.js');
+	var app = express();
+	app.use(bodyParser.json());
+	app.listen(3000, () => console.log('server started at 3000 port !!!'));
+	app.use('/api', productController)
+
+	const http = require('http');
+
+	const hostname = '127.0.0.1';
+	const port = 3000;
+	const server = http.createServer((req, res) => {
+	    res.statusCode = 200;
+	    res.setHeader('Content-Type', 'text/plain');
+	    res.setHeader("Access-Control-Allow-Origin", "*");
+	    res.setHeader("Access-Control-Allow-Methods", "OPTIONS,POST,GET,DELETE");
+	    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+	    res.end('Hello World');
+	});
+	server.listen(port, hostname, () => {
+	    console.log(`Server running at http://${hostname}:${port}/`);
+	});
+
+
+  -Create models folder with inside file and paste the same below
+ 	const mongoos=require('mongoose');
+	var Product=mongoos.model('Product',{
+    		name:{ type: String},
+		email:{ type: String},
+		mobile:{ type: Number},
+		price:{ type: Number},
+	});
+	module.exports=Product;
+
+  -Create controllers folder with inside file and paste same
+
+ 	const express=require('express');
+	var router=express.Router();
+	var {Product}=require('../models/product');
+	router.get('/',(req,res) => {
+	Product.find((req,docs)=>{
+	    if(!err){
+        	req.send(docs);
+	    }else{
+        	console.log('error to retrive : '+JSON.stringify(err,undefined,2))
+	    }      
+	});
+	});
+ 	module.exports=router;
+ 	
+-If you are submitting form and service api getting error as cors policy origin then give environment as 127.0.0.1 and backend index.js as same
+
+  -
+  
+
+https://www.fullstack.cafe/blog/top-60-mean-stack-interview-questions-and-answers
+https://mindmajix.com/mean-stack-interview-questions
+https://www.onlineinterviewquestions.com/mean-stack-interview-questions/
+	

@@ -1,0 +1,224 @@
+
+Logic COde************************************************************
+
+var a = [5,1,4], count = 5;
+var missing = new Array();
+
+for(var i=1;i<=count;i++) {
+    if(a.indexOf(i) == -1){
+        missing.push(i);
+    }
+}
+console.log(missing);
+
+_________Recursive 1 to 10___
+
+function print_recursive(n){
+    document.write(n);
+    if (n < 10)
+        print_recursive(n+1);
+   
+}
+print_recursive(1);
+_____________________________Reverse
+
+    function reverse(array) {
+      var output = [];
+      while (array.length) {
+        output.push(array.pop());
+      }
+      return output;
+    }
+    console.log(reverse([1, 2, 3, 4, 5, 6, 7]));
+
+    ________OR____________
+
+    var x = [5,2,4,5,5,2,4];
+
+    function reverse (a) {
+    var b = [], counter = 0;
+    for (var i = a.length-1; i >= 0; i -= 1) {
+    b[counter] = a[i];
+    counter += 1;
+    }
+    return b;
+    }
+
+    console.log(reverse(x));
+
+
+
+
+
+
+    ____count number_________________
+function letterFrequency(text){
+ var count = {};
+ text.split('').forEach(function(s) {
+  count[s] = count[s] ? count[s]+1 : 1;
+ });
+ return count;
+}
+
+
+console.log(letterFrequency('ssddffgghhjjkkaabbssddffgrghhrreg aa ss'));
+
+
+<!-- Remove duplicates -->
+
+var arr=[2,1,2,3,2,1];
+var b=[];
+for(i=0;i<arr.length;i++){
+if(b.indexOf(arr[i])===-1){
+b.push(arr[i]);
+}
+}
+console.log(b);
+
+
+_________________________
+
+
+-String interpolation: In Angular, String interpolation is used to display dynamic data on HTML template (at user end). It facilitates you to make changes on component.ts file and fetch data from there to HTML template (component.html file).
+
+-Annotation and a decorator :In Angular, annotations are used for creating an annotation array. They are only metadata set of the class using the Reflect Metadata library. Decorators in Angular are design patterns used for separating decoration or modification of some class without changing the original source code.
+
+-Filter: formatting the value of an expression in order to display it to the user.
+
+-HttpClient API Features: A RESTful APIs is used HttpClient requests to GET, PUT, POST and DELETE data. All communication must be stateless and cacheable.
+
+    -Observable Support
+    -Hassle Free API Testing
+    -Smooth Requests & Response Mechanism
+    -Better Error Handling
+
+-controllers: Controllers are JavaScript functions which provide data and logic to HTML UI.
+
+-What is a directive? A directive allows you to attach a behavior to DOM elements. This behavior could be as simple or as complex as you'd like. *ngFor and *ngIf are examples of built-in directives in Angular
+    Component Directives
+    Structural Directives
+    Attribute Directives
+
+-Diffrent Angular and jQuery
+    -RESTful API   
+    -Deep Linking Routing   
+    -Form Validation   
+    -Two Way Data Binding.   
+
+-Just-in-Time (JIT), compiles your app in the browser at runtime.
+-Ahead-of-Time (AOT), compiles your app at build time on the server.
+-Dependency Injection (DI) is a way to create objects that depend on the other objects.
+
+-Between one-way binding and two-way data binding:
+     -In One-Way data binding, the View or the UI part does not update automatically whenever the data model changes. You need to manually write custom code in order to update it every time the view changes.
+     -Whereas, in Two-way data binding, the View or the UI part is updated implicitly as soon as the data model changes. It is a synchronization process, unlike One-way data binding.
+-
+
+
+
+
+
+http://bipinjoshi.net/articles/5d8be0b6-e294-457e-82b0-ba7cc10cae0e.aspx
+https://www.javatpoint.com/javascript-this-keyword
+https://flaviocopes.com/javascript-functional-programming/#higher-order-functions
+
+
+
+
+
+**************************************************************************************
+DESC order
+_______________________
+
+var arr=[12,223,3,2,323,32,3,43,33,2,234,43,42];
+function testdata(){
+  for(var i=1;i< arr.length;i++){
+  var tmp=arr[i];
+  for(var j=i-1;j>=0 && (arr[j]< tmp);j--){
+    arr[j+1]=arr[j];
+  }
+  arr[j+1]=tmp;
+}
+}
+testdata();
+console.log(arr);
+___________________________
+var array=[12,223,3,2,323,32,3,43,33,2,234,43,42];
+function testdata() {
+    for (var i = 1; i < array.length; i++) {
+        var tmp = array[i];
+        for (var j = i - 1; j >= 0 && (array[j] < tmp); j--) {
+            array[j + 1] = array[j];
+        }
+        array[j + 1] = tmp;
+    }
+}
+testdata();
+console.log(array);
+
+_______________ASC_____________________
+var Arr = [1, 7, 2, 8, 3, 4, 5, 0, 9];
+
+for (var i = 1; i < Arr.length; i++)
+    for (var j = 0; j < i; j++)
+        if (Arr[i] < Arr[j]) {
+          var x = Arr[i];
+          Arr[i] = Arr[j];
+          Arr[j] = x;
+        }
+
+console.log(Arr);
+
+_______________ASC using function_____________________
+
+var numbers = [1, 5, 12, 3, 7, 15, 9];
+numbers.sort();
+numbers.sort(function(a, b){
+    return a - b; //for asc
+    <!-- return b-a; //for dsc -->
+});
+alert(numbers);
+
+_______________________________________________________
+
+var a=1;
+for (var i = 1; i <= 10; i++){
+console.log(a);
+a=a+1;
+}
+
+for(var i=1; i<=4; i++){
+debugger
+   console.log("*".repeat(i));
+}
+
+
+
+_______________ASC END HERE Triangle_____________________
+  var n=5;
+  for (var i = 0; i < n; i++) {
+    var str = '';
+    for (var j = 1; j < n-i; j++) {
+      str = str + ' ';
+    }
+    for (var k = 1; k <= (2*i+1); k++) {
+      str = str + '*';
+    }
+    console.log(str);
+  }
+
+____count number_________________
+
+function letterFrequency(text){
+ var count = {};
+ text.split('').forEach(function(s) {
+  count[s] = count[s] ? count[s]+1 : 1;
+ });
+ return count;
+}
+
+console.log(letterFrequency('ssddffgghhjjkkaabbssddffgrghhrreg aa ss'));
+
+
+
+**************************************************************************************

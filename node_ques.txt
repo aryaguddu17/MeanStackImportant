@@ -1,0 +1,30 @@
+
+
+    1) What is the Mean Stack?
+      Mean stack is combination of four popular JavaScript-based technologies MongoDB, Express, AngularJS and Node that allows developers to develop complete web applications.
+
+
+    2) What is Express?
+      Express is lightweight web framework for Node.js.It provides robust and scalable solutions to build single and multi-page web application. Express is inspired by Sinatra (Ruby framework).
+
+    3) Explain Mongoose?
+      Mongoose is a MongoDB Object Data Modeling (ODM) library for MongoDB and NodeJS.It provides a straight-forward, schema-based solution to model your application data. It includes built-in typecasting, validation, query building, business logic hooks and more, out of the box.
+
+
+    4) How AngularJS is different from NodeJS.
+    The purpose of Angular and Node Js is totally Different.
+    AngularJS is front-end framework that deals with UI and client side of an application while NodeJs is a runtime environment useful in building server-side applications.
+
+    7) What are the features of Node.js?
+    Node.js is a platform built on Chrome's JavaScript runtime for easily building fast and scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
+
+    Node.js is an open source, cross-platform runtime environment for developing server-side and networking applications.
+
+    Node.js is a single-threaded but highly scalable system that utilizes JavaScript as its scripting language. It uses asynchronous, event-driven I/O instead of separate processes or threads. It is able to achieve high output via single-threaded event loop and non-blocking I/O.
+
+  8)what is middleware in NodeJs
+   Middleware functions are functions that have access to the request object ( req ), the response object ( res ), and the next function in the application's request-response cycle. The next function is a function in the Express router which, when invoked, executes the middleware succeeding the current middleware.
+
+ 10)Socket I/O
+  Socket.IO is a JavaScript library for realtime web applications. It enables realtime, bi-directional communication between web clients and servers. It has two parts: a client-side library that runs in the browser, and a server-side library for Node.js. Both components have a nearly identical API
+

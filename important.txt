@@ -1,0 +1,51 @@
+file.str
+closure (a closure gives you access to an outer function's scope from an inner function. In JavaScript, closures are created every time a function is created, at function creation time)
+hosting (Hoisting is a JavaScript mechanism where variables and function declarations are moved to the top of their scope before code execution.)
+lazy loading(Lazy loading is the process of loading some features of your Angular application only when you navigate to their routes for the first time)
+@viewCHild(excepetion has occured before checked)
+how to load routing and navigation
+diffrentce btween 8 & 9 or 7 & 8(https://www.angularminds.com/blog/article/comparison-between-angular-6-vs-angular-7-vs-angular-8.html)
+authguard (how to use and its method)
+authguard canactive and its method
+css
+boostrap and its classes
+
+
+
+https://medium.com/@vigowebs/frequently-asked-angular-interview-questions-and-answers-d996be87cc7c
+https://www.edureka.co/blog/interview-questions/top-angularjs-interview-questions-2016/
+
+https://github.com/sudheerj/angular-interview-questions
+https://hackr.io/blog/angular-interview-questions
+
+
+
+https://www.fullstack.cafe/blog/top-60-mean-stack-interview-questions-and-answers
+https://mindmajix.com/mean-stack-interview-questions
+https://www.onlineinterviewquestions.com/mean-stack-interview-questions/
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

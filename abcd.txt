@@ -1,0 +1,226 @@
+HTML
+css
+bootstrap
+JavaScript
+codeExaple like null vs undefind
+
+
+promises and observables:
+ -Promises deal with one asynchronous event at a time, while observables handle a sequence of asynchronous events over a period of time
+ -computation does not start until subscription. Promises execute immediately on creation.
+ -promises have only then() method which can return either success or fail but in observables having retry() in case of fail,subscribe(),map(),forEach, and filter(),reply(), retryWhen(), delay()
+ -observables Deliver errors to the subscribers where as promises Push errors to the child promises.
+
+Data sharing or Coponent interaction in angular
+  -https://levelup.gitconnected.com/5-ways-to-share-data-between-angular-components-d656a7eb7f96
+  -https://fireship.io/lessons/sharing-data-between-angular-components-four-methods/
+
+
+Local Storage and Session Storage
+-Generally browsers provides upto 5-10MB of storage space.
+-WebStorages cannot access subdomain and/or parent domain.
+localStorage:
+  -localStorage stores information as long as the user does not delete them.
+  -Data stored in localStorage is accessible thought all pages under same domain, until user does not delete it manually. Even though user closes the browser, data will be accessible next time.
+  syntax:
+  -localStorage.setItem('ProductName', 'Mobile');
+  -localStorage.getItem('ProductName');
+  -localStorage.removeItem('ProductName');
+  -localStorage.clear():(This will remove all the sessionStorage storage for current page)
+sessionStorage:
+ -sessionStorage stores information as long as the session goes. Usually until the user closes the tab/browser.
+ -Session storage is almost same as local storage. Only difference is, session storage will get cleared once user will close the browser window.
+ syntax:
+  -sessionStorage.setItem('ProductName', 'Mobile');
+  -sessionStorage.getItem('ProductName');
+  -sessionStorage.removeItem('ProductName');
+  -sessionStorage.clear():(This will remove all the local storage for current domain)
+cookies:
+ -Store information on client side and having size 4kb 
+ -The 4K limit is for the entire cookie, including name, value, expiry date etc. To support most browsers, keep the name under 4000 bytes, and the overall cookie size under 4093 bytes. The data is sent back to the server for every HTTP request (HTML, images, JavaScript, CSS, etc) 
+ - increasing the amount of traffic between client and server.We can set the expiration time for each cookie
+ -browser does not create cookie on incognito mode
+
+
+lazy loading:
+ -Lazy loading is the process of loading some features of your Angular application only when you navigate to their routes for the first time
+ -Lazy Loading is the technique of loading the module or data on demand. It helps us to better the application performance and reduce the initial bundle size of our files. The initial page loads faster and we can also split the application into the logic chunks which can be loaded on demand.
+
+Angular Auth Guards:
+ -Angular Auth Guards add authentication layer which helps in preventing loading of components in various scenarios like Login authentication, permission-based      authentication etc. We can add checks before loading components using Angular guards which are of four types
+    -CanActivate: Checks route navigation before the component is loaded.
+    -CanActivateChild: Checks route children navigation before the component is loaded.
+    -CanDeactivate: Checks navigation from the current route eg leaving the partially filled form.
+    -Resolve: Resolve loads/ retrieves data before the route is activated.
+    -CanLoad: Checks to see if a user can route to a module that lazy-loaded.
+
+What is component decorators in Angular 4?
+    The main objectives of decorators is to add some metadata to the class that will tell Angular 4 how to process a class. Or in another words, Decorators are functions that modify JavaScript classes. Angular has many decorators that attach metadata to classes so that it knows what those classes mean and how they should work.
+    If we consider Component in Angular 4, we will have following options to configure.
+    
+    selector: — define the name of the HTML element in which our component will live.
+    template or templateUrl: — It can be inline string or link an external html file. It allows us to tie logic from our component directly to a view.
+    styles: — the styles array for our specific component. We can also link external CSS by styleUrls.
+    directives: — another component directives we want to use inside our components.
+    providers: — This is the place we are passing the services that we need insider our components.
+
+What is @NgModule?
+    An NgModule class describes how the application parts fit together. Every application has at least one NgModule, the root module that we bootstrap to launch the application.
+  -The NgModule decorator has five important(among all) options
+    The imports option is used to import other dependent modules. The BrowserModule is required by default for any web based angular application
+    The declarations option is used to define components in the respective module
+    The bootstrap option tells Angular which Component to bootstrap in the application
+    The providers option is used to configure set of injectable objects that are available in the injector of this module.
+    The entryComponents option is a set of components dynamically loaded into the view.
+what is module
+ -Modules are logical boundaries in your application and the application is divided into separate modules to separate the functionality of your application
+  
+
+What are all the types of Directives?
+    There are three types of directives in Angular. 
+    They are attribute directives, structural directives, and components.
+    -Structural directives change the DOM layout by adding and removing DOM elements. For example, *ngIf and *ngFor
+    -Attribute directives change the appearance or behavior of an element. . For example, *ngStyle and *ngClass
+    -Components are basically directives with a template.
+
+
+Angular 6 Vs Angular 7 Vs Angular 8 Vs Angular 9
+  Some Major updates in Angular 6
+    -Typescript 2.7.x supports
+    -Improved decorator error messages 
+    -Added Optional generic type for ElementRef
+    -Updates on NgModelChange
+    -Enable size tracking of a minimal CLI render3 application
+    -Add canonical view query
+    -<ng-template> now becomes <template>
+
+  Some Major updates in Angular 7
+    -Angular 7 now supporting to TypeScript 3.1
+    -Added a new ability to recover from malformed URLs
+    -Downloadable console for starting and running Angular projects on your local machine
+    -compiler-cli: update tsickle to 0.29.x
+    -Export defaultKeyValueDiffers to private API 
+
+  Major features included in Angular 8
+    -Updated Typescript to 3.4.x
+    -AngularJS API Migration Improvements with $location service
+    -@angular/platform-webworker and@angular/platform-webworker-dynamic both the packages are deprecated
+    -@angular/http removed from the list of packages
+    -ng-build, ng-test, and ng-run are equipped to be extended by 3rd-party libraries and tool.
+    -The ViewChild and ContentChild decorators now must have a new option called static.
+
+  Major updates in Angular 9
+    -Updated to Typescript 3.7
+    -Selector-less directives were already supported in the old version but were missing in the Ivy preview in Angular 8. This has now been added to Angular 9.
+    -The AOT builds will be noticeably faster ensuring a significant change in the compiler's performance.
+    -With IVY we see an improvement in the build error. It gives less time for the builds to complete enabling all the error messages easier to read.
+    -The deprecated versioned files option for service workers in the service worker asset group config has been removed.
+    -The ViewEngine in this version translates the templates and components into regular HTML and JavaScript for the browser can interpret and display them.
+
+
+
+
+
+
+closure 
+ -a closure gives you access to an outer function's scope from an inner function. In JavaScript, closures are created every time a function is created, at function creation time
+
+ var add = (function () {
+  var counter = 0;
+  return function () {counter += 1; return counter}
+})();
+
+add();
+add();
+add();
+
+
+hosting 
+ -Hoisting is a JavaScript mechanism where variables and function declarations are moved to the top of their scope before code execution.
+
+
+https://www.guru99.com/javascript-interview-questions-answers.html
+https://www.greycampus.com/blog/programming/top-30-interview-questions-and-answers-on-angular-5
+
+
+ Life Cycle hook:
+  -import { Component, OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy } from '@angular/core';
+    @Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+    })
+    export class AppComponent implements OnChanges, OnInit,
+    DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit,
+    AfterViewChecked, OnDestroy{
+    ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    }
+    ngOnInit(): void {
+    alert("2. on init is called");
+    }
+    ngDoCheck(): void {
+    alert("3. do check is called");
+    }
+    ngAfterContentInit(): void {
+    alert("4. after content init called");
+    }
+    ngAfterContentChecked(): void {
+    alert("5. after content check called");
+    }
+    ngAfterViewInit(): void {
+    alert('6. after view init called');
+    }
+    ngAfterViewChecked(): void {
+    alert('7. after view init checked');
+    }
+    ngOnDestroy(): void {
+    alert('8. on destroy called');
+    }
+    title = 'ngcanvas';
+    constructor(){
+    alert("1. on changes called");
+    }
+    }
+
+
+Question: Explain the difference between an Annotation and a Decorator in Angular?
+Answer: In Angular, annotations are used for creating an annotation array. They are only metadata set of the class using the Reflect Metadata library.
+Decorators in Angular are design patterns used for separating decoration or modification of some class without changing the original source code.
+
+
+
+Authentication VS authorization
+  In simple terms, authentication is the process of verifying who a user is, while authorization is the process of verifying what they have access to. Comparing these processes to a real-world example, when you go through security in an airport, you show your ID to authenticate your identity.
+
+
+
+Socket i/o
+prototype in js
+eventloop in Node
+middleware 
+call back
+multer 
+what is aggrigation in MongoDB
+
+
+
+my name is guddu kumar from siwan bihar,I have completed B.tech with specialization of computer science engineering from JNTUK in the Years of 2017.
+
+and currently Working as a Mean Stack developer in ecommstreet solution private ltd. at noida.
+
+I have 2.6 Years of experience in angular 4 & 7.
+
+My responsibility includes design and development of user interface using Angular 4 & 7
+
+I have a good knowledge of node js & MongoDB having 1 Year plus exp.
+
+apart from it i have also knowledge of javascript,bootstrap,html,css,jquery.
+
+
+**************************************************************************************
+**************************************************************************************
+
+
+SILICON INSTITUTE OF TECHNOLOGY - [SIT], BHUBANESWAR - COURSE & FEES DETAILS
+HALDIA INSTITUTE OF TECHNOLOGY - [HIT], HALDIA - COURSE & FEES DETAILS
+haritage as well 
