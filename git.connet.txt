@@ -5,3 +5,5 @@
 -Add file name or folder which you want to commit "git add filename or folder"
 -git commit -m "add files"
 -git push origin nodeJsConfiguration
+
+important link for git command "https://dont-be-afraid-to-commit.readthedocs.io/en/latest/git/commandlinegit.html"
