@@ -1,0 +1,7 @@
+-git clone https://github.com/aryaguddu17/MeanStackImportant.git
+-Past file what ever you want to change 
+-check status "git status"
+-Add new branch like "git checkout -b nodeJsConfiguration"
+-Add file name or folder which you want to commit "git add filename or folder"
+-git commit -m "add files"
+-git push origin nodeJsConfiguration
