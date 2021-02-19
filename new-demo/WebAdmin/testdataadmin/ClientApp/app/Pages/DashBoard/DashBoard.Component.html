@@ -1,0 +1,585 @@
+<div *ngIf="dashboardview=='1'">
+    <div class="dash-head">
+        <p>Dashboard</p>
+    </div>
+    <div class="cleafrfix"></div>
+    <div class="col-md-12">
+        <div class="new-dash-wrapper">
+            <ul>
+                <li (click)="JobPost('JobPost')" style="cursor: pointer">
+                    <p class="title-bar">Job Posted</p>
+                    <div class="divider-bar divider-bar-1"></div>
+                    <p class="count-bar count-bar-1">{{openingDetails1.jobposted}}</p>
+                </li>
+                <li>
+                    <p class="title-bar">No. of Vacancies</p>
+                    <div class="divider-bar divider-bar-2"></div>
+                    <p class="count-bar count-bar-2">{{openingDetails1.totalVacancy}}</p>
+                </li>
+                <li (click)="JobPost('applicantReciept')">
+                    <p class="title-bar">Application Received</p>
+                    <div class="divider-bar divider-bar-3"></div>
+                    <p class="count-bar count-bar-3">{{openingDetails1.applicantReciept}}</p>
+                </li>
+                <li (click)="JobPost('registeredcandidate')">
+                    <p class="title-bar">Candidate Registration</p>
+                    <div class="divider-bar divider-bar-4"></div>
+                    <p class="count-bar count-bar-4">{{openingDetails1.registeredcandidate}}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="new-dash-wrapper">
+            <ul>
+                <li (click)="JobPost('activejobs')">
+                    <p class="title-bar">Total Active Job</p>
+                    <div class="divider-bar divider-bar-1"></div>
+                    <p class="count-bar count-bar-1">{{openingDetails1.totalactivejob}}</p>
+                </li>
+
+                <li (click)="JobPost('closedjobs')">
+                    <p class="title-bar">Total Closed Job</p>
+                    <div class="divider-bar divider-bar-4"></div>
+                    <p class="count-bar count-bar-4">{{openingDetails1.totalclosedjob}}</p>
+                </li>
+
+                <li>
+                    <p class="title-bar">Total Open Vacancies</p>
+                    <div class="divider-bar divider-bar-2"></div>
+                    <p class="count-bar count-bar-2">{{openingDetails1.totalOpenVacancy}}</p>
+                </li>
+
+                <li>
+                    <p class="title-bar">Total Closed Vacancies</p>
+                    <div class="divider-bar divider-bar-3"></div>
+                    <p class="count-bar count-bar-3">{{openingDetails1.totalClosedVacancy}}</p>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6" style="padding-right: 8px;">
+        <div class="new-dash-wrapper" >
+            <ul>
+                <li (click)="RegisteredCompany('RegisteredCompany')">
+                    <p class="title-bar">Registered Company</p>
+                    <div class="divider-bar divider-bar-4"></div>
+                    <p class="count-bar count-bar-4">{{openingDetails1.totalCompany}}</p>
+                </li>
+                <!-- <li [routerLink]="'/Register'">
+                    <p class="title-bar">Registered Company</p>
+                    <div class="divider-bar divider-bar-4"></div>
+                    <p class="count-bar count-bar-4">{{openingDetails1.totalCompany}}</p>
+                </li> -->
+
+                <!-- <li (click)="RegisteredAgent('RegisteredAgent')"> -->
+                        <!-- <li>
+                    <p class="title-bar">Registered Agent</p>
+                    <div class="divider-bar divider-bar-4"></div>
+                    <p class="count-bar count-bar-4">{{openingDetails1.registeredcandidate}}</p>
+                </li> -->
+                <!-- <li [routerLink]="'/fos'">
+                    <p class="title-bar">Registered Agent</p>
+                    <div class="divider-bar divider-bar-3"></div>
+                    <p class="count-bar count-bar-3">{{openingDetails1.totalAgent}}</p>
+                </li> -->
+
+                <!-- <li [routerLink]="'/PlacedCandidate'"> -->
+                <li (click)="PlacedCandidate('Placed')">
+                    <p class="title-bar">Placed Candidate</p>
+                    <div class="divider-bar divider-bar-1"></div>
+                    <!-- <a href="javascript:void(0)" [routerLink]="'/PlacedCandidate'"> -->
+                    <p class="count-bar count-bar-1">{{openingDetails1.totalplaced}}</p>
+                    <!-- </a> -->
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="roj-panel">
+            <h4 class="roj-panel-head">
+                Recently Posted Jobs
+                <button href="javascript:void(0)" (click)="Allrecentlypostedjoblist(flag=1)"
+                    class="btn pull-right btn-back-reg" title="View all posted jobs list">
+                    View All
+                </button>
+            </h4>
+            <div class="roj-panel-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Company Name</th>
+                            <th>Job Title</th>
+                            <th>Posted Date</th>
+                            <th>Valid Upto</th>
+                            <!-- <th>No. of Applicants</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of getrecentOpeningDetails2 let i=index">
+                            <td>{{ i+ 1 }}</td>
+
+                            <td>{{item.companyName?item.companyName:'NA'}}</td>
+
+                            <td>
+                                <a class="mandatory" href="javascript:void(0)" (click)="JobCount(item.jobid)">
+                                    {{item.jobtitle?item.jobtitle:'NA'}}
+                                </a>
+                            </td>
+                            <td>{{item.jobpusheddate?item.jobpusheddate:'NA'}}</td>
+                            <td>{{item.validupto?item.validupto:'NA'}}</td>
+                            <!-- <td> {{item.noofappliedcandidate}}</td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- *****************Recent Applied Candidate Table ********************** -->
+    <div class="col-md-12 margin-top-40">
+        <div class="roj-panel">
+            <h4 class="roj-panel-head">
+                Recently Applied Candidate
+                <button href="javascript:void(0)" (click)="Allrecentlyappliedcandidatelist(flag=1)"
+                    class="btn pull-right btn-back-reg" title="View all candidate applied list">
+                    View All
+                </button>
+            </h4>
+            <div class="roj-panel-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Company Name</th>
+                            <th>Job Title</th>
+                            <th>Posted Date</th>
+                            <th>Valid Upto</th>
+                            <th>No. of Applicants</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of recentlyappliedcandidate2 let i=index">
+                            <td>{{ i+ 1 }}</td>
+                            <td>{{item.companyName?item.companyName:'NA'}}</td>
+
+                            <td>
+                                <a class="mandatory" href="javascript:void(0)" (click)="JobCount(item.jobid)">
+                                    {{item.jobtitle?item.jobtitle:'NA'}}
+                                </a>
+                            </td>
+                            <td>{{item.jobpusheddate?item.jobpusheddate:'NA'}}</td>
+                            <td>{{item.validupto?item.validupto:'NA'}}</td>
+                            <td> {{item.noofappliedcandidate}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="alldetail=='1'">
+    <div class="dash-head">
+        <p>Recently Posted Jobs List</p>
+        <a href="javascript:void(0)" (click)="gotototalcandidatelist()" class="btn pull-right btn-back-reg">
+            Back
+        </a>
+        <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="excelExport()">
+            <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+        </a>
+    </div>
+    <!-- <table datatable class="row-border hover table table-striped table-bordered" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Company Name</th>
+                <th>Job Title</th>
+                <th>State</th>
+                <th>District</th>
+                <th>Total Vacancy</th>
+                <th>No. of Applicants</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of jobcount2 let i=index">
+                <td>{{ i+ 1 }}</td>
+                <td>{{item.comapnyname?item.comapnyname:'NA'}}</td>
+                <td> {{item.jobtitle?item.jobtitle:'NA'}}</td>
+                <td>{{item.statename?item.statename:'NA'}}</td>
+                <td>{{item.districtname?item.districtname:'NA'}}</td>
+                <td>{{ item.totvancancy?item.totvancancy:'0'}}</td>
+                <td>
+                    <a class="mandatory" (click)="Appliedcandidatedetail(item)" href="javascript:void(0)" *ngIf="item.noofappliedcandidate>=1">
+                        {{item.noofappliedcandidate?item.noofappliedcandidate:'0'}}
+                    </a>
+                    <a href="javascript:void(0)" *ngIf="item.noofappliedcandidate==0">
+                        {{item.noofappliedcandidate?item.noofappliedcandidate:'0'}}
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table> -->
+
+    <div class="all-jobs-list">
+        <div id="" class="searchResults">
+            <div class="ui-widget-header ui-widget-header-r">
+                <input #gb type="text" pInputText size="50" placeholder="Search">
+            </div>
+            <p-dataTable [(value)]="jobcount2" [paginator]="true" [rows]="10" [pageLinks]="3"
+                [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                <p-column header="S. No." [style]="{'width':'50px'}">
+                    <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                        {{i+1}}
+                    </ng-template>
+                </p-column>
+                <p-column field="comapnyname" header="Company Name" [sortable]="true" [style]="{'width':'100px'}">
+                </p-column>
+                <p-column field="jobtitle" header="Job Title" [sortable]="true" [style]="{'width':'150px'}"></p-column>
+                <p-column field="statename" header="State" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+                <p-column field="districtname" header="District" [sortable]="true" [style]="{'width':'200px'}">
+                </p-column>
+                <p-column field="totvancancy" header="Total Vacancy" [sortable]="true" [style]="{'width':'100px'}">
+                </p-column>
+
+                <p-column field="noofappliedcandidate" header="No. of Applicants" [sortable]="true"
+                    [style]="{'width':'250px'}">
+                    <ng-template field="salaryctcpermonth" let-item="rowData" pTemplate type="body">
+                        <a class="mandatory" (click)="Appliedcandidatedetail(item)" href="javascript:void(0)"
+                            *ngIf="item.noofappliedcandidate>=1">
+                            {{item.noofappliedcandidate?item.noofappliedcandidate:'0'}}
+                        </a>
+                        <a href="javascript:void(0)" *ngIf="item.noofappliedcandidate==0">
+                            {{item.noofappliedcandidate?item.noofappliedcandidate:'0'}}
+                        </a>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+
+</div>
+<div *ngIf="appliedcandidatedetail=='1'">
+    <div class="dash-head">
+        <p>Job Detail</p>
+        <a href="javascript:void(0)" (click)="singleback1()" class="btn pull-right btn-back-reg">
+            Back
+        </a>
+        <!-- <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="excelExport()">
+                <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+            </a> -->
+    </div>
+    <div class="roj-panel-content">
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Job Title</th>
+                        <th>State</th>
+                        <th>District</th>
+                        <th>Total Vacancy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{setdata.Companyname?setdata.Companyname:'NA'}}</td>
+                        <td>
+                            {{setdata.Jobtitle?setdata.Jobtitle:'NA'}}
+                        </td>
+                        <td>{{setdata.Statename?setdata.Statename:'NA'}}</td>
+                        <td>{{setdata.Districtname?setdata.Districtname:'NA'}}</td>
+                        <td>{{setdata.Totalvacancy?setdata.Totalvacancy:'0'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dash-head">
+        <p>Applied Candidate List</p>
+        <!-- <a href="javascript:void(0)" (click)="singleback1()" class="btn pull-right btn-back-reg">
+            Back
+        </a> -->
+        <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="excelExport()">
+            <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+        </a>
+    </div>
+    <!-- <div class="table-responsive">
+        <table datatable class="row-border hover table table-striped table-bordered" [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger">
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Candidate Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>State</th>
+                    <th>District</th>
+                    <th>Applied Date</th>
+                    <th>Partner Name</th>
+                    <th>Scheme</th>
+                    <th>Trade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of appliedcandidatedetail2 let i=index">
+                    <td>{{ i+ 1 }}</td>
+                    <td>{{item.candname?item.candname:'NA'}}</td>
+                    <td>{{item.email?item.email:'NA'}}</td>
+                    <td>{{item.mobile?item.mobile:'NA'}}</td>
+                    <td>{{item.gender?item.gender:'NA'}}</td>
+                    <td>{{item.age?item.age:'NA'}}</td>
+                    <td>{{item.statename?item.statename:'NA'}}</td>
+                    <td>{{item.districtname?item.districtname:'NA'}}</td>
+                    <td>{{item.appliedDate!=''? (item.appliedDate | date: 'dd-MM-yyyy') :'NA'}}</td>
+                    <td>{{item.partnername?item.partnername:'NA'}}</td>
+                    <td>{{item.trainingscheme?item.trainingscheme:'NA'}}</td>
+                    <td>{{item.traningtrade?item.traningtrade:'NA'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div> -->
+
+    <div class="all-jobs-list">
+        <div id="" class="searchResults">
+            <div class="ui-widget-header ui-widget-header-r">
+                <input #gb type="text" pInputText size="50" placeholder="Search">
+            </div>
+            <p-dataTable [(value)]="appliedcandidatedetail2" [paginator]="true" [rows]="10" [pageLinks]="3"
+                [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                <p-column header="S. No." [style]="{'width':'50px'}">
+                    <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                        {{i+1}}
+                    </ng-template>
+                </p-column>
+                <p-column field="candname" header="Candidate Name" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="candname" let-item="rowData" pTemplate type="body">
+                        {{item.candname?item.candname:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="email" header="Email" [sortable]="true" [style]="{'width':'200px'}">
+                    <ng-template field="email" let-item="rowData" pTemplate type="body">
+                        {{item.email?item.email:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="mobile" header="Mobile" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="mobile" let-item="rowData" pTemplate type="body">
+                        {{item.mobile?item.mobile:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="gender" header="Gender" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="gender" let-item="rowData" pTemplate type="body">
+                        {{item.gender?item.gender:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="age" header="Age" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="age" let-item="rowData" pTemplate type="body">
+                        {{item.age?item.age:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="statename" header="State" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="statename" let-item="rowData" pTemplate type="body">
+                        {{item.statename?item.statename:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="districtname" header="District" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="districtname" let-item="rowData" pTemplate type="body">
+                        {{item.districtname?item.districtname:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="appliedDate" header="Applied Date" [sortable]="true" [style]="{'width':'250px'}">
+                    <ng-template field="appliedDate" let-item="rowData" pTemplate type="body">
+                        {{item.appliedDate!=''? item.appliedDate:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="partnername" header="Partner Name" [sortable]="true" [style]="{'width':'200px'}">
+                    <ng-template field="partnername" let-item="rowData" pTemplate type="body">
+                        {{item.partnername?item.partnername:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="trainingscheme" header="Scheme" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="trainingscheme" let-item="rowData" pTemplate type="body">
+                        {{item.trainingscheme?item.trainingscheme:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="traningtrade" header="Trade" [sortable]="true" [style]="{'width':'200px'}">
+                    <ng-template field="traningtrade" let-item="rowData" pTemplate type="body">
+                        {{item.traningtrade?item.traningtrade:'NA'}}
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>
+
+<!-- *************************Total Joblist Table ********************* -->
+<div *ngIf="totaljoblistshow=='1'">
+    <div class="dash-head">
+        <p>Total Posted Jobs List</p>
+        <a href="javascript:void(0)" (click)="gotodashboard()" class="btn pull-right btn-back-reg"
+            title="Go to dashboard">
+            Back
+        </a>
+        <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="excelExport()">
+            <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+        </a>
+    </div>
+    <!-- <table datatable class="row-border hover table table-striped table-bordered" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Company Name</th>
+                <th>Job Title</th>
+                <th>Posted Date</th>
+                <th>Valid Upto</th>
+                <th>No. of Applicants</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of allrecentlypostedjoblist2 let i=index">
+                <td>{{ i+ 1 }}</td>
+                <td>{{item.companyName?item.companyName:'NA'}}</td>
+
+                <td>
+                    <a class="mandatory" href="javascript:void(0)" (click)="JobCount(item.jobid,param=1)">
+                        {{item.jobtitle?item.jobtitle:'NA'}}
+                    </a>
+                </td>
+                <td>{{item.jobpusheddate?item.jobpusheddate:'NA'}}</td>
+                <td>{{item.validupto?item.validupto:'NA'}}</td>
+                <td> {{item.noofappliedcandidate}}</td>
+            </tr>
+        </tbody>
+    </table> -->
+
+
+    <div>
+        <div class="ui-widget-header ui-widget-header-r">
+            <input #gb type="text" pInputText size="50" placeholder="Search">
+        </div>
+        <p-dataTable [(value)]="allrecentlypostedjoblist2" [paginator]="true" [rows]="10" [pageLinks]="3"
+            [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+            <p-column header="S. No." [style]="{'width':'50px'}">
+                <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                    {{i+1}}
+                </ng-template>
+            </p-column>
+            <p-column field="companyName" header="Company Name" [sortable]="true" [style]="{'width':'100px'}">
+                <ng-template field="companyName" let-item="rowData" pTemplate type="body">
+                    {{item.companyName?item.companyName:'NA'}}
+                </ng-template>
+            </p-column>
+            <p-column field="jobtitle" header="Job Title" [sortable]="true" [style]="{'width':'200px'}">
+                <ng-template field="jobtitle" let-item="rowData" pTemplate type="body">
+                    <a class="mandatory" href="javascript:void(0)" (click)="JobCount(item.jobid,param=1)">
+                        {{item.jobtitle?item.jobtitle:'NA'}}
+                    </a>
+                </ng-template>
+            </p-column>
+            <p-column field="jobpusheddate" header="Posted Date" [sortable]="true" [style]="{'width':'100px'}">
+                <ng-template field="jobpusheddate" let-item="rowData" pTemplate type="body">
+                    {{item.jobpusheddate?item.jobpusheddate:'NA'}}
+                </ng-template>
+            </p-column>
+            <p-column field="validupto" header="Valid Upto" [sortable]="true" [style]="{'width':'100px'}">
+                <ng-template field="validupto" let-item="rowData" pTemplate type="body">
+                    {{item.validupto?item.validupto:'NA'}}
+                </ng-template>
+            </p-column>
+            <p-column field="noofappliedcandidate" header="No. of Applicants" [sortable]="true"
+                [style]="{'width':'100px'}">
+                <ng-template field="noofappliedcandidate" let-item="rowData" pTemplate type="body">
+                    {{item.noofappliedcandidate?item.noofappliedcandidate:'NA'}}
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+
+<!-- *************************Total Candidate list Table ********************* -->
+<div *ngIf="totalcandidateshow=='1'">
+    <div class="dash-head">
+        <p>Total Applied Candidates List</p>
+        <a href="javascript:void(0)" (click)="gotodashboard()" class="btn pull-right btn-back-reg"
+            title="Go to dashboard">
+            Back
+        </a>
+        <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="excelExport()">
+            <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+        </a>
+    </div>
+    <!-- <table datatable class="row-border hover table table-striped table-bordered" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Company Name</th>
+                <th>Job Title</th>
+                <th>Posted Date</th>
+                <th>Valid Upto</th>
+                <th>No. of Applicants</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of allrecentlyappliedcandidatelist2 let i=index">
+                <td>{{ i+ 1 }}</td>
+                <td>{{item.companyName?item.companyName:'NA'}}</td>
+                <td>
+                    <a class="mandatory" href="javascript:void(0)" (click)="JobCount(item.jobid,param=2)">
+                        {{item.jobtitle?item.jobtitle:'NA'}}
+                    </a>
+                </td>
+                <td>{{item.jobpusheddate?item.jobpusheddate:'NA'}}</td>
+                <td>{{item.validupto?item.validupto:'NA'}}</td>
+                <td> {{item.noofappliedcandidate}}</td>
+            </tr>
+        </tbody>
+    </table> -->
+    <div class="all-jobs-list">
+        <div id="" class="searchResults">
+            <div class="ui-widget-header ui-widget-header-r">
+                <input #gb type="text" pInputText size="50" placeholder="Search">
+            </div>
+            <p-dataTable [(value)]="allrecentlyappliedcandidatelist2" [paginator]="true" [rows]="10" [pageLinks]="3"
+                [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                <p-column header="S. No." [style]="{'width':'50px'}">
+                    <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                        {{i+1}}
+                    </ng-template>
+                </p-column>
+                <p-column field="companyName" header="Company Name" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="companyName" let-item="rowData" pTemplate type="body">
+                        {{item.companyName?item.companyName:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="jobtitle" header="Job Title" [sortable]="true" [style]="{'width':'200px'}">
+                    <ng-template field="jobtitle" let-item="rowData" pTemplate type="body">
+                        <a class="mandatory" href="javascript:void(0)" (click)="JobCount(item.jobid,param=1)">
+                            {{item.jobtitle?item.jobtitle:'NA'}}
+                        </a>
+                    </ng-template>
+                </p-column>
+                <p-column field="jobpusheddate" header="Posted Date" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="jobpusheddate" let-item="rowData" pTemplate type="body">
+                        {{item.jobpusheddate?item.jobpusheddate:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="validupto" header="Valid Upto" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="validupto" let-item="rowData" pTemplate type="body">
+                        {{item.validupto?item.validupto:'NA'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="noofappliedcandidate" header="No. of Applicants" [sortable]="true"
+                    [style]="{'width':'100px'}">
+                    <ng-template field="noofappliedcandidate" let-item="rowData" pTemplate type="body">
+                        {{item.noofappliedcandidate?item.noofappliedcandidate:'NA'}}
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>

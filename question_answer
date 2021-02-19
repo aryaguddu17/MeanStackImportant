@@ -1,0 +1,69 @@
+1) What is fat arrow? Write a program.
+2) Difference between Function Declarations and Function Expressions
+function declaration is used to reusable code and less coding while function expression used to data binding porpose
+
+3) What is const? How to change const value? Explain with example.
+const is variable which scope is block level and we can access data within it only
+Exm:
+function abc(){
+var a=10;
+if(a==10){
+const b=9; 
+}
+
+console.log("this variable get error when we will try to access",b);
+}
+
+4) What is difference between call and bind? Explain with example?
+bind is use to display properties and value
+exm:
+<p id="selector" style=""></p>
+<script>
+var 
+$("#selector").bind(); // some properties 
+</script>
+
+
+
+
+5) Write program with async await?
+async await is used by obserable to get latest value it has emited.
+exp:
+
+6) What is IIFE?
+
+
+
+7) Write the output
+
+setTimeout(function () {
+  console.log('First')
+}, 0)
+console.log('One')
+
+one 
+
+
+first
+
+
+
+var a = 100;
+setTimeout(function () {
+  a = 0;
+}, 0);
+var b = a;
+
+
+
+console.log(a)
+
+
+
+(function(x) {
+    return (function(y) {
+        console.log(x);
+    })(2)
+})(1);
+
+

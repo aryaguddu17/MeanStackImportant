@@ -1,0 +1,111 @@
+<style>
+a.disabled {
+   pointer-events: none;
+   cursor: default;
+}
+</style>
+<div class="dash-head">
+  <p>Report</p>
+  <a (click)="backprofile()" *ngIf="goback" href="javascript:void(0)" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0"><i aria-hidden="true" class="fa fa-arrow-left"></i></a>
+</div>
+
+<div class="col-md-12" *ngIf="ShowAllCompany">
+  <p>Total Number Of Record : {{totalCompanyData}}</p>
+  <p>Number Of Page : {{count}}</p>
+<div class="cleafix"></div>
+ <div class="update-profile">
+   <div id="" class="searchResults1">
+       <div class="row pull-right">
+          <div class="col"><label>Search</label><input class="form-control" type="text" name="search" [(ngModel)]="filter"></div>
+       </div>
+       <div class="clearfix"></div>
+       <div class="table-responsive">
+           <table st-table="displayed" class="table table-bordered">
+               <thead>
+                   <tr>
+                       <th>S. No.</th>
+                       <th>Company Name</th>
+                       <th>Name Of States</th>
+                       <th>Number Of Opening</th>
+                       <th>Login Type</th>
+                   </tr>
+                  
+               </thead>
+               <tbody>
+                <tr *ngFor="let item of ShowData | filter:filter | paginate: { itemsPerPage: 10, currentPage: p };let i=index">
+                  <td>{{i + 1}}</td>
+                  <td><a href="javascript:void(0);" (click)="GetDataByCompany(item.companyId);">{{ item.companyName }}</a></td>
+                  <td>{{ item.companyStateCount }}</td>
+                  <td>{{ item.noOfOpening }}</td>
+                  <td>{{ item.loginType }}</td>
+                  </tr>
+               </tbody>
+           </table>
+       </div>
+     <div class="clearfix"></div>
+     <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <button (click)="Pagination(0)" [disabled]="(count=='1')" class="btn btn-primary" >Previous</button>        
+        </li>
+         <li class="page-item">
+          <button (click)="Pagination(1)" [disabled]="(count==totalCompanyData)" class="btn btn-primary" >Next</button>
+        
+        </li>
+      </ul>
+    </nav>
+   </div>
+ </div>
+</div>
+
+<div class="col-md-12" *ngIf="ShowDetail">
+  <div class="cleafix"></div>
+   <div class="update-profile">
+     <div id="" class="searchResults1">
+         <div class="row pull-right">
+            <div class="col"><label>Search</label><input class="form-control" type="text" name="search" [(ngModel)]="filter"></div>
+         </div>
+         <div class="clearfix"></div>
+         <div class="table-responsive">
+             <table st-table="displayed" class="table table-bordered">
+                 <thead>
+                     <tr>
+                         <th>S. No.</th>
+                         <th>Company Name</th>
+                         <th>Name of States</th>
+                         <th>District</th>
+                         <th>Job Title</th>
+                         <th>Number Of Opening</th>
+                         <th>Valid Upto Date</th>
+                     </tr>
+                    
+                 </thead>
+                 <tbody>
+                  <tr *ngFor="let companydata of totalCompany | filter:filter | paginate: { itemsPerPage: 10, currentPage: p };let i=index">
+                    <td>{{SerialNumber + i}}</td>
+                    <td>{{companydata.companyName}}</td>
+                    <td>{{companydata.stateName}}</td>
+                    <td>{{ companydata.districtName }}</td>
+                    <td>{{companydata.jobTitle}}</td>
+                    <td>{{companydata.noOfOpening}}</td>
+                    <td>{{companydata.validDate | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                 </tbody>
+             </table>
+         </div>
+       <div class="clearfix"></div>
+       <nav aria-label="Page navigation example">
+          <ul class="pagination">
+              <li class="page-item">
+                <button (click)="Pagination(0)" [disabled]="(count=='1')" class="btn btn-success" >Previous</button>        
+              </li>
+               <li class="page-item">
+                <button (click)="Pagination(1)" [disabled]="(count==totalCompanyData)" class="btn btn-success" >Next</button>
+              
+              </li>
+            </ul>
+      </nav>
+     </div>
+   </div>
+  </div>
+

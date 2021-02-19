@@ -1,0 +1,122 @@
+<div class="page-filters">
+    <h2>
+        <a href="javascript:void(0);">
+            <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+            <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+        </a>
+    </h2>
+    <form (submit)="GetFilterSearch(0,'','search')" [formGroup]="FilterJob">
+        <div class="filter-wrapper">
+            <div class="form-group">
+                <div class="col-md-3 col-sm-6">
+                    <label>Login Type</label>
+                    <select class="form-control" formControlName="logintype">
+                        <option value="" selected>--Select--</option>
+                        <option value="Agency">Agency</option>
+                        <option value="Employer">Employer</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label>State</label>
+                    <select class="form-control" required formControlName="StateiD" (change)="GetAllDistrict($event.target.value)">
+                        <option value="" selected>--Select--</option>
+                        <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label>District</label>
+                    <select class="form-control" #val required formControlName="DistrictID">
+                        <option value="" selected="selected">--Select--</option>
+                        <option *ngFor="let district of district1" [value]="district.ID">{{district.DISTRICTNAME}}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-sm-3">
+                    <label>Search Keywords<span></span></label>
+                    <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+                </div>
+            </div>
+            <div class="form-group text-center m-t-10">
+                <button type="reset" (click)="reset()" class="btn btn-w-shadow no-rd">Reset</button>
+                <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+            </div>
+            <div class="form-group text-center m-t-10">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="col-md-12" *ngIf="Showpushdata=='1'">
+    <div class="col-md-12 jd-detail job-wrapper searchResults">
+        <h4>Search Result</h4>
+        <div class="form-group">
+            <p class="col-md-4">
+                <span class="text-strong">Login Type</span>: {{ShowPushData.logintype}}
+            </p>
+            <p class="col-md-4">
+                <span class="text-strong">Search Keywords</span>: {{ShowPushData.JobKeyword}}
+            </p>
+            <p class="col-md-4">
+                <span class="text-strong">State</span>: {{ShowPushData.StateiD ? ShowPushData.StateiD :'NA'}}
+            </p>
+            <p class="col-md-4">
+                <span class="text-strong">District</span>: {{ShowPushData.Districtid ? ShowPushData.Districtid :'NA'}}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="legend-text" *ngIf="(backbtn=='1')">
+    <a href="javascript:void(0)" (click)="back()" class="btn pull-right btn-back-reg">
+        <!-- <i aria-hidden="true" class="fa fa-arrow-left"></i> -->
+        Back
+    </a>
+</div>
+<!-- {{companyregisterdata|json}} -->
+<div class="col-md-12" *ngIf="hrefurl=='1'">
+    <div class="all-jobs-list">
+        <div class="searchResults ">
+
+            <ul class="joblist-wrapper">
+                <li class="job-wrapper ps-relative {{item.ISVERIFIED=='1'?'posted':''}}" *ngFor="let item of companyregisterdata"
+                    [style.background-color]="item.COMPANYID==compid ? '#d4d0d0' : 'none' ">
+                    <h2 class="job-title lang-ellip" title="{{item.COMPANYNAME}}">{{item.COMPANYNAME?item.COMPANYNAME:'NA'}}</h2>
+                    <div class="clearfix"></div>
+                    <div class="form-group">
+                        <div class="row">
+                            <!-- <div class="col-md-6 lang-ellip"><strong>Name : </strong> {{item.FIRSTNAME}}</div> -->
+                            <div class="col-md-6"><strong>Login Type : </strong> {{item.LOGINTYPE?item.LOGINTYPE:'NA'}}</div>
+                            <div class="col-md-6 lang-ellip" title="{{item.EMAIL}}"><strong>Email : </strong>
+                                {{item.EMAIL?item.EMAIL:'NA'}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6"><strong>Mobile : </strong> {{item.PHONENO?item.PHONENO:'NA'}}</div>
+                            <div class="col-md-6"><strong>PAN : </strong> {{item.PANCARD?item.PANCARD:'NA'}}</div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6"><strong>State : </strong> {{item.statename ? item.statename:'NA'}}</div>
+                            <div class="col-md-6"><strong>District : </strong> {{item.districtname ? item.districtname:'NA'}}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="job-list-action card-view-btns">
+                            <a class="viewit" href="javascript:void(0)" (click)="viewdata(item.COMPANYID)">View</a>
+                            <!-- <a class="postit" href="javascript:void(0)" (click)="deletedata(item.COMPANYID)">Delete</a> -->
+                        </div>
+                    </div>
+                    <!--<ul class="jd-detail">
+                        <li class="lang-ellip" title="{{item.FIRSTNAME}}"><span class="text-strong">Name:</span> <span>{{item.FIRSTNAME}}</span></li>
+                        <li class="lang-ellip"><span class="text-strong">Mobile:</span> <span>{{item.PHONENO}}</span></li>
+                        <li class="lang-ellip" title="{{item.EMAIL}}"><span class="text-strong">Email:</span> <span>{{item.EMAIL}}</span></li>
+                        <li class="lang-ellip" title="{{item.LOGINTYPE}}"><span class="text-strong">Login Type:</span> <span>{{item.LOGINTYPE}}</span></li>
+                    </ul>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

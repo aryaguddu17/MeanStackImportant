@@ -1,0 +1,580 @@
+<!-- Show Company -->
+
+<div *ngIf="HideCommon==1">
+  <div class="dash-head">
+    <p>Suggestive Search</p>
+  </div>  
+</div>
+
+<div [ngClass]="HideCommon=='1'?'show':'hide'">
+  <div class="page-filters" [ngClass]="ShowCompanyFilter=='1'?'show':'hide'">
+    <h2>
+      <a href="javascript:void(0);">
+        <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+        <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+      </a>
+    </h2>
+    <form (submit)="GetFilterCompany(0,'','search')" [formGroup]="ComapanyFilterJob">
+      <div class="filter-wrapper">
+        <div class="form-group">
+          <div class="col-md-3 col-sm-6">
+            <label>Login Type</label>
+            <select class="form-control" formControlName="logintype">
+              <option value="" selected>--Select--</option>
+              <option value="Agency">Agency</option>
+              <option value="Employer">Employer</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>State</label>
+            <select class="form-control" required formControlName="StateiD" (change)="GetAllDistrict($event.target.value)">
+              <option value="" selected>--Select--</option>
+              <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>District</label>
+            <select class="form-control" #val required formControlName="DistrictID">
+              <option value="" selected="selected">--Select--</option>
+              <option *ngFor="let district of district1" [value]="district.ID">{{district.DISTRICTNAME}}</option>
+            </select>
+          </div>
+
+          <div class="col-md-3 col-sm-3">
+            <label>Search Keywords<span></span></label>
+            <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+          </div>
+        </div>
+        <div class="form-group text-center m-t-10">
+          <button type="reset" (click)="Comapanyreset()" class="btn btn-w-shadow no-rd">Reset</button>
+          <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+        </div>
+        <div class="form-group text-center m-t-10">
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-12" *ngIf="hrefurl=='1'">
+    <div class="col-md-12 jd-detail job-wrapper searchResults">
+      <h4>Search Result</h4>
+      <div class="form-group">
+        <p class="col-md-4">
+          <span class="text-strong">Login Type</span>: {{Showpushdatacompany.logintype}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">Search Keywords</span>: {{Showpushdatacompany.JobKeyword}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">State</span>: {{Showpushdatacompany.StateiD ? Showpushdatacompany.StateiD :'NA'}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">District</span>: {{Showpushdatacompany.Districtid ? Showpushdatacompany.Districtid
+          :'NA'}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12" *ngIf="CompanyList=='1'">
+    <div class="all-jobs-list">
+      <div class="searchResults ">
+
+        <ul class="joblist-wrapper">
+          <li class="job-wrapper ps-relative {{item.isverified=='1'?'posted':''}}" *ngFor="let item of companyregisterdata"
+            [style.background-color]="item.companyid==compid ? '#d4d0d0' : 'none' ">
+
+            <div class="job-view fos">
+              <div>
+                <img onError="this.src='../assets/images/NoImage.png'" src="{{item.comapanyimgname!='' && item.companyimagepath !=''? item.comapanyimgname:'assets/images/NoImage.png'}}"
+                  class="img-thumbnail" alt="Image">
+              </div>
+              <div>
+                <h2 *ngIf="item.companyname!=null" class="job-title 1a" title="{{item.companyname}}">
+                  {{ (item.companyname.length>50)? (item.companyname | slice:0:50)+'...':(item.companyname) }}
+                </h2>
+                <div class="clearfix"></div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>Login Type : </strong> {{item.logintype?item.logintype:'NA'}}</div>
+                    <div *ngIf="item.email!=null" class="col-md-6" title="{{item.email}}"><strong>Email : </strong>
+                      {{ (item.email.length>50)? (item.email | slice:0:50)+'...':(item.email) }}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>Mobile : </strong> {{item.phoneno?item.phoneno:'NA'}}</div>
+                    <div class="col-md-6"><strong>PAN : </strong> {{item.pancard?item.pancard:'NA'}}</div>
+
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>State : </strong> {{item.statename ? item.statename:'NA'}}</div>
+                    <div class="col-md-6"><strong>District : </strong> {{item.districtname ? item.districtname:'NA'}}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>No. of Job : </strong>
+                      {{item.noofjobs?item.noofjobs:'0'}}
+                    </div>
+                    <div class="col-md-6"><strong>No. of Posted Job : </strong>
+                      {{item.noofjobposted ? item.noofjobposted:'0'}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="job-list-action card-view-btns">
+                    <a class="viewit" href="javascript:void(0)" (click)="onClicked(item.companyid)">View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End code added by prakash Singh for company List 18-04-2019 -->
+</div>
+
+<div *ngIf="HideCommon==2">
+  <div class="dash-head">
+    <p>Job List</p>
+    <a (click)="goToCommon()" title="Go To Common" class="btn btn-w-shadow no-rd pull-right" tabindex="0">
+      <!-- <i aria-hidden="true" class="fa fa-arrow-left"></i> -->Back
+    </a>
+    <div class="clearfix"></div>
+  </div>
+</div>
+
+<div class="page-filters" *ngIf="joblistshow=='1'">
+  <h2>
+    <a href="javascript:void(0);">
+      <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters For Jobs
+      <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+    </a>
+  </h2>
+  <form (submit)="GetFilterJobsList(0,'')" [formGroup]="FilterJobList">
+    <div class="filter-wrapper">
+      <div class="form-group">
+        <div class="col-md-3 col-sm-6">
+          <label>Industry</label>
+          <select class="form-control" formControlName="industry">
+            <option value="" selected>--Select--</option>
+            <option *ngFor="let item of IndustryArea" value="{{item.id}}">{{item.industryName}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>Functional Area</label>
+          <select class="form-control" formControlName="functionalarea">
+            <option value="" class="" selected="selected">--Select--</option>
+            <option *ngFor="let item of FunctionArea" value="{{item.id}}">{{item.functionalAreaName}}</option>
+          </select>
+        </div>
+        <!-- <div class="col-md-3 col-sm-6">
+          <label>From Date </label>
+          <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="walkInFromDate"
+            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" bsDatepicker>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>To Date </label>
+          <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="walkInToDate"
+            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" bsDatepicker>
+        </div> -->
+
+        <div class="col-md-3 col-sm-6">
+          <label>From Date </label>
+          <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="walkInFromDate"
+            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" [maxDate]="maxDate" (bsValueChange)="MinDate($event)"
+            bsDatepicker>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>To Date </label>
+          <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="walkInToDate"
+            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" [minDate]="minDate" (bsValueChange)="MaxDate($event)"
+            bsDatepicker>
+        </div>
+
+
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 col-sm-6">
+          <div class="col-md-6 col-sm-6 p-l-0">
+            <label>Min CTC</label>
+            <input readonly value="{{minCtc}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MinCtc" class="form-control" placeholder="MinCtc">
+          </div>
+          <div class="col-md-6 col-sm-6 p-r-0">
+            <label>Max CTC</label>
+            <input readonly value="{{maxCtc}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MaxCtc" class="form-control" placeholder="MaxCtc">
+            <div class="custom-slider">
+            </div>
+          </div>
+          <div class="col-md-12 col-sm-12 custom-slider mrg-min p-d-0">
+            <label></label>
+            <ng5-slider [(value)]="minCtc" [(highValue)]="maxCtc" [options]="CtcOptions"></ng5-slider>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="col-md-6 col-sm-6 p-l-0">
+            <label>Min Exp</label>
+            <input disabled value="{{minExp}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MinExp" class="form-control" placeholder="MinExp">
+          </div>
+          <div class="col-md-6 col-sm-6 p-r-0">
+            <label>Max Exp</label>
+            <input disabled value="{{maxExp}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MaxExp" class="form-control" placeholder="MaxExp">
+          </div>
+          <div class="col-md-12 col-sm-12 custom-slider mrg-min p-d-0">
+            <label></label>
+            <ng5-slider [(value)]="minExp" [(highValue)]="maxExp" [options]="ExpOptions"></ng5-slider>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-3">
+          <label>Search Keywords<span></span></label>
+          <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+        </div>
+      </div>
+      <div class="row text-center m-t-5">
+        <button type="reset" (click)="reset_job()" class="btn btn-w-shadow no-rd">Reset</button>
+        <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="col-md-12" *ngIf="searchsts1==1">
+  <div class="col-md-12 jd-detail job-wrapper searchResults">
+    <h4>Search Result</h4>
+    <div class="form-group">
+      <p class="col-md-4">
+        <span class="text-strong">Industry</span>: {{ShowPushData.industry}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Functional Area</span>: {{ShowPushData.functionalarea}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">From Date</span>:
+        {{ShowPushData.searchwalkinfromdate!='NA'?(ShowPushData.searchwalkinfromdate | date:'dd/MM/yyyy'):'NA'}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">To Date</span>:
+        {{ShowPushData.searchwalkintodate!='NA'?(ShowPushData.searchwalkintodate | date:'dd/MM/yyyy'):'NA'}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Min CTC</span>: {{ShowPushData.Minctc}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Max CTC</span>: {{ShowPushData.Maxctc}}
+      </p>
+    </div>
+    <div class="form-group">
+
+      <p class="col-md-4">
+        <span class="text-strong">Min Exp</span>: {{ShowPushData.MinExp}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Max Exp</span>: {{ShowPushData.MaxExp}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Search Keywords</span>: {{ShowPushData.JobKeyword}}
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-12" *ngIf="ShowJobList==1">
+  <!-- <div class="dash-head" *ngIf="gohome==1">
+    <a (click)="goHome()" title="Go Home" class="btn btn-w-shadow no-rd pull-right" tabindex="0"><i aria-hidden="true"
+        class="fa fa-arrow-left"></i></a>
+    <div class="clearfix"></div>
+  </div> -->
+  <div class="all-jobs-list">
+    <div id="" class="searchResults">
+      <ul class="joblist-wrapper">
+        <li class="job-wrapper ps-relative {{item.isJobPushed?'posted':''}}" *ngFor="let item of jobdetail">
+          <!-- <h2 class="job-title"><a href="javascript:void(0)" [routerLink]="'/ViewJob'" (click)="setId(item.jobId)">{{item.companyName}}</a></h2> -->
+          <h2 class="job-title">{{item.companyName}}</h2>
+          <div class="clearfix"></div>
+          <h3 class="company-name" style="text-transform:capitalize">{{item.jobTitle}}</h3>
+          <div class="clearfix"></div>
+          <!-- <ul class="jd-detail">
+            <li> <span class=""> <strong>Valid Date :</strong></span><span>{{item.validDate | date:
+                'dd/MM/yyyy'}}</span></li>
+            <li><span><i class="fa fa-user" aria-hidden="true"></i></span> <span class="">{{item.name}}</span></li>
+            <li><span><i class="fa fa-phone" aria-hidden="true"></i></span> <span class="">{{item.mobile}}</span></li>
+            <li><span><i class="fa fa-graduation-cap" aria-hidden="true" title="no of vacancy"></i></span> <span class="">{{item.noofvacancy}}</span></li>
+          </ul> -->
+
+          <ul class="jd-detail">
+            <li class="">
+              <span class="ellip-view"><strong>Job Code:</strong></span><span class="text-strong"> {{item.jobcode}}</span>
+            </li>
+            <li><span>
+                <strong>Valid Upto :</strong>
+              </span> <span class="">{{item.validDate | date:
+                'dd/MM/yyyy'}}</span></li>
+          </ul>
+
+          <ul class="jd-detail">
+            <li><span> <strong>No. of Vacancy :</strong></span> <span class="">{{item.noofvacancy}}</span></li>
+            <li class="lang-ellip">
+              <span class="ellip-view"><strong>Job Description:</strong> {{item.jobDescription}}</span>
+            </li>
+          </ul>
+
+          <ul class="jd-detail">
+            <li><span> <strong>Min CTC(INR) :</strong></span> <span class="">{{item.minctc}}</span></li>
+            <li class="lang-ellip">
+              <span class="ellip-view"><strong>Max CTC(INR) :</strong> {{item.maxctc}}</span>
+            </li>
+          </ul>
+
+          <ul class="jd-detail">
+            <li><span> <strong>Industry :</strong></span> <span class="">{{item.industryArea}}</span></li>
+            <li>
+              <span><strong>Functional Area :</strong> </span><span class="">{{item.functionalArea}}</span>
+            </li>
+          </ul>
+          <ul class="jd-detail">
+            <li class="lang-ellip"><span> <strong> Contact Person :</strong></span> <span class="">{{item.name}}</span></li>
+            <li><span> <strong>Contact No :</strong></span> <span class="">{{item.mobile}}</span></li>
+          </ul>
+
+          <div class="form-group">
+            <div class="job-list-action card-view-btns">
+              <a class="postit" href="javascript:void(0)" (click)="viewPia(item)" title="View">View</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Pia Listing -->
+<div *ngIf="(pialist==1)">
+
+  <div class="dash-head" *ngIf="goback==1">
+    <p>Training Partner List</p>
+    <a (click)="goBack()" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0"><i aria-hidden="true"
+        class="fa fa-arrow-left"></i></a>
+  </div>
+  <div class="page-filters">
+    <h2>
+      <a href="javascript:void(0);">
+        <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters For Training Partner
+        <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+      </a>
+    </h2>
+    <form (submit)="getPiaData(0,'')" [formGroup]="SectorForm">
+      <div class="filter-wrapper">
+        <div class="form-group">
+
+          <div class="col-md-3 col-sm-6">
+            <label>State</label>
+            <select class="form-control" formControlName="StateiD" (change)="GetAllDistrict($event.target.value)">
+              <!-- <option value="" selected>--Select--</option> -->
+              <option value="">--Select--</option>
+              <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>District</label>
+            <select class="form-control" #val formControlName="DistrictID">
+              <option value="" selected="selected">--Select--</option>
+              <option *ngFor="let district of district1" [value]="district.ID">{{district.DISTRICTNAME}}</option>
+            </select>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <label>Sector</label>
+            <select class="form-control" formControlName="SectorID" (change)="Getalltrade($event.target.value)">
+              <option value="">--Select--</option>
+              <option *ngFor="let sector of Sector" value="{{sector.id}}">{{sector.name}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label> Trade</label>
+            <select class="form-control" formControlName="TradeID">
+              <option value="">--Select--</option>
+              <option *ngFor="let trade of Trade" value="{{trade.id}}">{{trade.name}}</option>
+            </select>
+          </div>
+          <!-- <div class="col-md-3 col-sm-6">
+            <label>Industry</label>
+            <select class="form-control" formControlName="industry">
+              <option value="" selected>--Select--</option>
+              <option *ngFor="let item of IndustryArea" value="{{item.id}}">{{item.industryName}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>Functional Area </label>
+            <select class="form-control" formControlName="functionalarea">
+              <option value="" class="" selected="selected">--Select--</option>
+              <option *ngFor="let item of FunctionArea" value="{{item.id}}">{{item.functionalAreaName}}</option>
+            </select>
+          </div> -->
+        </div>
+        <div class="form-group text-center m-t-5">
+          <button type="reset" (click)="reset_pia()" class="btn btn-w-shadow no-rd">Reset</button>
+          <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-12" *ngIf="searchsts2==1">
+    <div class="col-md-12 jd-detail job-wrapper searchResults">
+      <h4>Search Result For Traing Partner</h4>
+      <div class="form-group">
+        <p class="col-md-6">
+          <span class="text-strong">State</span>: {{PiaSearch.StateiD}}
+        </p>
+        <p class="col-md-6">
+          <span class="text-strong">District</span>: {{PiaSearch.DistrictID}}
+        </p>
+        <p class="col-md-6">
+          <span class="text-strong">Sector</span>: {{PiaSearch.SectorID}}
+        </p>
+        <p class="col-md-6">
+          <span class="text-strong">Trade</span>: {{PiaSearch.TradeID}}
+        </p>
+        <!-- <p class="col-md-4">
+          <span class="text-strong">Industry</span>: {{PiaSearch.industry}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">Functional Area</span>: {{PiaSearch.functionalarea}}
+        </p> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- show PIA List After Searching  -->
+<div class="col-md-12" *ngIf="ShwoCardsStatus == true">
+  <div class="all-jobs-list">
+    <div id="" class="searchResults">
+      <ul class="joblist-wrapper agency-job-listing">
+        <li class="job-wrapper ps-relative" *ngFor="let predictive of GetData">
+          <div class="clearfix"></div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-12">
+                <h3 class="job-title">{{predictive.pia_Name}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>No. Of Training Center : </strong> {{predictive.nO_OF_TC}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>No. Of Batches : </strong> {{predictive.nO_OF_BATCHES}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>No. Of Candidates : </strong> {{predictive.nO_OF_CANDIDATES}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="job-list-action card-view-btns">
+              <a class="postit" href="javascript:void(0)" title="View" (click)="tcdetails(predictive.id)">View</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- show TC List After Searching  -->
+<div class="col-md-12" *ngIf="showTC == true">
+  <div class="dash-head">
+    <p>Training Center List </p>
+    <a (click)="goPrevious()" title="Go Previous" class="btn btn-w-shadow no-rd pull-right" tabindex="0"><i aria-hidden="true"
+        class="fa fa-arrow-left"></i></a>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="all-jobs-list">
+    <div id="" class="searchResults">
+      <ul class="joblist-wrapper agency-job-listing">
+        <li class="job-wrapper ps-relative" *ngFor="let TCdetail of GetTCData">
+          <div class="clearfix"></div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-12">
+                <h3 class="job-title">{{TCdetail.managedby}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center Name : </strong> {{TCdetail.tcname!=null ?
+                TCdetail.tcname:'NA'}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center Incharge : </strong> {{TCdetail.tcIncharge!=null ?
+                TCdetail.tcIncharge:'NA'}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center Email : </strong>
+                {{TCdetail.emailAddress!=null?TCdetail.emailAddress:'NA'}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center Mobile : </strong>
+                {{TCdetail.mobile!=null?TCdetail.mobile:'NA'}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center State : </strong>
+                {{TCdetail.stateName!=null?TCdetail.stateName:'NA'}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center District : </strong>
+                {{TCdetail.districtName!=null?TCdetail.districtName:'NA'}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center Sector : </strong>
+                {{TCdetail.sector!=null?TCdetail.sector:'NA'}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12"><strong>Training Center Trade : </strong>
+                {{TCdetail.trade!=null?TCdetail.trade:'NA'}}</div>
+            </div>
+          </div>
+          <!-- <div class="form-group">
+            <div class="job-list-action card-view-btns">
+                <a class="postit" href="javascript:void(0)" title="View" (click)="tcdetails(predictive.id)">View3</a>
+              </div>
+          </div> -->
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

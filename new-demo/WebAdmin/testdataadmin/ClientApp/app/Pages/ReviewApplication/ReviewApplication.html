@@ -1,0 +1,1561 @@
+<div class="dash-head">
+    <!-- <div class="dash-head {{ScreeningDetail?'hide':'show'}}"> -->
+    <p *ngIf="!(ScreeningDetail)">Applied Jobs List</p>
+    <p *ngIf="(ScreeningDetail)">Review Application</p>
+    <a href="javascript:void(0)" *ngIf="(JobCardShow==true && ScreeningDetail == false)" (click)="BackToCompanyList()"
+        class="back-button pull-right" title="Go To Company List"><i class="fa fa-arrow-left"
+            aria-hidden="true"></i></a>
+    <a href="javascript:void(0)" *ngIf="(ScreeningDetail ==true && BackfromInterview == false)"
+        (click)="BackToJobList()" class="back-button pull-right" title="Go To Job List"><i class="fa fa-arrow-left"
+            aria-hidden="true"></i></a>
+    <!-- back to review application page -->
+    <a class="btn btn-w-shadow no-rd pull-right" *ngIf="(BackfromInterview)" (click)="BackToJobListFromInterview()"
+        href="javascript:void(0)" title="Go Back">
+        <i aria-hidden="true" class="fa fa-arrow-left"></i>
+    </a>
+</div>
+
+<div class="clearfix"></div>
+<!-- Company card by arti ahirwar on date 10 may 2019 -->
+<div [ngClass]="(CompanyListShow==true)?'show':'hide'">
+    <div class="page-filters">
+        <h2>
+            <a href="javascript:void(0);">
+                <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            </a>
+        </h2>
+        <form (submit)="GetCompanyDataFilter()" [formGroup]="FilterCompanyRegistration">
+            <div class="filter-wrapper">
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-6">
+                        <label>Login Type</label>
+                        <select class="form-control" formControlName="logintype">
+                            <option value="" selected>--Select--</option>
+                            <option value="Agency">Agency</option>
+                            <option value="Employer">Employer</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>State</label>
+                        <select class="form-control" formControlName="StateiD"
+                            (change)="onChangeState($event.target.value)">
+                            <option value="" selected>--Select--</option>
+                            <option *ngFor="let state of lstState" [value]="state.id">{{state.stateName}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>District</label>
+                        <select class="form-control" #val formControlName="DistrictID">
+                            <option value="" selected="selected">--Select--</option>
+                            <option *ngFor="let district of district" [value]="district.id">{{district.districtName}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <label>Search Keywords<span></span></label>
+                        <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>Application Received</label>
+                        <select class="form-control" formControlName="ApplicationRcvd">
+                            <option value="" selected>--Select--</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group text-center margin-top-20 ps-relative">
+                    <button type="reset" class="btn btn-w-shadow no-rd" style="margin-right:10px;"
+                        (click)="CompanyResultReset()">Reset</button>
+                    <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-12" *ngIf="(ComSearch)">
+        <div class="col-md-12 jd-detail job-wrapper searchResults">
+            <h4>Search Result</h4>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <span class="text-strong">Login Type</span>: {{ShowPushDataCompany.logintype}}
+                </div>
+                <div class="col-md-4">
+                    <span class="text-strong">Search Keywords</span>: {{ShowPushDataCompany.JobKeyword}}
+                </div>
+                <div class="col-md-4">
+                    <span class="text-strong">State</span>: {{ShowPushDataCompany.state}}
+                </div>
+                <div class="col-md-4">
+                    <span class="text-strong">District</span>: {{ShowPushDataCompany.district}}
+                </div>
+                <div class="col-md-4">
+                    <span class="text-strong">Application Received</span>: {{ShowPushDataCompany.ApplicationRcvd}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" *ngIf="(CompanyListShow==true)">
+    <div class="form-group">
+        <div class="col-md-5 col-sm-12 col-xs-12 col-md-offset-7 p-r-0">
+            <div class="legends">
+                <ul>
+                    <li><span class="l2"></span>Application Received</li>
+                    <!--<li><span class="l3"></span> Users partial approved</li>-->
+                    <li><span class="l1"></span>Application Not Received</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="all-jobs-list">
+        <div class="searchResults">
+            <ul class="joblist-wrapper">
+                <!-- <li class="job-wrapper ps-relative  {{(item.totalusers==item.totappusers?'approved':'') || (item.totalusers==item.totdisappusers?'disapproved':'')}}"
+                    *ngFor="let item of RegisteredCompany" [style.background-color]="item.companyid==Companyid ? '#d4d0d0' : 'none' "> -->
+                <li class="job-wrapper ps-relative  {{(item.totAppReceived > 0 ?'approved':'') || (item.totAppReceived==0?'disapproved':'')}}"
+                    *ngFor="let item of RegisteredCompany">
+                    <div class="job-view fos">
+                        <div>
+                            <a *ngIf="item.comapanyimgname!=null && item.companyimagepath!=null"
+                                href="javascript:void(0)" target="_blank">
+                                <img class="img-thumbnail" height="50" width="50"
+                                    src="{{ item.comapanyimgname!='' && item.companyimagepath!=''?       item.companyimagepath:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'">
+                            </a>
+                        </div>
+                        <div>
+                            <h2 class="job-title" title="{{item.companyName}}"> {{ (item.companyName.length>50)?
+                                (item.companyName | slice:0:50)+'...':(item.companyName) }}</h2>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12"><strong>Login Type: </strong> {{item.logintype}}</div>
+                                    <!-- <div class="col-md-12"><strong>Email : </strong>
+                                        {{item.email?item.email:'NA'}}</div>
+                                    <div class="col-md-12"><strong>Mobile : </strong>
+                                        {{item.phoneno?item.phoneno:'NA'}}</div> -->
+                                    <div class="col-md-12"><strong>GSTIN: </strong> {{item.gstno?item.gstno:'NA'|
+                                        uppercase}}</div>
+                                    <div class="col-md-12"><strong>PAN: </strong> {{item.pancard?item.pancard:'NA' |
+                                        uppercase}}</div>
+                                    <div class="col-md-12">
+                                        <strong>State: </strong>
+                                        {{item.statename?item.statename:'NA'}}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <strong>District: </strong>
+                                        {{item.districtname?item.districtname:'NA'}}
+                                    </div>
+
+                                    <div class="col-md-12"><strong>Posted Job : </strong> {{item.totJobPosted ?
+                                        item.totJobPosted:'0'}}</div>
+                                    <div class="col-md-12"><strong>Application Received : </strong>{{item.totAppReceived
+                                        ?
+                                        item.totAppReceived:'0'}}</div>
+                                    <div class="col-md-12">
+                                        <strong>No. Of Opening: </strong>
+                                        {{item.noOfOening ? item.noOfOening : 0}}
+                                    </div>
+                                    <!-- <div class="col-md-12"><strong>Total Work Location: </strong> {{item.totworkloc}}</div> -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="job-list-action card-view-btns">
+                                    <a class="viewit" href="javascript:void(0)"
+                                        (click)="onCompanyClicked(item.companyId)" title="View">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Company card ends here -->
+
+<!-- Job card by arti ahirwar on date 10 may 2019 -->
+<div class="page-filters" [ngClass]="(JobCardShow == true)?'show':'hide'">
+    <h2>
+        <a href="javascript:void(0);">
+            <i class="fa fa-filter" aria-hidden="true"></i>Apply Filters Job
+            <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+        </a>
+    </h2>
+    <form action="" [formGroup]="FilterJobByComoany" (submit)="GetJobListByComapnyIdFilter(0,'')">
+        <div class="filter-wrapper">
+            <div class="form-group">
+                <div class="col-md-4 col-sm-4">
+                    <label>Industry</label>
+                    <select class="form-control" formControlName="Industry">
+                        <option value="" selected>Select</option>
+                        <option *ngFor="let item of IndustryArea" value="{{item.id}}">{{item.industryName}}</option>
+                    </select>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <label>Functional Area</label>
+                    <select class="form-control" formControlName="FunctionalArea">
+                        <option value="" class="" selected="selected">Select</option>
+                        <option *ngFor="let item of FunctionArea" value="{{item.id}}">{{item.functionalAreaName}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <label>Search Keyword<span class="mandatory"></span></label>
+                    <input class="form-control" formControlName="SearchKeyJob">
+                </div>
+            </div>
+            <div class="row text-center m-t-5">
+                <button type="reset" (click)="reset()" class="btn btn-w-shadow no-rd">Reset</button>
+                <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="col-md-12" *ngIf="SearchResultShow==true">
+    <div class="col-md-12 jd-detail job-wrapper searchResults">
+        <h4>Search Result</h4>
+        <div class="form-group">
+            <p class="col-md-4">
+                <span class="text-strong">Industry</span> : {{ShowPushDatajob.industry}}
+            </p>
+            <p class="col-md-4">
+                <span class="text-strong">Functional Area</span> : {{ShowPushDatajob.functional}}
+            </p>
+            <p class="col-md-4">
+                <span class="text-strong">Keyword</span> : {{ShowPushDatajob.Keyword}}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" *ngIf="JobCardShow">
+    <div class="all-jobs-list">
+        <div id="" class="searchResults">
+            <ul class="joblist-wrapper">
+                <li class="job-wrapper edit-delete-h" *ngFor="let item of joblist">
+
+                    <h2 class="job-title lang-ellip"><a href="javascript:void(0)">{{item.comapnyName}}</a></h2>
+                    <div class="clearfix"></div>
+                    <h3 class="company-name lang-ellip">{{item.jobTitle}}</h3>
+                    <div class="clearfix"></div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Job Code : </strong> <span class="text-strong">{{item.jobcode!=null?item.jobcode:'NA'
+                                    }} </span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Valid upto : </strong> <span>{{item.validDate | date:'dd/MM/y'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6 lang-ellip">
+                                <strong>Name : </strong> <span
+                                    title="{{item.contactPersonName}}">{{item.contactPersonName}}
+                                </span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Contact No. : </strong> <span>{{item.contactPersonMobile}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6 lang-ellip">
+                                <strong>Email : </strong> <span>{{item.email }}</span>
+                            </div>
+                            <!-- <div class="col-md-6">
+                                <strong>Total Applied : </strong> <span>{{item.totalAppliedCandidate}}</span>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Industry Name : </strong> <span>{{item.industryName }}</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Functional Area : </strong> <span>{{item.functionalAreaName}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>No of Opening : </strong> <span>{{item.noofopening !='' ? item.noofopening
+                                    :'NA' }}</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Total Applied : </strong> <span>{{item.totalAppliedCandidate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="(item.totalAppliedCandidate!=0)">
+                          <button class="postit" href="javascript:void(0)" (click)="GetOpeningList(item.jobId,0,'')" class="btn btn-w-shadow no-rd pull-right"
+                            title="View">View Opening</button>
+                        </div>
+                      </div>
+                    </div> -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12" *ngIf="(item.totalAppliedCandidate!=0)">
+                                <div class="job-list-action card-view-btns">
+                                    <a class="viewit" href="javascript:void(0)"
+                                        (click)="GetOpeningScreeningPage(item.jobId,item.userActiveStatus,item.userId,item.iscreeningavilable)"
+                                        title="View Opening">
+                                        View Applicant
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div *ngIf="(JobCardShow && (joblist == '' || joblist.length==0 || joblist==null))" class="alert alert-warning">No Data
+    Found...</div>
+
+<!-- Job card ends here -->
+
+
+<!--      Code for screening and opening  --->
+
+<div class="review-application {{ScreeningDetail?'show':'hide'}}">
+    <h5 class="review-application-header"></h5>
+    <div class="review-application-wrapper">
+        <div class="form-group">
+            <div [ngClass]="ScrQuesCount?'col-md-4 col-sm-4':'col-md-6 col-sm-6'">
+                <a href="javascript:void(0)" (click)="GetJobDetail(templateJobDetail)"
+                    class="review-application-btn">View
+                    Job Posted Details</a>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="(ScrQuesCount)">
+                <a href="javascript:void(0)" class="review-application-btn"
+                    (click)="GetJobScreeningquestionList(displayQuestion)">View
+                    Screening Questions</a>
+                <!-- <a   (click)="GetJobScreeningquestionList()" class="review-application-btn">View Screening Questions</a> -->
+            </div>
+            <div [ngClass]="ScrQuesCount?'col-md-4 col-sm-4':'col-md-6 col-sm-6'">
+                <a href="javascript:void(0)" class="review-application-btn"
+                    (click)="GetCompanyDetail(ShowCompanyDetail)">View
+                    Company Detail</a>
+                <!-- <a   (click)="GetJobScreeningquestionList()" class="review-application-btn">View Screening Questions</a> -->
+            </div>
+        </div>
+        <div class="form-group" *ngIf="(ScrQuesCount)">
+            <div class="review-stats">
+                <div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-8 col-xs-8">Negotiable Questions</div>
+                        <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">{{CountRes.totnegotiablequescnt}}</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-8 col-xs-8">Non-Negotiable Questions</div>
+                        <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">{{CountRes.totnonnegotiablequescnt}}</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-8 col-xs-8">Total Questions</div>
+                        <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">{{CountRes.totscreeingquestcnt}}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-8 col-xs-8">Qualified Application</div>
+                        <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">{{CountRes.totquilifiedcand}}</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-8 col-xs-8">Non-Qualified Application</div>
+                        <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">{{CountRes.totnonquilifiedcand}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- {{openinglist|json}} -->
+        <div class="form-group margin-top-20">
+            <div class="col-md-1 col-sm-2 col-xs-6"><b>Job Opening Location</b></div>
+            <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+            <div class="col-md-3 col-sm-3 col-xs-5">
+                <select class="form-control" (change)="OnLocationChange($event.target.value)">
+                    <option value="0">All</option>
+                    <option *ngFor="let item of openinglist" value="{{item.jobopeningId}}">{{item.jobdCode}} -
+                        {{item.stateName}},{{item.cityname}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="review-application-c-list" *ngIf="(ScrQuesCount==true)">
+            <div [ngClass]="(ScreeningDetail==true)?'show':'hide'">
+                <div class="page-filters p-d-0">
+                    <h2>
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                            <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                        </a>
+                    </h2>
+                    <form (submit)="GetCandidateListDirectly()" [formGroup]="FilterCandidateForm">
+                        <div class="filter-wrapper">
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-6">
+                                    <label>Question Category</label>
+                                    <select class="form-control" formControlName="QuesCatNego"
+                                        (change)="OnQuestCatChange($event.target.value)">
+                                        <option value="" selected="selected">All</option>
+                                        <option value="1">Negotiable</option>
+                                        <option value="0">Not Negotiable</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-sm-4" *ngIf=PrefrenceOption>
+                                    <label>Preferences</label>
+                                    <select class="form-control" formControlName="QuesPreference">
+                                        <option value="" selected="selected">All</option>
+                                        <option *ngFor="let item of PrefResponse" value="{{item.id}}">
+                                            {{item.preferenceValue}}
+                                        </option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <label>Application Category</label>
+                                    <select class="form-control" formControlName="expectedAnswer">
+                                        <option value="" selected="selected">All</option>
+                                        <option value="EXPECTED">Qualified</option>
+                                        <option value="NONEXPECTED">Non-Qualified</option>
+                                    </select>
+                                </div>
+                                <div class="form-group text-center margin-top-20 ps-relative">
+                                    <button type="reset" class="btn btn-w-shadow no-rd" (click)="ResetFilter()"
+                                        style="margin-right:10px;">Reset</button>
+                                    <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- <div class="col-md-12" *ngIf="(OpeningSearchResult)">
+                    <div class="col-md-12 jd-detail job-wrapper searchResults">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <h4 class="m-b-0">Search Result</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 col-sm-6">
+                                <span class="text-strong">Question Category</span>: {{ShowCandFilterData.QuestionCatgory}}
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <span class="text-strong">Preferences</span>: {{ShowCandFilterData.PreferenceN}}
+                            </div>
+                            <div class="cleafix visible-sm"></div>
+                            <div class="col-md-3 col-sm-6">
+                                <span class="text-strong">Application Category</span>: {{ShowCandFilterData.Expectedstaus}}
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="review-application-c-list m-t-10" *ngIf="ShowCandList">
+            <h6>Candidate List :</h6>
+            <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="ShowAllexcelExport(CandList)">
+                <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+            </a>
+            <div class="">
+                <div class="ui-widget-header ui-widget-header-r">
+                    <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+                </div>
+                <p-dataTable [value]="CandList" [loading]="loading" [rows]="10" [paginator]="true" [pageLinks]="3"
+                    [rowsPerPageOptions]="[5,10,20]" [sortField]="sortF" [sortOrder]="sortO"
+                    (onSort)="changeSort($event)" [globalFilter]="gb" scrollable="true" scrollWidth="100%">
+                    <p-column header="S.No." [style]="{'width':'50px'}">
+                        <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                            {{i+1}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column header="Action" [style]="{'width':'150px'}">
+                        <ng-template let-action="rowData" let-i="rowIndex" pTemplate type="body">
+                            <span>
+                                <select
+                                    *ngIf="(action.candStatus == 'SUITABLE' || action.candStatus == 'NOTSUITABLE' || action.candStatus == 'DISQULIFIED'  || action.candStatus == 'PENDING'  || action.candStatus == 'SCHEDULED')"
+                                    class="form-control" id="myDropDown{{i}}"
+                                    (change)="JobSuitability(templatefornotsuitable,$event.target.value,action.candId,action.candName ,action.jobId,action.jobOpeningId,action.apiType,action.sourceId,i)">
+                                    <option value="2" class="" [selected]="action.isSuitable==null ? true:false">--
+                                        Select
+                                        --</option>
+                                    <option value="1" class="" [selected]="action.isSuitable==1 ? true:false">Suitable
+                                    </option>
+                                    <option value="0" class="" [selected]="action.isSuitable==0 ? true:false">Not
+                                        Suitable</option>
+                                </select><b></b>
+                            </span>
+                            <span *ngIf="(action.candStatus == 'SELECTED')"><b>Selected</b></span>
+                            <span *ngIf="(action.candStatus == 'RELEASED')"><b>Offer Letter Released</b></span>
+                            <span *ngIf="(action.candStatus == 'PLACED')"><b>Placed</b></span>
+                        </ng-template>
+                    </p-column>
+
+                    <p-column header="View Screening" [style]="{'width':'100px'}">
+                        <ng-template let-ViewScreening="rowData" let-i="rowIndex" pTemplate type="body">
+                            <a href="javascript:void(0)" *ngIf="ViewScreening.isScreeningAnswer" class="text-link"
+                                title="View Screening"
+                                (click)="openscreeningModal(screeningAnswerTemplate,ViewScreening,i)">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                            <span *ngIf="!ViewScreening.isScreeningAnswer">-</span>
+                        </ng-template>
+                    </p-column>
+
+                    <p-column header="Name" [sortable]="true" [style]="{'width':'200px'}">
+                        <ng-template let-name="rowData" let-i="rowIndex" pTemplate type="body">
+                            {{ (name.candName.length>20)?
+                            (name.candName | slice:0:20)+'...':(name.candName) }}
+                        </ng-template>
+                    </p-column>
+
+                    <!-- <p-column field="candName" header="Name" [sortable]="true" [style]="{'width':'800px'}"></p-column> -->
+                    <p-column field="openingJobdCode" header="Opening Code" [style]="{'width':'200px'}"></p-column>
+                    <p-column field="mobile" header="Mobile" [sortable]="true" [style]="{'width':'200px'}"></p-column>
+                    <p-column field="gender" header="Gender" [sortable]="true" [style]="{'width':'50px'}"></p-column>
+                    <p-column field="age" header="Age" [sortable]="true" [style]="{'width':'50px'}"></p-column>
+                    <p-column header="State" [sortable]="true" [style]="{'width':'250px'}">
+
+                        <ng-template let-stateName="rowData" pTemplate type="body">
+                            {{stateName.stateName!=null?stateName.stateName:'NA'}}
+                        </ng-template>
+
+                    </p-column>
+                    <p-column header="District" [sortable]="true" [style]="{'width':'250px'}">
+                        <ng-template let-districtName="rowData" pTemplate type="body">
+                            {{districtName.districtName!=null?districtName.districtName:'NA'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="apiType" header="Source" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+                    <p-column header="Training Center" [sortable]="true" [style]="{'width':'150px'}">
+                        <ng-template let-partnername="rowData" pTemplate type="body">
+                            {{partnername.partnerName!=null?partnername.partnerName:'NA'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column header="Training Trade" [sortable]="true" [style]="{'width':'150px'}">
+                        <ng-template let-traningtrade="rowData" pTemplate type="body">
+                            {{traningtrade.traningTrade!=null?traningtrade.traningTrade:'NA'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column header="Training Scheme" [sortable]="true" [style]="{'width':'150px'}">
+                        <ng-template let-trainingscheme="rowData" pTemplate type="body">
+                            {{trainingscheme.trainingScheme!=null?trainingscheme.trainingScheme:'NA'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column header="View Profile" class="text-center" [style]="{'width':'75px'}">
+                        <ng-template let-ViewProfile="rowData" pTemplate type="body">
+                            <!-- <a href="javascript:void(0)" class="" title="View Details" (click)="ViewDetails(template,template2,ViewProfile.sourceId==0?ViewProfile.candId:ViewProfile.sourceId,ViewProfile.apiType)">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a> -->
+
+                            <a href="javascript:void(0)" class="" title="View Details"
+                                (click)="openModal(ViewProfile.sourceId==0?ViewProfile.candId:ViewProfile.sourceId,ViewProfile.apiType)">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+
+                        </ng-template>
+                    </p-column>
+                    <!-- <p-column header="PIA Detail" class="text-center" [style]="{'width':'150px'}">
+                        <ng-template let-PIADetail="rowData" pTemplate type="body">
+                            <a *ngIf="PIADetail.apiType=='MRIGS'" href="javascript:void(0)" class="" title="View Details"
+                                (click)="openpiaData(temppia,PIADetail.sourceId==0?PIADetail.candId:PIADetail.sourceId,PIADetail.jobOpeningId,PIADetail.apiType)">
+                                <i class="fas fa-address-card" aria-hidden="true"></i>
+                            </a>
+                            <p *ngIf="PIADetail.apiType!='MRIGS'">NA </p>
+                        </ng-template>
+                    </p-column> -->
+                </p-dataTable>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-w-shadow no-rd" tabindex="0" (click)="SubmitSuitabilityRemarks()">
+                    Submit
+                </button>
+                <button type="button" class="btn btn-w-shadow no-rd" tabindex="0" (click)="InterviewSchedule()">
+                    Interview Schedule
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-CommonView-Layout></app-CommonView-Layout>
+
+<!-- code to screening -->
+<ng-template #displayQuestion>
+    <div class="modal-body margin-top-20">
+        <div class="legend-box m-b-5">
+            <div class="col-md-12 row">
+                <span class="legend-title"><label class="biz-label">Screening Question</label></span>
+            </div>
+
+            <!-- Display Question List  section-->
+            <div>
+                <!-- <div *ngFor="let item of screenList ; let i = index" class="col-md-12">
+                    <b>{{1+i}} - {{item.questions}}?</b>
+                </div> -->
+                <div class="col-md-12">
+                    <hr class="m-b-0" />
+                </div>
+
+                <div class="col-md-12 m-t-10">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Group Name</th>
+                                <th>Question</th>
+                                <th>Expected Answer</th>
+                                <th>Question Category</th>
+                                <th>Question Preference</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of screenList ; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{item.groupname}}</td>
+                                <td>{{ (item.questions.length>40)?
+                                    (item.questions | slice:0:40)+'...':(item.questions)}}</td>
+                                <td>
+                                    <!-- {{item.expectanswer?item.expectanswer:'-'}} -->
+                                    <span>{{item.expectanswer}}</span>
+                                    <!-- <span *ngIf="!item.expectanswer">No</span> -->
+                                </td>
+                                <td>{{item.ismandatory==true?'Non Negotiable':'Negotiable'}}</td>
+                                <td>{{item.preference==0?'NA':item.preference}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <button class="btn btn-w-shadow no-rd" type="button" (click)="closeQuestionList()">Close</button>
+        </div>
+    </div>
+
+</ng-template>
+
+<!-- Code to get the comany detail -->
+<ng-template #ShowCompanyDetail>
+    <div class="modal-body margin-top-20">
+        <div class="legend-box m-b-5">
+            <div class="col-md-12 row">
+                <span class="legend-title"><label class="biz-label">Company Detail</label></span>
+            </div>
+            <!-- Display Question List  section-->
+            <div>
+                <div class="searchResults ps-relative">
+                    <div class="job-view">
+                        <div>
+                            <a *ngIf="CompanyData.image!=null && CompanyData.imgName!=null" href="{{CompanyData.image}}"
+                                target="_blank">
+                                <img class="thumbnail img-responsive"
+                                    src="{{ CompanyData.image!=null?CompanyData.image:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'">
+                            </a>
+                            <a *ngIf="CompanyData.image==null || CompanyData.imgName==null" href="javascript:void(0)">
+                                <img class="thumbnail img-responsive"
+                                    src="{{ CompanyData.image!=null && CompanyData.imgName!=null?CompanyData.image:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'">
+                            </a>
+                        </div>
+                        <div>
+                            <div class="form-group m-b-0">
+                                <div class="col-md-4 col-sm-4">
+                                    <h6 class="m-b-0 job-title text-uppercase">
+                                        Company Name
+                                    </h6>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <div class="col-md-12 p-l-0">
+                                        <h6 class="m-b-0 job-title text-uppercase">
+                                            <span title={{CompanyData.companyName}}>
+                                                {{CompanyData.companyName==null?'NA':CompanyData.companyName}}
+                                            </span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong"> Tagline</span>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    {{CompanyData.tagLine==null?'NA':CompanyData.tagLine}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong"> Short Code</span>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    {{CompanyData.companyShortName==null?'NA':CompanyData.companyShortName}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong"> Login Type</span>:
+                                    {{CompanyData.loginType==null?'NA':CompanyData.loginType}}
+                                </div>
+
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong"> Email
+                                        id</span>:{{CompanyData.email==null?'NA':CompanyData.email}}
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong"> Mobile No.</span>:
+                                    <span>{{CompanyData.mobile==null?'NA':CompanyData.mobile}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong"> Landline No.</span>:
+                                    {{CompanyData.landLineNo==null?'NA':CompanyData.landLineNo}}
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong">GSTIN</span>: <span class="text-uppercase">
+                                        {{
+                                        CompanyData.gstn==null || CompanyData.gstn== ''
+                                        ?'NA':CompanyData.gstn
+                                        }}
+                                    </span>
+                                </div>
+
+                                <div class="col-md-4 col-sm-4">
+                                    <span class="text-strong">PAN</span>: <span
+                                        class="text-uppercase">{{CompanyData.pan==null?'NA':CompanyData.pan}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <button class="btn btn-w-shadow no-rd" type="button" (click)="Closecompanydetailsmodel()">Close</button>
+        </div>
+    </div>
+
+</ng-template>
+
+<!-- code to call job detail pop up -->
+<ng-template #templateJobDetail>
+    <div class="modal-header">
+        <h6 class="modal-title pull-left">Job Detail</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="CloseJobDetail()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <div>
+                <div class="usersWrapper" *ngFor="let jobs of JobDetail">
+                    <div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2 class="job-title">Job Posted By : {{jobs.companyName ? jobs.companyName :
+                                        'NA'}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="company-name m-b-10">Job Title : {{jobs.jobTitle ? jobs.jobTitle :
+                                        'NA'}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="company-name m-b-10">Job Code : {{jobs.jobcode ? jobs.jobcode : 'NA'}}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h6 class="m-b-0">Contact Person</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">Name :</span> {{jobs?.name}}
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">Designation :</span> {{jobs?.designation}}
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">Mobile No. :</span> {{jobs?.mobile}}
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">Landline No. :</span> {{jobs.landlineNumber ?
+                                    jobs.landlineNumber :'NA'}}
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">Email : </span> {{jobs.email ? jobs.email : 'NA'}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h6 class="m-b-0 m-t-10">Job Details</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span *ngIf="jobs.ageMax != '0'">
+                                        <span class="text-strong">Age :</span> {{jobs.ageMin ?jobs.ageMin:'NA'}} - {{
+                                        jobs.ageMax ? jobs.ageMax
+                                        : 'NA'
+                                        }}
+                                    </span>
+                                    <span *ngIf="jobs.ageMax=='0'">
+                                        <span class="text-strong">Age :</span> NA
+                                    </span>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12"
+                                    *ngIf="jobs.male!=0||jobs.female!=0||jobs.transgender!=0">
+                                    <span>
+                                        <span class="text-strong">Gender : </span> {{jobs.male==1?' Male ':''}}
+                                        {{jobs.female==2 ?' ,':''}} {{jobs.female==2 ?' Female':''}}
+                                        {{jobs.transgender==3?' , ':''}}
+                                        {{jobs.transgender==3?' Transgender ':''}}
+                                    </span>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12"
+                                    *ngIf="jobs.male == '0' &&jobs.female == '0' && jobs.transgender == '0'">
+                                    <span>
+                                        <span class="text-strong">Gender : </span> NA
+                                    </span>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span *ngIf="jobs.maxExp != '0'">
+                                        <span class="text-strong">Experience (in Yrs) :</span> {{jobs.minExp
+                                        ?jobs.minExp:'NA'}} - {{
+                                        jobs.maxExp ?
+                                        jobs.maxExp : 'NA'
+                                        }}
+                                    </span>
+                                    <span *ngIf="jobs.maxExp=='0'">
+                                        <span class="text-strong">Experience :</span> NA
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">Posted by: </span> {{jobs.posteDby ? jobs.posteDby :
+                                    'NA'}}
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">Probation Duration (in days) : </span> {{
+                                    jobs.probationDuration !=0 ? jobs.probationDuration :
+                                    'NA'
+                                    }}
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <span class="text-strong">OJT Duration (in Hrs) : </span> {{
+                                    jobs.ojtDuration !=0 ? jobs.ojtDuration :
+                                    'NA'
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <span class="text-strong">Other Detail : </span>
+                                    <span [innerHtml]="jobs.otherDetail ? jobs.otherDetail :'NA'"
+                                        style="white-space: pre-wrap;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <span class="text-strong">Job Description: </span>
+                                    <span [innerHtml]="jobs.jobDescription ? jobs.jobDescription :'NA'"
+                                        style="white-space: pre-wrap;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <span class="text-strong">Keyword : </span> {{jobs.keyword ? jobs.keyword : 'NA'}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <span class="text-strong">Functional Area : </span> {{
+                                    jobs.functionalArea ? jobs.functionalArea :
+                                    'NA'
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <span class="text-strong">Industry Area: </span> {{jobs.industryArea ?
+                                    jobs.industryArea : 'NA'}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="text-strong">Training Sector : </span> {{
+                                    jobs.trainingSectorList ?
+                                    jobs.trainingSectorList : 'NA'
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="text-strong">Training Trade : </span> {{
+                                    jobs.tradeList ?
+                                    jobs.tradeList : 'NA'
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <span class="text-strong">Role and Responsibility: </span>
+                                    <span [innerHtml]="jobs.rolesresPonsiblty ? jobs.rolesresPonsiblty :'NA'"
+                                        style="white-space: pre-wrap;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cleafix margin-bottom-20"></div>
+            <div class="dash-head dash-head-2" *ngIf="(jobopeningdetail.length!=0)">
+                <p>Location Wise Openings</p>
+            </div>
+
+            <div class="row location-details-wrapper">
+                <div *ngFor="let item of  jobopeningdetail.lstJobRequest"
+                    class="label-normal ps-relative location-details">
+                    <p class="text-strong">
+                        <label class="col-md-4">
+                            <span class="text-strong">State:</span> {{item.stateName?item.stateName:'NA'}}
+                        </label>
+                        <label class="col-md-4">
+                            <span class="text-strong">District:</span> {{item.districtName ? item.districtName: 'NA'}}
+                        </label>
+                        <label class="col-md-4">
+                            <span class="text-strong">City:</span> {{item.cityname ? item.cityname :
+                            'NA'}}
+                        </label>
+                    </p>
+                    <p>
+                        <label class="col-md-4">
+                            <span class="text-strong">No. of Vacancies:</span> {{item.noOfVacancy?item.noOfVacancy:0}}
+                        </label>
+                        <label class="col-md-4"><span class="text-strong">CTC (per month INR):</span> {{item.minCtc !=0
+                            &&
+                            item.maxCtc!=0
+                            ? (item.minCtc| toFloat) +' -'+(item.maxCtc | toFloat): 'NA'}} </label>
+                        <label class="col-md-4"><span class="text-strong">In Hand Salary (per month INR):</span>
+                            {{item.netSalary !=0 && item.maxNetSalary!=0 ? (item.netSalary) +' - '+(item.maxNetSalary):
+                            'NA'}}
+                            <!-- <span *ngIf="item.netSalary!=0">{{item.netSalary}} </span>
+                            <span *ngIf="item.netSalary==0">NA</span> -->
+                        </label>
+                    </p>
+                    <p>
+
+                        <label class="col-md-4"><span class="text-strong">Required Language:
+                            </span> <span *ngFor="let lang of item.languageId">
+                                <span>{{lang.name!=[] && lang.name!='' ? lang.name:'NA'}},</span> </span>
+                            <span *ngIf="item.languageId.length==0">
+                                <span>{{'NA'}}</span> </span>
+                        </label>
+                    </p>
+                    <div class="clearfix margin-bottom-20"></div>
+
+                    <!---   add new code  prakash singh -->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h6>Contact Person Details</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <span class="text-strong">Contact Person:</span>
+                                    {{item.contactName!=''&&item.contactName!=null?item.contactName:'NA'}}
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <span class="text-strong">Designation:</span>
+                                    {{item.contactDesignation!=''&&item.contactDesignation!=null?item.contactDesignation:'NA'}}
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <span class="text-strong">Mobile No:</span>
+                                    {{item.contactMobile!=''&&item.contactMobile!=null?item.contactMobile:'NA'}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <span class="text-strong">Landline Number:</span>
+                                    {{item.contactLandlineNumber!=''&&item.contactLandlineNumber!=null?item.contactLandlineNumber:'NA'}}
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <span class="text-strong">Email ID:</span>
+                                    {{item.contactEmail!=''&&item.contactEmail!=null?item.contactEmail:'NA'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix margin-bottom-20"></div>
+                    <!-- end  new code prakash Singh -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-w-shadow no-rd" (click)="CloseJobDetail()">Close</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- code to call Not suitable remark pop up -->
+
+<ng-template #templatefornotsuitable>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{CandName}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)=" CloseNotSuitableRemark()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="NotSuitableCandidateForm">
+            <div class="edit-profile-wrapper margin-top-20">
+                <div class="box-title">
+                    <p class="box-title-content">
+                        Remark For Not Suitable Candidate
+                    </p>
+                </div>
+                <div class="box-content">
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>Remarks<span class="mandatory">*</span></label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" formControlName="remarkforNotsuitable" />
+                            </div>
+                            <errors [control]="NotSuitableCandidateForm.controls.remarkforNotsuitable"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="button" data-dismiss="modal" [disabled]="!(NotSuitableCandidateForm.valid)"
+                            (click)="SubmitNotSuitableRemark()" class="btn yl-btn">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</ng-template>
+
+<ng-template #screeningAnswerTemplate>
+    <div class="panel-body padding-bottom-0">
+        <button type="button" class="close" (click)="closeScreeningModal()">&times;</button>
+        <!-- *ngIf="ScrStatus==2"  <h4 class="modal-title" style="text-transform: capitalize">Screening Answer</h4>appliedCandidate.isSutable-->
+    </div>
+    <div class="modal-body">
+        <div class="legend-box m-b-5">
+            <div class="col-md-12 row">
+                <span class="legend-title">
+                    <label class="biz-label">Screening Answer</label>
+                </span>
+            </div>
+            <div class="alert alert-success m-t-10 p-d-0">
+                <div class="form-group m-t-10">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <b>Total Number of Expected Answer :</b> {{screeningAnswer.totexpctdans}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <b>Total Number of Non Expected Answer :</b> {{screeningAnswer.totnonexpctdans}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <b>Candidate :</b>
+                        {{ (screeningAnswer.candidateName.length>50)?
+                        (screeningAnswer.candidateName | slice:0:50)+'...':(screeningAnswer.candidateName) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <b>JobTitle :</b> {{screeningAnswer.jobtitle}}
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <b>JobCode :</b> {{screeningAnswer.jobcode}}
+                    </div>
+                </div>
+            </div>
+            <div class="legend-box col-md-12 margin-top-20 m-b-5" *ngFor="let data of screeningAnswer.groupList">
+                <div class="col-md-12 row">
+                    <span class="legend-title">
+                        <label class="biz-label">Group Name : {{data.groupname}}</label>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <div class="screening-group-wrapper">
+                        <div class="question-list-wrapper" *ngFor="let item of data.quesList; let i = index">
+                            <ul class="group-queston">
+                                <li class="question-list">
+                                    <span class="q-n">{{i + 1}}</span> {{ (item.questions.length>40)?
+                                        (item.questions | slice:0:40)+'...':(item.questions)}}
+                                </li>
+                                <li class="question-list bg-success">
+                                    <span><b>Ans.</b> {{item.answers}}</span><br>
+                                    <span class="ans-phrase"><b>Expected Answer:</b> {{item.expectAnswer}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer p-t-0">
+        <button
+            *ngIf="(CandStatus == 'SUITABLE' || CandStatus == 'NOTSUITABLE' || CandStatus == 'DISQULIFIED'  || CandStatus == 'PENDING'  || CandStatus == 'SCHEDULED')"
+            type="button" class="btn btn-w-shadow no-rd"
+            (click)="selectSuitable(templatefornotsuitable,'1',appliedCandidate,index)">Suitable</button>
+        <button type="button"
+            *ngIf="(CandStatus == 'SUITABLE' || CandStatus == 'NOTSUITABLE' || CandStatus == 'DISQULIFIED'  || CandStatus == 'PENDING'  || CandStatus == 'SCHEDULED')"
+            class="btn btn-w-shadow no-rd"
+            (click)="selectSuitable(templatefornotsuitable,'0',appliedCandidate,index)">Not
+            Suitable</button>
+        <button type="button" class="btn btn-w-shadow no-rd" (click)="closeScreeningModal()">Close</button>
+    </div>
+</ng-template>
+
+
+
+<ng-template #template2>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"></h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modaldefualt.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        No Records Founds......
+    </div>
+</ng-template>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h6 class="modal-title pull-left">Candidate Details </h6>
+        <button type="button" class="btn btn-w-shadow no-rd pull-right" aria-label="Close" (click)="modalRef.hide()">
+
+            Close
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="col-md-12" *ngIf="MrigsDataShow==true;">
+            <!-- {{candidatedetails}} -->
+            <span [innerHtml]="candidatedetails.candidateHtml | KeepHtml: 'html' "></span>
+            <div>
+            </div>
+        </div>
+        <div class="col-md-12" *ngIf="MrigsDataShow==false;">
+            <div class="job-view">
+                <div>
+                    <figure class="text-center thumbnail">
+                        <br>
+                        <img onError="this.src='../../../../assets/images/NoImage.png'"
+                            src="{{candidatedetails.imagePath!=''?candidatedetails.imagePath:'assets/images/NoImage.png'}}"
+                            alt="No image" />
+                        <figcaption>
+                            <br>
+                        </figcaption>
+                    </figure>
+
+
+                </div>
+
+
+                <div>
+                    <h6 class="job-title m-b-5">Personal Details</h6>
+                    <div class="form-group">
+                        <p class="col-md-6 lang-ellip" title="{{candidatedetails.name}}">
+                            <span class="text-strong">Name:</span>
+                            {{candidatedetails.name}}
+                        </p>
+                        <p class="col-md-6">
+                            <span class="text-strong">Date of Birth:</span> {{
+                            candidatedetails.dob|date : "dd/MMMM/y"
+                            }}
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <p class="col-md-6 lang-ellip" title="{{candidatedetails.email}}">
+                            <span class="text-strong">Email:</span>
+                            {{candidatedetails.email}}
+                        </p>
+                        <p class="col-md-6">
+                            <a href="javascript:void(0)" title="show" (click)="v =!v"><span><strong>Mobile
+                                        No:</strong></span>
+                                <span style="color:blue;">{{v==true?candidatedetails.mobile:'XXX-XXX-XXXX'}}</span></a>
+
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <p class="col-md-6"><span class="text-strong">Gender:</span> {{candidatedetails.gender}}</p>
+                        <p class="col-md-6"><span class="text-strong">Religion:</span> {{candidatedetails.religion}}</p>
+                    </div>
+                    <div class="form-group">
+                        <p class="col-md-12"><span class="text-strong">About Me:</span> {{candidatedetails.aboutMe}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cleafix margin-bottom-20"></div>
+            <div class="dash-head dash-head-2" *ngIf="PartnerInfo!=''">
+                <p>Training Partner</p>
+            </div>
+            <div class="table-responsive">
+                <table *ngIf="PartnerInfo!=''" class="table table-bordered table-striped margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th scope="col">Sr. No.</th>
+                            <th scope="col">Training Partner </th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>{{ PartnerInfo.trainingPartner }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="cleafix margin-bottom-20"></div>
+            <div class="dash-head dash-head-2" *ngIf="TrainingPartnerDetails!=''">
+                <p>Training Partner Details</p>
+            </div>
+            <div class="table-responsive">
+                <table *ngIf="TrainingPartnerDetails!=''" class="table table-bordered table-striped margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th scope="col">Sr. No.</th>
+                            <th>Batch Number</th>
+                            <th>Training Scheme</th>
+                            <th>Training Sector</th>
+                            <th>Training Trade</th>
+                            <th>Training Centre Name</th>
+                            <th>Registration Code</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="TrainingPartnerDetails!=null">
+                            <td>1</td>
+                            <td>{{ TrainingPartnerDetails.batchNumber }}</td>
+                            <td>{{ TrainingPartnerDetails.trainingScheme}}</td>
+                            <td>{{ TrainingPartnerDetails.trainingSector}}</td>
+                            <td>{{ TrainingPartnerDetails.trainingTrade}}</td>
+                            <td>{{ TrainingPartnerDetails.trainingCentreName}}</td>
+                            <td>{{ TrainingPartnerDetails.registrationCode}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dash-head dash-head-2" *ngIf="empeduinfodata?.length > 0">
+                <p>Education Qualification</p>
+            </div>
+            <div class="table-responsive">
+                <table *ngIf="empeduinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Qualification</th>
+                            <th>Board / University</th>
+                            <th>Stream / Course</th>
+                            <th>Percentage</th>
+                            <th>Year of passing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let dbedu of empeduinfodata;let i=index">
+                            <td>{{i+1}} </td>
+                            <td>{{ dbedu.educationName}} </td>
+                            <td>{{ dbedu.board }} </td>
+                            <td>{{ dbedu.stream}}</td>
+                            <td>{{ dbedu.percentage}}%</td>
+                            <td>{{ dbedu.yearOfPassing }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="cleafix margin-bottom-20"></div>
+            <div class="dash-head dash-head-2" *ngIf="workexpinfodata?.length > 0">
+                <p>Work Experience</p>
+            </div>
+            <div class="table-responsive">
+                <table *ngIf="workexpinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Designation</th>
+                            <th>Organization</th>
+                            <th>Country</th>
+                            <th>State</th>
+                            <th>District</th>
+                            <th>Working</th>
+                            <th>CTC(INR in lakhs)</th>
+                            <th>Period [From]</th>
+                            <th>Period [To]</th>
+                            <th>Experience</th>
+                            <th>Job Description</th>
+                            <!-- <th>Contact</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let dbworkexp of workexpinfodata;let i=index">
+                            <td>{{ i+1 }} </td>
+                            <td>{{ dbworkexp.jobTitle }} </td>
+                            <td>{{ dbworkexp.companyName }} </td>
+                            <td>India</td>
+                            <td>{{ dbworkexp.stateName}}</td>
+                            <td>{{ dbworkexp.districtName }}</td>
+                            <td>{{ dbworkexp.currentlyWorking==true?"Yes":"No" }} </td>
+                            <td>{{ dbworkexp.currentCtc }} </td>
+                            <td>{{ dbworkexp.jobPeriodFrom | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{ dbworkexp.jobPeriodTo | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{dbworkexp.totalExp}}</td>
+                            <td>
+                                <a class="viewit" style="color:blue" href="javascript:void(0)" title="Read More"
+                                    (click)="viewcandidateDescription(dbworkexp.jobDesc,template3)">
+                                    {{dbworkexp.jobDesc| slice:0:20}}...
+                                </a>
+                            </td>
+                            <!-- <td style="text-align:center">
+                                <a href="javascript:void(0)" class="" title="View Details" (click)="openpiaData(temppia,dbworkexp.id,'MRIGS')">
+                                    <i class="fas fa-address-card" aria-hidden="true"></i>
+                                </a>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dash-head dash-head-2" *ngIf="empcertinfodata?.length > 0">
+                <p>Certificate</p>
+            </div>
+            <div class="table-responsive">
+                <table *ngIf="empcertinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>Certification No/UID</th>
+                            <th>Program Name/ Scheme</th>
+                            <th>Issued By</th>
+                            <th>Issued On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let dbcert of empcertinfodata;let i=index">
+                            <td>{{ dbcert.certificationNo }} </td>
+                            <td>{{ dbcert.programName }} </td>
+                            <td>{{ dbcert.issuedBy}}</td>
+                            <td>{{ dbcert.issuedOn | date: 'dd/MM/yyyy'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dash-head dash-head-2" *ngIf="addressinfodata?.length > 0">
+                <p>Address</p>
+            </div>
+            <div class="table-responsive" *ngIf="addressinfodata?.length > 0">
+                <table class="table table-bordered table-striped margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th scope="col">Sr. No.</th>
+                            <th scope="col">District of birth </th>
+                            <th scope="col">State</th>
+                            <th scope="col">Country</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Pincode</th>
+                            <th scope="col">Landmark</th>
+                            <th scope="col">Address Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="ng-star-inserted" *ngFor="let address of addressinfodata;let i = index">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{address.districtName}}</td>
+                            <td>{{address.stateName}}</td>
+                            <td>India</td>
+                            <td>{{address.address}}</td>
+                            <td>{{address.pinCode}}</td>
+                            <td>{{address.landmark}}</td>
+                            <td>{{address.addressType=='P'?'Permanent':'Correspondence'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dash-head dash-head-2" *ngIf="langinfodata?.length > 0">
+                <p>Language</p>
+            </div>
+            <div class="table-responsive">
+                <table *ngIf="langinfodata?.length > 0" class="table table-bordered table-striped margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th scope="col">Sr. No.</th>
+                            <th>Language</th>
+                            <th>Read</th>
+                            <th>Write</th>
+                            <th>Speak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let lang of langinfodata;let i = index">
+                            <td>{{ i+1}}</td>
+                            <td>{{ lang.languageName }}</td>
+                            <td>{{ lang.isRead==true?"Yes":"No"}}</td>
+                            <td>{{ lang.isWrite==true?"Yes":"No"}}</td>
+                            <td>{{ lang.isSpeak==true?"Yes":"No"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dash-head dash-head-2" *ngIf="areainfodata?.length > 0">
+                <p>Interest/hobby</p>
+            </div>
+            <div class="table-responsive">
+                <table *ngIf="areainfodata?.length > 0" class="table table-bordered table-striped margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Hobbies</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let area of areainfodata;let i = index">
+                            <td>{{ i+1 }}</td>
+                            <td>{{ area.interest }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dash-head dash-head-2" *ngIf="familyinfodata?.length > 0">
+                <p>Family Details</p>
+            </div>
+            <div class="table-responsive" *ngIf="familyinfodata?.length > 0">
+                <table *ngIf="familyinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Name</th>
+                            <th>Relation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let dbfamily of familyinfodata;let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{ dbfamily.name}}</td>
+                            <td>{{ dbfamily.relation }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="cleafix"></div>
+    <div class="modal-footer form-group text-right">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-w-shadow no-rd" aria-label="Close" (click)="modalRef.hide()">
+                Close
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #template3>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Job Description</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRefdesc.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="dash-head dash-head-2">
+
+    </div>
+    <div class="modal-body">
+        {{CandiadateDescr}}
+    </div>
+</ng-template>
+
+
+<ng-template #temppia>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Contact Details</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modaldpia.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" *ngIf="PiaContacDetials.contactHtml!=null">
+        <span [innerHtml]="PiaContacDetials.contactHtml | KeepHtml: 'html' "></span>
+    </div>
+    <div class="modal-body" *ngIf="PiaContacDetials.contactHtml==null">
+        <p class="text-center"> {{'No Records Found'}} </p>
+    </div>
+</ng-template>

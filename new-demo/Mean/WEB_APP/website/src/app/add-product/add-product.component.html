@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="card">
+      <div class="card-header">
+        <h1 class="text-primary">
+          Add Product
+        </h1>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="addProductForm" novalidate="novalidate" (ngSubmit)="submit()">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" formControlName="name" id="name" name="name" class="form-control"
+              [ngClass]="{'is-invalid':addProductForm.controls.name.invalid && addProductForm.controls.name.touched}">
+            <div *ngIf="addProductForm.controls.name.invalid && addProductForm.controls.name.touched">
+              <p *ngIf="addProductForm.controls.name.errors?.required" class="error-block">You Can`t leave Empty this!.
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" formControlName="image" id="image" name="image" class="form-control"
+              (change)="onImageSelect($event.target.files)"
+              [ngClass]="{'is-invalid':addProductForm.controls.image.invalid && addProductForm.controls.image.touched}">
+            <div *ngIf="addProductForm.controls.image.invalid && addProductForm.controls.image.touched">
+              <p *ngIf="addProductForm.controls.image.errors?.required" class="error-block">You Can`t leave Empty this!.
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" formControlName="price" id="price" name="price" class="form-control"
+              [ngClass]="{'is-invalid':addProductForm.controls.price.invalid && addProductForm.controls.price.touched}">
+            <div *ngIf="addProductForm.controls.price.invalid && addProductForm.controls.price.touched">
+              <p *ngIf="addProductForm.controls.price.errors?.required" class="error-block">You Can`t leave Empty this!.
+              </p>
+            </div>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

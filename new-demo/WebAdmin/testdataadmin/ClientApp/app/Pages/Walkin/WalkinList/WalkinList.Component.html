@@ -1,0 +1,451 @@
+<div class="dash-head">
+  <p>Walk-In Post</p>
+</div>
+<!-- ***************Filter for Company Details (Rajeev Jha-1174)********************** -->
+<div [ngClass]="HideCommon=='1'?'show':'hide'">
+  <div class="page-filters">
+    <h2>
+      <a href="javascript:void(0);">
+        <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+        <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+      </a>
+    </h2>
+    <form (submit)="GetFilterSearch(0,'','search')" [formGroup]="FilterJob">
+      <div class="filter-wrapper">
+        <div class="form-group">
+          <div class="col-md-3 col-sm-6">
+            <label>Login Type</label>
+            <select class="form-control" formControlName="logintype">
+              <option value="" selected>--Select--</option>
+              <option value="Agency">Agency</option>
+              <option value="Employer">Employer</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>State</label>
+            <select class="form-control" required formControlName="StateiD" (change)="GetAllDistrict($event.target.value)">
+              <option value="" selected>--Select--</option>
+              <option *ngFor="let st of states" [value]="st.id">{{st.stateName}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>District</label>
+            <select class="form-control" #val required formControlName="DistrictID">
+              <option value="" selected="selected">--Select--</option>
+              <option *ngFor="let district of district1" [value]="district.id">{{district.districtName}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <label>Search Keywords<span></span></label>
+            <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>Walk-in Created</label>
+            <select class="form-control" formControlName="walkinpostedstatus">
+              <option value="" selected>--Select--</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group text-center m-t-10">
+          <button type="reset" (click)="reset1()" class="btn btn-w-shadow no-rd">Reset</button>
+          <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+        </div>
+        <div class="form-group text-center m-t-10">
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- ******************Company filter-Search Result(Rajeev Jha-1174)********************* -->
+  <div class="col-md-12" *ngIf="companyfilterresult=='1'">
+    <div class="col-md-12 jd-detail job-wrapper searchResults">
+      <h4>Search Result</h4>
+      <div class="form-group">
+        <p class="col-md-4">
+          <!-- {{companyfilterresultdata|json}} -->
+          <span class="text-strong">Login Type</span>: {{companyfilterresultdata.logintype}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">State</span>: {{companyfilterresultdata.statename ?
+          companyfilterresultdata.statename :'NA'}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">District</span>: {{companyfilterresultdata.districtname ?
+          companyfilterresultdata.districtname :'NA'}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">Search Keywords</span>:
+          {{companyfilterresultdata.jobkeyword!=''?companyfilterresultdata.jobkeyword:'NA'}}
+        </p>
+        <p class="col-md-4">
+          <span class="text-strong">Walk-in Created</span>:
+          {{companyfilterresultdata.walkinpostedstatus!=''?companyfilterresultdata.walkinpostedstatus:'NA'}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- ******************End-Company filter-Search Result(Rajeev Jha-1174)***************** -->
+  <!-- *************** Company Details on Card (Rajeev Jha-1174)************************* -->
+  <div class="col-md-12" *ngIf="hrefurl=='1'">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-8 p-r-0">
+        <div class="legends">
+          <ul>
+            <li><span class="walkincreated"></span>Walk-In Created</li>
+            <li><span class="nowalkincreated"></span> Walk-In not Created</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="all-jobs-list">
+      <div class="searchResults ">
+        <ul class="joblist-wrapper">
+          <li class="job-wrapper ps-relative {{item.noofjobs>='1'?'approved':'disapproved'}}" *ngFor="let item of companyregisterdata"
+            [style.background-color]="item.companyid==companyId ? '#d4d0d0' : 'none' ">
+            <div class="job-view fos">
+              <div>
+                <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{item.comapanyimgname!=''?item.comapanyimgname:'assets/images/NoImage.png'}}"
+                  class="img-thumbnail" alt="Image">
+              </div>
+              <div>
+                <h2 class="job-title" title="{{item.companyname}}" *ngIf="item.companyname!=null">
+                  {{ (item.companyname.length>50)? (item.companyname | slice:0:50)+'...':(item.companyname) }}
+                </h2>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>Login Type : </strong> {{item.logintype?item.logintype:'NA'}}</div>
+                    <div *ngIf="item.email!=null" class="col-md-12" title="{{item.email?item.email:'NA'}}">
+                      <strong>Email : </strong>
+                      {{ (item.email.length>50)? (item.email | slice:0:50)+'...':(item.email) }}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>Mobile : </strong> {{item.phoneno?item.phoneno:'NA'}}</div>
+                    <div class="col-md-6"><strong>PAN : </strong> {{item.pancard?item.pancard:'NA'}}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>State : </strong> {{item.statename ? item.statename:'NA'}}</div>
+                    <div class="col-md-6"><strong>District : </strong> {{item.districtname ? item.districtname:'NA'}}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <strong>Total no. of Walk-in : </strong> {{item.noofjobs ?item.noofjobs:'0'}}
+                    </div>
+                    <div class="col-md-6">
+                      <strong>Total no. of Posted Walk-in : </strong> {{
+                      item.noofjobposted ?
+                      item.noofjobposted:'0'
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <strong>Total no. of Scraped Walk-in : </strong> {{
+                      item.noofjobscrap ?
+                      item.noofjobscrap:'0'
+                      }}
+                    </div>
+                    <div class="col-md-6">
+                      <strong>Total no. of Closed Walk-in : </strong> {{
+                      item.noofjobsclosed ?
+                      item.noofjobsclosed:'0'
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="job-list-action card-view-btns">
+                    <a class="viewit" href="javascript:void(0)" (click)="onClicked(item.companyid)">View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dash-head" *ngIf="walklistshow=='1'">
+  <a (click)="goToCommon()" title="Go To Common" class="btn btn-w-shadow no-rd pull-right" tabindex="0">
+    Back
+  </a>
+  <a *ngIf="walkindetail.isactive!=false" [routerLink]="'/CreateWalkins'" [queryParams]="{companyid:companyId}" class="btn btn-w-shadow no-rd pull-right"
+    tabindex="0">Create Walk-In</a>
+</div>
+<div class="page-filters" [ngClass]="(walklistshow=='1'?'show':'hide')">
+  <h2>
+    <a href="javascript:void(0);">
+      <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+      <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+    </a>
+  </h2>
+  <form (submit)="GetFilterWalkins()" [formGroup]="WalkingFilterForm">
+    <div class="filter-wrapper">
+      <div class="form-group">
+        <div class="col-md-3 col-sm-6">
+          <label>Industry</label>
+          <select class="form-control" formControlName="industry">
+            <option value="" selected>--Select--</option>
+            <option *ngFor="let item of IndustryArea" value="{{item.id}}">{{item.industryName}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>Functional Area</label>
+          <select class="form-control" formControlName="functionalarea">
+            <option value="" class="" selected="selected">--Select--</option>
+            <option *ngFor="let item of FunctionArea" value="{{item.id}}">{{item.functionalAreaName}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>Walk-In valid</label>
+          <select class="form-control" formControlName="walkinvalid">
+            <option value="" selected>--Select--</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>Walk-In status</label>
+          <select class="form-control" formControlName="walkinstatus">
+            <option value="" selected>--Select--</option>
+            <option value="Pending">Pending</option>
+            <option value="Posted">Posted</option>
+            <option value="Scraped">Scraped</option>
+            <option value="Closed">Closed</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>Search Keywords</label>
+          <input type="text" class="form-control" formControlName="walkinsearch" placeholder="Search" />
+        </div>
+        <div class="col-md-3 col-sm-6 ">
+          <div class="col-md-6 col-sm-6 p-l-0">
+            <label>Min CTC</label>
+            <input disabled value="{{minCtc}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MinCtc" class="form-control" placeholder="MinCtc">
+          </div>
+          <div class="col-md-6 col-sm-6 p-r-0">
+            <label>Max CTC</label>
+            <input disabled value="{{maxCtc}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MaxCtc" class="form-control" placeholder="MaxCtc">
+            <div class="custom-slider">
+            </div>
+          </div>
+          <div class="col-md-12 col-sm-12 custom-slider mrg-min p-d-0">
+            <label></label>
+            <ng5-slider [(value)]="minCtc" [(highValue)]="maxCtc" [options]="CtcOptions"></ng5-slider>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="col-md-6 col-sm-6 p-l-0">
+            <label>Min Exp</label>
+            <input disabled value="{{minExp}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MinExp" class="form-control" placeholder="MinExp">
+          </div>
+          <div class="col-md-6 col-sm-6 p-r-0">
+            <label>Max Exp</label>
+            <input disabled value="{{maxExp}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              type="text" formControlName="MaxExp" class="form-control" placeholder="MaxExp">
+          </div>
+          <div class="col-md-12 col-sm-12 custom-slider mrg-min p-d-0">
+            <label></label>
+            <ng5-slider [(value)]="minExp" [(highValue)]="maxExp" [options]="ExpOptions"></ng5-slider>
+          </div>
+        </div>
+      </div>
+      <div class="form-group text-center m-t-5">
+        <button type="reset" (click)="reset()" class="btn btn-w-shadow no-rd">Reset</button>
+        <button type="submit" class="btn btn-w-shadow no-rd filter-toggle" tabindex="0">Search</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="col-md-12" *ngIf="wlakinListStatus && searchsts==1">
+  <div class="col-md-12 jd-detail job-wrapper searchResults">
+    <h4>Search Result</h4>
+    <div class="form-group">
+      <p class="col-md-4">
+        <span class="text-strong">Industry</span>:
+        {{searchWalkins.IndustryAreaId!=0?searchWalkins.IndustryAreaId:'NA'}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Functional Area</span>:
+        {{searchWalkins.FunctionAreaId!=0?searchWalkins.FunctionAreaId:'NA'}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Walk-In valid</span>:
+        {{searchWalkins.walkinvalid!=''?searchWalkins.walkinvalid:'NA'}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Walk-In status </span>:
+        {{searchWalkins.walkinStatus!=''?searchWalkins.walkinStatus:'NA'}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Search Keywords</span>:
+        {{searchWalkins.searchKey!=''?searchWalkins.searchKey:'NA'}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Min CTC</span>: {{searchWalkins.minCtc}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Max CTC</span>: {{searchWalkins.maxCtc}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Min Exp</span>: {{searchWalkins.minExp}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Max Exp</span>: {{searchWalkins.maxExp}}
+      </p>
+    </div>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="all-jobs-list" *ngIf="wlakinListStatus">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-8 p-r-0">
+        <div class="legends">
+          <ul>
+            <li><span class="approved"></span>Walk-In valid</li>
+            <li><span class="disapproved"></span> Walk-In Invalid</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="" class="searchResults">
+      <ul class="joblist-wrapper">
+        <li class="job-wrapper ps-relative {{item.walkinToDate>comparegettodaydate?'approved':'disapproved'}}" *ngFor="let item of walkindetail">
+          <ng-template #template2>
+            <div class="modal-body text-center">
+              <p>Do you want to post this walk-in?</p>
+              <br />
+              <br />
+              <button type="button" class="btn yl-btn no-rd" (click)="postWalkin(item.walkInId,item)">Yes</button>
+              <button type="button" class="btn bl-btn no-rd" (click)="declineBox()">No</button>
+            </div>
+          </ng-template>
+          <ng-template #template3>
+            <div class="modal-body text-center">
+              <p>Please Add Valid Vacancy!</p>
+              <br />
+              <br />
+              <button type="button" class="btn bl-btn no-rd" (click)="declineBox()">Ok</button>
+            </div>
+          </ng-template>
+          <ng-template #template4>
+            <div class="modal-body text-center">
+              <p>Do You Want To Close This Walk-In?</p>
+              <br />
+              <br />
+              <button type="button" class="btn yl-btn no-rd" (click)="closeWalkin(item.walkInId,item,'closeWalk')">Yes</button>
+              <button type="button" class="btn bl-btn no-rd" (click)="declineBox()">No</button>
+            </div>
+          </ng-template>
+          <ng-template #template12>
+            <div class="modal-body text-center">
+              <p>Do you want to Repost this Walk-In?</p>
+              <br />
+              <br />
+              <button type="button" class="btn yl-btn no-rd" (click)="RepostwalkinJob(item.walkInId,item,'repost')">Yes</button>
+              <button type="button" class="btn bl-btn no-rd" (click)="declineBox()">No</button>
+            </div>
+          </ng-template>
+          <ng-template #template9>
+            <div class="modal-body text-center">
+              <p>Do You Want To Scrap This Walkin-In?</p>
+              <br />
+              <br />
+              <button type="button" class="btn yl-btn no-rd" (click)="scrapWalkin(item.walkInId,item,'scrapWalk')">Yes</button>
+              <button type="button" class="btn bl-btn no-rd" (click)="declineBox()">No</button>
+            </div>
+          </ng-template>
+          <h2 class="job-title lang-ellip"><a href="javascript:void(0)">{{item.companyName | uppercase}}</a></h2>
+          <div class="form-group m-b-0">
+            <div class="row">
+              <div class="col-md-12">
+                <h3 class="company-name lang-ellip" title="{{item.jobTitle}}" style="text-transform:capitalize">{{item.jobTitle
+                  | titlecase}}
+                </h3>
+              </div>
+            </div>
+          </div>
+          <ul class="jd-detail">
+            <li class="">
+              <span class="ellip-view"><strong>Job Code:</strong></span><span class="text-strong">
+                {{item.jobcode?item.jobcode:'NA'}}</span>
+            </li>
+            <li><span> <strong>No. of Vacancies :</strong></span> <span class="">{{item.noOfVacancy?item.noOfVacancy:'0'}}</span></li>
+          </ul>
+          <ul class="jd-detail">
+            <li class="lang-ellip">
+              <strong>Walkin From : </strong> <span>
+                {{item.walkInDate | date:"dd/MM/yyyy"}}
+              </span>
+            </li>
+            <li class="lang-ellip">
+              <strong>Walkin To : </strong> <span>
+                {{item.walkinToDate | date:"dd/MM/yyyy"}}
+              </span>
+            </li>
+          </ul>
+          <ul class="jd-detail">
+            <li class="lang-ellip">
+              <strong>Walkin Time : </strong> <span>
+                {{converttime(item.walkinFromTime)}}-
+                {{converttime(item.walkinToTime) }}
+              </span>
+            </li>
+            <li class="lang-ellip">
+              <span class="ellip-view"><strong>Job Description:</strong>
+                {{item.jobDescription?item.jobDescription:'NA'}}</span>
+            </li>
+          </ul>
+          <ul class="jd-detail">
+            <li><span> <strong>Industry :</strong></span> <span class="">{{item.industryArea?item.industryArea:'NA'}}</span></li>
+            <li>
+              <span><strong>Functional Area :</strong> </span><span class="">{{item.functionalArea}}</span>
+            </li>
+          </ul>
+          <ul class="jd-detail">
+            <li><span> <strong> Contact Person :</strong></span> <span class="">{{item.name?item.name:'NA'}}</span></li>
+            <li><span> <strong>Contact No :</strong></span> <span class="">{{item.mobile?item.mobile:'NA'}}</span></li>
+          </ul>
+          <div class="form-group">
+            <div class="job-list-action card-view-btns">
+              <a href="javascript:void(0)" class="postit" *ngIf="item.noOfVacancy=='0' && !item.isJobPushed && item.isScrap == false && item.isValidJob == true"
+                title="Post This Walkin" (click)="PushedTemplate(template3)">Post</a>
+
+              <a href="javascript:void(0)" class="postit" *ngIf="!item.isJobPushed && item.noOfVacancy!='0' && item.isScrap == false && item.isValidJob == true"
+                title="Post This Walkin" (click)="PushedTemplate(template2)">Post</a>
+
+              <a href="javascript:void(0)" class="revokeit" title="Repost This Walk-In" *ngIf="item.isJobPushed && !item.isScrap  && !item.isClosed && item.isValidJob == true"
+                (click)="repostWalkin(template12)">Repost</a>
+
+              <a href="javascript:void(0)" class="viewit" title="Scrap This Walk-In" *ngIf="item.isJobPushed && !item.isScrap  && !item.isClosed && item.isValidJob == true"
+                (click)="scrapTemplate(template9)">Scrap</a>
+              <a href="javascript:void(0)" class="revokeit" title="Close This Walk-In" *ngIf="item.isJobPushed && !item.isScrap  && !item.isClosed && item.isValidJob == true"
+                (click)="scrapWalkinTemplate(template4)">Close</a>
+              <a href="javascript:void(0)" class="revokeit" title="Scraped Walkin" *ngIf="item.isScrap">Scraped</a>
+              <a href="javascript:void(0)" class="revokeit" title="Closed This Walk-In" *ngIf=" item.isJobPushed && item.isScrap == false && item.isClosed">Closed</a>
+              <a href="javascript:void(0)" class="viewit" title="View This Walk-In" *ngIf="item.isJobPushed || item.isScrap"
+                [routerLink]="'/viewwalkin'" (click)="setId(item)">View</a>
+              <a href="javascript:void(0)" class="viewit" title="Edit/View This Walk-In" *ngIf="!item.isJobPushed && !item.isScrap"
+                [routerLink]="'/viewwalkin'" (click)="setId(item)">Edit/View</a>
+              <!-- <a href="javascript:void(0)" class="revokeit" title="Expired Walk-In" *ngIf=" item.isValidJob==false">Expired</a> -->
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

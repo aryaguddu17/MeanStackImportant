@@ -1,0 +1,129 @@
+<div>
+    <div>
+        <div class="dash-head">
+            <p>
+                Subscribe User List
+            </p>
+        </div>
+        <div class="page-filters">
+            <h2>
+                <a href="javascript:void(0);">
+                    <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                    <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                </a>
+            </h2>
+            <form (submit)="GetFilter(0,'',FilterJob.value)" [formGroup]="FilterJob">
+                <div class="filter-wrapper">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-4">
+                            <label>Email<span></span></label>
+                            <input type="text" class="form-control" formControlName="Email" placeholder="Search" />
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Mobile<span></span></label>
+                            <input type="text" class="form-control" formControlName="Mobile" placeholder="Search"
+                                (keypress)="numberOnly($event)" maxlength="10" />
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Search Keywords<span></span></label>
+                            <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+                        </div>
+                    </div>
+                    <div class="form-group text-center m-t-10">
+                            <button type="reset" class="btn btn-w-shadow no-rd filter-toggle" (click)=resetcall()>Reset</button>
+                        <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- <div class="col-md-12">
+            <div class="col-md-12 jd-detail job-wrapper searchResults" *ngIf="search=='search'">
+                <h4>Search Result</h4>
+                <div class="form-group">
+                    <p class="col-md-4">
+                        <span class="text-strong">Email</span>: {{ShowPushData.Email? ShowPushData.Email :'NA'}}
+                    </p>
+                    <p class="col-md-4">
+                        <span class="text-strong">Mobile</span>: {{ShowPushData.Mobile? ShowPushData.Mobile :'NA'}}
+                    </p>
+                    <p class="col-md-4">
+                        <span class="text-strong">Search Keywords</span>: {{ShowPushData.Search? ShowPushData.Search
+                        :'NA'}}
+                    </p>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-12">
+            <div class="all-jobs-list">
+                <div class="searchResults" id="">
+                    <ul class="joblist-wrapper">
+                        <li class="job-wrapper ps-relative" *ngFor="let item of alluserdetail" [style.background-color]="item.subscriptinId==subscibeId ? '#d4d0d0' : '#FFFFFF' ">
+                            <h2 class="job-title">{{item.name?item.name:'NA'}} </h2>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>Email : </strong>{{item.email?item.email:'NA'}} </div>
+                                    <div class="col-md-6"><strong>Mobile : </strong> {{item.mobile?item.mobile:'NA'}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>Company Name : </strong>{{item.companyName?item.companyName:'NA'}} </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="job-list-action card-view-btns">
+                                    <a class="viewit" href="javascript:void(0)" (click)="openModal(template,item.subscriptinId)"
+                                        title="View">View</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <div class="modal-header">
+        <h6 class="modal-title pull-left">Subscribe User Details </h6>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="col-md-6" ><span class="text-strong">Name:</span>
+                {{subcribeuserdata.name?subcribeuserdata.name:'NA'}}</div>
+            <div class="col-md-6"><span class="text-strong">Email:</span> {{subcribeuserdata.email?subcribeuserdata.email:'NA'}}</div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6" ><span class="text-strong">Mobile:</span>
+                {{subcribeuserdata.mobile?subcribeuserdata.mobile:'NA'}}</div>
+            <div class="col-md-6" ><span class="text-strong">Company Name:</span>
+                {{subcribeuserdata.companyName?subcribeuserdata.companyName:'NA'}}</div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12" >
+                <span class="text-strong">Industry:</span>
+                <span *ngFor="let indu of subcribeuserdata.industryList">{{indu.industryName?indu.industryName:'NA'}}, </span>
+            </div>
+            <div class="col-md-12" >
+                <span class="text-strong">Functional Area:</span>
+                <span *ngFor="let func of subcribeuserdata.functionalList"> {{func.functionalAreaName?func.functionalAreaName:'NA'}}, </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6" ><span class="text-strong">Regional:</span>
+                {{subcribeuserdata.regionName?subcribeuserdata.regionName:'NA'}}</div>
+            <div class="col-md-6" ><span class="text-strong">Sub Regional:</span>
+                {{subcribeuserdata.subRegionName?subcribeuserdata.subRegionName:'NA'}}</div>
+        </div>
+        <div class="cleafix margin-bottom-20"></div>
+    </div>
+    <div class="cleafix"></div>
+    <div class="modal-footer form-group text-right">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-w-shadow no-rd" aria-label="Close" (click)="modalRef.hide()">
+                Close
+            </button>
+        </div>
+    </div>
+</ng-template>

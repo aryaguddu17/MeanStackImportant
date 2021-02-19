@@ -1,0 +1,95 @@
+/* 
+@import "../../../../../../assets/external/styles.css";
+@import "http://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"; */
+
+
+.facebook-responsive {
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+
+
+
+.facepages {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 250px;
+}
+
+.facepages ul { padding: 0; margin: 0;}
+.facepages ul li { margin: 0; padding: 15px 0 15px 20px; display: block; font-size: 16px; font-weight: bold ;
+border-top: 1px solid rgb(234, 234, 234); color: #333;}
+.facepages ul li:hover, .facepages ul li.active { background-color: #f5f5f5;}
+.facepages ul li:last-child {border-bottom: 1px solid rgb(234, 234, 234);}
+.facepages ul li:first-child {border-top: none;}
+.facepages ul li span { display: block; font-size: 12px; color: #999;}
+.faceNoti { position: absolute; color: #999; left:250px; top: 0; overflow: hidden; height: 100%; border-left: 1px solid rgb(234, 234, 234);} 
+.faceNoti ul { margin: 10px; padding: 0;}
+.faceNoti ul li { list-style: none; margin: 0; padding: 0;} 
+.faceNoti ul li strong { font-weight: bold;}
+
+.postImgs img { width: 100%; height: 231px; object-fit: cover;}
+
+.actPost { font-size: 11px;}
+.actPost ul { margin: 5px auto 0; padding: 2px 0; width: 100%; list-style: none;
+border-top: 1px solid #bbbbbb; border-bottom: 1px solid #bbbbbb; display: inline-block;}
+.actPost ul li { width: 25%;padding: 7px 0; float: left; text-align: center;}
+.actPost ul li:hover { background-color: #e4e4e4; border-radius: 4px;}
+.actPost ul li a { color: #191c1e; }
+.actPost ul li a:hover { text-decoration: none; }
+ .comnts   {border-bottom: 1px solid #f5f5f5; padding: 8px 1px 24px;}
+.comnts img { position: absolute; border-radius: 4px; left: 10px; right: 0; height: 52px; width: 52px; object-fit: cover;}
+.comnts p { padding-left: 65px; margin-bottom: 0; line-height: 18px;} 
+.comnts p small { display: block; color: #999;}
+.tabbbs span{
+  display: block;
+    background-color: #fff;
+    color: black;
+    padding: 10px 0px;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+
+}
+.tabbbs span:hover {
+  background-color: #ddd;
+}
+.tabbbs span.active {
+  background-color: #ddd;
+}
+.postImgs .huge {    
+  position: absolute;
+  height: 230px;
+  background: rgba(0,0,0,.2);
+  top: 26px;
+  right: 123px;
+  width: 40% !important;
+  margin-left: -120px;
+  left: 384px;
+  margin-right: 0;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 212px;
+  font-size: 36px;
+  color: #fff}
+
+.postImgs > div > div span  { width: 50% !important; float: left; padding: 1px; box-sizing: border-box;}
+/* .postImgs > div > div span img { width: 100% !important; object-fit: cover;  height: 300px;} */
+.row.list.p-4.m-2.bg-white{
+width: 527px;
+margin-left: -15px !important;
+margin-top: -7px !important;
+}
+
+.tabbbs ul { padding: 0; margin: -15px;}
+.tabbbs ul span { margin: -5; padding: 15px 95px 14px 13px; display: block; font-size: 16px; font-weight: bold ;
+border-top: 1px solid rgb(234, 234, 234); color: #333;}
+.tabbbs ul span:hover, .tabbbs ul span.active { background-color: #f5f5f5;}
+.tabbbs ul span:last-child {border-bottom: 1px solid rgb(234, 234, 234);}
+.tabbbs ul span:first-child {border-top: none;}
+.tabbbs ul span { display: block; font-size: 12px; color: #999;}

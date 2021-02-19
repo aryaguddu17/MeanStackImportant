@@ -1,0 +1,924 @@
+<div class="dash-head">
+  <p>Applied Jobs List</p>
+</div>
+<!-- ***************Filter for Company Details (Rajeev Jha-1174)********************** -->
+<div [ngClass]="HideCommon==1?'show':'hide'">
+  <div class="page-filters">
+    <h2>
+      <a href="javascript:void(0);">
+        <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+        <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+      </a>
+    </h2>
+    <form (submit)="GetFilterSearch(0,'','search')" [formGroup]="FilterJob">
+      <div class="filter-wrapper">
+        <div class="form-group">
+          <div class="col-md-3 col-sm-6">
+            <label>Login Type</label>
+            <select class="form-control" formControlName="logintype">
+              <option value="" selected>--Select--</option>
+              <option value="Agency">Agency</option>
+              <option value="Employer">Employer</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>State</label>
+            <select class="form-control" required formControlName="StateiD" (change)="GetAllDistrictforfilter($event.target.value)">
+              <option value="" selected>--Select--</option>
+              <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label>District</label>
+            <select class="form-control" #val required formControlName="DistrictID">
+              <option value="" selected="selected">--Select--</option>
+              <option *ngFor="let district of district1" [value]="district.ID">{{district.DISTRICTNAME}}</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <label>Search Keywords<span></span></label>
+            <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+          </div>
+        </div>
+        <div class="form-group text-center m-t-10">
+          <button type="reset" (click)="reset1()" class="btn btn-w-shadow no-rd">Reset</button>
+          <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+        </div>
+        <div class="form-group text-center m-t-10">
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- </div> -->
+  <!-- *************** Company Details on Card (Rajeev Jha-1174)********************** -->
+  <!-- <div class="legend-text" *ngIf="(backbtn=='1')">
+  <a href="javascript:void(0)" (click)="back()" class="btn pull-right btn-back-reg">
+    Back
+  </a>
+</div> -->
+  <div class="col-md-12" *ngIf="hrefurl=='1'">
+    <div class="form-group">
+    </div>
+    <div class="all-jobs-list">
+      <div class="searchResults ">
+        <ul class="joblist-wrapper">
+          <li class="job-wrapper ps-relative " *ngFor="let item of companyregisterdata" [style.background-color]="item.companyid==CompanyId ? '#d4d0d0' : 'none' ">
+            <div class="job-view fos">
+              <div>
+                <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{item.comapanyimgname!=''?item.comapanyimgname:'assets/images/NoImage.png'}}"
+                  class="img-thumbnail" alt="Image">
+              </div>
+              <div>
+
+                <h2 class="job-title" title="{{item.companyname}}">
+                  {{ (item.companyname.length>50)? (item.companyname | slice:0:50)+'...':(item.companyname) }}
+                </h2>
+                <div class="clearfix"></div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>Login Type : </strong> {{item.logintype?item.logintype:'NA'}}</div>
+                    <div class="col-md-12" title="{{item.email?item.email:'NA'}}">
+                      <strong>Email : </strong>
+                      {{item.email?item.email:'NA'}}
+                      <!-- {{ (item.email.length>50)? (item.email | slice:0:50)+'...':(item.email) }} -->
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>Mobile : </strong> {{item.phoneno?item.phoneno:'NA'}}</div>
+                    <div class="col-md-6"><strong>PAN : </strong> {{item.pancard?item.pancard:'NA'}}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>State : </strong> {{item.statename ? item.statename:'NA'}}</div>
+                    <div class="col-md-6"><strong>District : </strong> {{item.districtname ? item.districtname:'NA'}}</div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6"><strong>No. of Posted Job : </strong> {{item.noofjobposted ?
+                      item.noofjobposted:'0'}}</div>
+                    <div class="col-md-6"><strong>No. of Application Received : </strong> {{item.noofjobposted ?
+                      item.noofjobposted:'0'}}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="job-list-action card-view-btns">
+                    <a class="viewit" href="javascript:void(0)" (click)="onClicked(item.companyid)">View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="HideCommon==2">
+  <div class="dash-head">
+    <a (click)="goToCommon()" title="Go To Common" class="btn btn-w-shadow no-rd pull-right" tabindex="0">Back </a>
+    <div class="clearfix"></div>
+  </div>
+</div>
+
+<div class="page-filters" [ngClass]="(JobCardShow == true)?'show':'hide'">
+  <h2>
+    <a href="javascript:void(0);">
+      <i class="fa fa-filter" aria-hidden="true"></i>Apply Filters Job
+      <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+    </a>
+  </h2>
+  <form action="" [formGroup]="FilterJobByComoany" (submit)="GetJobListByComapnyIdFilter(0,'')">
+    <div class="filter-wrapper">
+      <div class="form-group">
+        <div class="col-md-3 col-sm-6">
+          <label>Industry</label>
+          <select class="form-control" formControlName="Industry">
+            <option value="" selected>Select</option>
+            <option *ngFor="let item of IndustryArea" value="{{item.id}}">{{item.industryName}}</option>
+          </select>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+          <label>Functional Area</label>
+          <select class="form-control" formControlName="FunctionalArea">
+            <option value="" class="" selected="selected">Select</option>
+            <option *ngFor="let item of FunctionArea" value="{{item.id}}">{{item.functionalAreaName}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <label>Search Keyword<span class="mandatory"></span></label>
+          <input class="form-control" formControlName="SearchKeyJob">
+        </div>
+      </div>
+      <div class="row text-center m-t-5">
+        <button type="reset" (click)="reset()" class="btn btn-w-shadow no-rd">Reset</button>
+        <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="col-md-12" *ngIf="SearchResultShow==true">
+  <div class="col-md-12 jd-detail job-wrapper searchResults">
+    <h4>Search Result</h4>
+    <div class="form-group">
+      <p class="col-md-4">
+        <span class="text-strong">Industry</span> : {{ShowPushDatajob.industry}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Functional Area</span> : {{ShowPushDatajob.functional}}
+      </p>
+      <p class="col-md-4">
+        <span class="text-strong">Keyword</span> : {{ShowPushDatajob.Keyword}}
+      </p>
+    </div>
+  </div>
+</div>
+<div class="col-md-12" *ngIf="JobCardShow && searchStatus">
+  <div class="all-jobs-list">
+    <div id="" class="searchResults">
+      <ul class="joblist-wrapper">
+        <li class="job-wrapper edit-delete-h" *ngFor="let item of joblist">
+
+          <h2 class="job-title lang-ellip"><a href="javascript:void(0)">{{item.comapnyName}}</a></h2>
+          <div class="clearfix"></div>
+          <h3 class="company-name lang-ellip">{{item.jobTitle}}</h3>
+          <div class="clearfix"></div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>Job Code : </strong> <span class="text-strong">{{item.jobcode!=null?item.jobcode:'NA' }} </span>
+              </div>
+              <div class="col-md-6">
+                <strong>Valid upto : </strong> <span>{{item.validDate | date:'dd-MM-y'}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6 lang-ellip">
+                <strong>Name : </strong> <span>{{item.contactPersonName}} </span>
+              </div>
+              <div class="col-md-6">
+                <strong>Contact No. : </strong> <span>{{item.contactPersonMobile}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>Total Applied : </strong> <span>{{item.totalAppliedCandidate}}</span>
+              </div>
+              <div class="col-md-6 lang-ellip">
+                <strong>Email : </strong> <span>{{item.email }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>Industry Name : </strong> <span>{{item.industryName }}</span>
+              </div>
+              <div class="col-md-6">
+                <strong>Functional Area : </strong> <span>{{item.functionalAreaName}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>No of Opening : </strong> <span>{{item.noofopening !='' ? item.noofopening :'NA' }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12" *ngIf="(item.totalAppliedCandidate!=0)">
+                <button class="postit" href="javascript:void(0)" (click)="GetOpeningList(item.jobId,0,'')" class="btn btn-w-shadow no-rd pull-right"
+                  title="View">View Opening</button>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- opening details start here -->
+
+<div class="col-md-12" [ngClass]="(OpeningCardShow == true)?'show':'hide'">
+  <div class="all-jobs-list">
+    <!-- Back Button -->
+    <div class="dash-head">
+      <a (click)="goBack()" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0">Back
+
+      </a>
+
+    </div>
+    <div class="clearfix"></div>
+    <div id="" class="searchResults">
+      <ul class="joblist-wrapper">
+        <li class="job-wrapper edit-delete-h" *ngFor="let opening of openings">
+          <h2 class="job-title lang-ellip"><a href="javascript:void(0)">{{opening.companyName}}</a></h2>
+          <h4 class="">{{opening.jobTitle}}</h4>
+          <div class="clearfix"></div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>State: </strong> <span>{{opening.stateName ? opening.stateName : 'NA'}}</span>
+              </div>
+              <div class="col-md-6">
+                <strong>Candidate Applied : </strong> <span>{{opening.noOfCandidate}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>District Name : </strong> <span>{{opening.districtName ? opening.districtName : 'NA' }}</span>
+              </div>
+              <div class="col-md-6">
+                <strong>City: </strong> <span>{{opening.cityname ? opening.cityname : 'NA' }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>No Of Vacancy : </strong> <span>{{opening.noOfVancency }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="(opening.noOfCandidate!=0)">
+            <div class="row">
+              <div class="col-md-12">
+                <a class="postit" href="javascript:void(0)" (click)="GetCandidateList(opening.jobOpeningID)" class="btn btn-w-shadow no-rd pull-right"
+                  title="View">View Candidate</a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-12" *ngIf="jobtablelist">
+
+  <!-- Previous Button -->
+  <div class="dash-head">
+    <a (click)="goPrevious()" title="Go Previous" class="btn btn-w-shadow no-rd pull-right" tabindex="0">Back</a>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="job-description">
+    <div id="" class="searchResults">
+      <ul class="joblist-wrapper">
+        <li class="job-wrapper edit-delete-h" *ngFor="let jobs of companydetails">
+          <div class="margin-bottom-20"></div>
+          <div class="job-header-1">Posted Job Details</div>
+          <div class="clearfix"></div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <h2 class="job-title">Job Posted By : {{jobs?.companyName}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <h3 class="company-name">Job Title : {{jobs?.jobTitle}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-4">
+                <h3 class="company-name m-b-10">Job Code : {{jobs?.jobcode}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <h6 class="m-b-0 m-t-10">Contact Person</h6>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-4">
+                <span class="text-strong">Name : </span> {{jobs?.name}}
+              </div>
+              <div class="col-md-4">
+                <span class="text-strong">Designation : </span> {{jobs?.designation}}
+              </div>
+              <div class="col-md-4">
+                <span class="text-strong">Mobile No. : </span> {{jobs?.mobile}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-4">
+                <span class="text-strong">Phone No. : </span> {{jobs.landlineNumber ? jobs.landlineNumber :'NA'}}
+              </div>
+              <div class="col-md-4">
+                <span class="text-strong">Email : </span> {{jobs.email ? jobs.email : 'NA'}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <h6 class="m-b-0 m-t-10">Job Details</h6>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-4">
+                <span *ngIf="jobs.ageMax != '0'">
+                  <span class="text-strong">Age (in yrs) :</span> {{jobs.ageMin ?jobs.ageMin:'NA'}} - {{jobs.ageMax ?
+                  jobs.ageMax : 'NA'}}
+                </span>
+                <span *ngIf="jobs.ageMax=='0'">
+                  <span class="text-strong">Age (in yrs) :</span> NA
+                </span>
+              </div>
+
+              <div class="col-md-4">
+                <span *ngIf="jobs.male!=0||jobs.female!=0||jobs.transgender!=0">
+                  <span class="text-strong">Gender : </span> {{jobs.male==1?' Male ':''}} {{jobs.female==2 ?' Female
+                  ':''}}
+                  {{jobs.transgender==3?' Transgender ':''}}
+                </span>
+                <span *ngIf="jobs.male == '0' &&jobs.female == '0' && jobs.transgender == '0'">
+                  <span class="text-strong">Gender : </span> NA
+                </span>
+              </div>
+              <div class="col-md-4">
+                <span *ngIf="jobs.maxExp != '0'">
+                  <span class="text-strong">Experience (in yrs) :</span> {{jobs.minExp ?jobs.minExp:'NA'}} -
+                  {{jobs.maxExp ?
+                  jobs.maxExp : 'NA'}}
+                </span>
+                <span *ngIf="jobs.maxExp=='0'">
+                  <span class="text-strong">Experience :</span> NA
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-4">
+                <span class="text-strong">Posted by : </span> {{jobs.posteDby ? jobs.posteDby : 'NA'}}
+              </div>
+              <div class="col-md-4">
+                <span class="text-strong">Probation Duration (in days): </span> {{jobs.probationDuration !=0 ?
+                jobs.probationDuration :'NA'}}
+              </div>
+              <div class="col-md-4">
+                <span class="text-strong">OJT Duration (in hrs) : </span> {{jobs.ojtDuration !=0 ? jobs.ojtDuration :
+                'NA'}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <span class="text-strong">Other Detail : </span>
+                <span [innerHtml]="jobs.otherDetail ? jobs.otherDetail :'NA'" style="white-space: pre-wrap;"></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <span class="text-strong">Job Description : </span>
+                <span [innerHtml]="jobs.jobDescription ? jobs.jobDescription :'NA'" style="white-space: pre-wrap;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <span class="text-strong">Functional Area : </span> {{jobs.functionalArea ? jobs.functionalArea :
+                'NA'}}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <span class="text-strong">Industry Area : </span> {{jobs.industryArea ? jobs.industryArea : 'NA'}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <span class="text-strong">Keyword : </span>
+                <span [innerHtml]="jobs.keyword ? jobs.keyword : 'NA'" style="white-space: pre-wrap;"></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <span class="text-strong">Role and Responsibility : </span>
+                <span [innerHtml]="jobs.rolesresPonsiblty ? jobs.rolesresPonsiblty :'NA'" style="white-space: pre-wrap;"></span>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix margin-bottom-20"></div>
+          <div class="clearfix margin-bottom-20"></div>
+          <div class="location-details-wrapper">
+            <div class="label-normal ps-relative location-details">
+              <div class="clearfix margin-bottom-20"></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-12" *ngIf="candidatelisttable">
+  <div class="usersWrapper" *ngIf="candidatelist">
+    <div class="table-responsive">
+      <table datatable class="row-border hover">
+        <thead class="bg-info">
+          <tr>
+            <th>S.No.</th>
+            <th>Applicant Name</th>
+            <th>Mobile</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>State</th>
+            <th>District</th>
+            <th>Source</th>
+            <th>Training Centre</th>
+            <th>Trade</th>
+            <th>Scheme</th>
+            <th>View Screening</th>
+            <th>View Profile</th>
+            <th>Contact Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of candidatelist; let i='index'">
+
+            <td>{{i+1}}</td>
+            <td>{{item.candName}}</td>
+            <td>{{item.mobile}}</td>
+            <td>{{item.gender}}</td>
+            <td>{{item.age}}</td>
+            <td>{{item.stateName!=null?item.stateName:'NA'}}</td>
+            <td>{{item.districtName!=null?item.districtName:'NA'}}</td>
+            <td>{{item.apitype}}</td>
+            <td>{{item.partnername!=null?item.partnername:'NA'}}</td>
+            <td>{{item.traningtrade!=null?item.traningtrade:'NA'}}</td>
+            <td>{{item.trainingscheme!=null?item.trainingscheme:'NA'}}</td>
+            <td class="text-center">
+              <a href="javascript:void(0)" *ngIf="item.isScreeningAnswer" class="text-link" title="View Details" (click)="openscreeningModal(screeningAnswerTemplate,item,i)">
+                <i
+                class="fa fa-eye" aria-hidden="true"></i>
+              </a>
+              <span *ngIf="!item.isScreeningAnswer">-</span>
+            </td>
+            <td>
+              <a href="javascript:void(0)" class="" title="View Details" (click)="ViewDetails(template,template2,item.sourceId==0?item.candId:item.sourceId,item.apitype)">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+              </a>
+            </td>
+            <td><a *ngIf="item.apitype=='MRIGS'" href="javascript:void(0)" class="" title="View Details" (click)="openpiaData(temppia,item.sourceId==0?item.candId:item.sourceId,item.apitype)">
+                <i class="fas fa-address-card" aria-hidden="true"></i></a>
+              <p *ngIf="item.apitype!='MRIGS'">NA </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    No Records Founds......
+  </div>
+</ng-template>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h6 class="modal-title pull-left">Candidate Details </h6>
+    <button type="button" class="btn btn-w-shadow no-rd pull-right" aria-label="Close" (click)="modalRef.hide()">
+      Close
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12" *ngIf="MrigsDataShow==true;">
+      <!-- {{candidatedetails}} -->
+      <span [innerHtml]="candidatedetails.candidateHtml | KeepHtml: 'html' "></span>
+      <div>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="MrigsDataShow==false;">
+      <div class="job-view">
+        <div>
+          <figure class="text-center thumbnail">
+            <br>
+            <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{candidatedetails.imagePath!=''?candidatedetails.imagePath:'assets/images/NoImage.png'}}"
+              alt="No image" />
+            <figcaption>
+              <br>
+            </figcaption>
+          </figure>
+        </div>
+        <div>
+          <h6 class="job-title m-b-5">Personal Details</h6>
+          <div class="form-group">
+            <p class="col-md-6 lang-ellip" title="{{candidatedetails.name}}">
+              <span class="text-strong">Name:</span>
+              {{candidatedetails.name}}
+            </p>
+            <p class="col-md-6">
+              <span class="text-strong">Date of Birth:</span> {{
+              candidatedetails.dob|date : "dd/MMMM/y"
+              }}
+            </p>
+          </div>
+          <div class="form-group">
+            <p class="col-md-6 lang-ellip" title="{{candidatedetails.email}}">
+              <span class="text-strong">Email:</span>
+              {{candidatedetails.email}}
+            </p>
+            <p class="col-md-6">
+              <a href="javascript:void(0)" title="show" (click)="v =!v"><span><strong>Mobile No:</strong></span></a>
+              {{v==true?candidatedetails.mobile:'XXX-XXX-XXXX'}}
+            </p>
+          </div>
+          <div class="form-group">
+            <p class="col-md-6"><span class="text-strong">Gender:</span> {{candidatedetails.gender}}</p>
+            <p class="col-md-6"><span class="text-strong">Religion:</span> {{candidatedetails.religion}}</p>
+          </div>
+          <div class="form-group">
+            <p class="col-md-12"><span class="text-strong">About Me:</span> {{candidatedetails.aboutMe}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="cleafix margin-bottom-20"></div>
+      <div class="dash-head dash-head-2" *ngIf="PartnerInfo!=''">
+        <p>Training Partner</p>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="PartnerInfo!=''" class="table table-bordered table-striped margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th scope="col">Sr. No.</th>
+              <th scope="col">Training Partner </th>
+
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>{{ PartnerInfo.trainingPartner }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cleafix margin-bottom-20"></div>
+      <div class="dash-head dash-head-2" *ngIf="TrainingPartnerDetails!=''">
+        <p>Training Partner Details</p>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="TrainingPartnerDetails!=''" class="table table-bordered table-striped margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th scope="col">Sr. No.</th>
+              <th>Batch Number</th>
+              <th>Training Scheme</th>
+              <th>Training Sector</th>
+              <th>Training Trade</th>
+              <th>Training Centre Name</th>
+              <th>Registration Code</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="TrainingPartnerDetails!=null">
+              <td>1</td>
+              <td>{{ TrainingPartnerDetails.batchNumber }}</td>
+              <td>{{ TrainingPartnerDetails.trainingScheme}}</td>
+              <td>{{ TrainingPartnerDetails.trainingSector}}</td>
+              <td>{{ TrainingPartnerDetails.trainingTrade}}</td>
+              <td>{{ TrainingPartnerDetails.trainingCentreName}}</td>
+              <td>{{ TrainingPartnerDetails.registrationCode}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-head dash-head-2" *ngIf="empeduinfodata?.length > 0">
+        <p>Education Qualification</p>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="empeduinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th>Sr. No.</th>
+              <th>Qualification</th>
+              <th>Board / University</th>
+              <th>Stream / Course</th>
+              <th>Percentage</th>
+              <th>Year of passing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dbedu of empeduinfodata;let i=index">
+              <td>{{i+1}} </td>
+              <td>{{ dbedu.educationName}} </td>
+              <td>{{ dbedu.board }} </td>
+              <td>{{ dbedu.stream}}</td>
+              <td>{{ dbedu.percentage}}%</td>
+              <td>{{ dbedu.yearOfPassing }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cleafix margin-bottom-20"></div>
+      <div class="dash-head dash-head-2" *ngIf="workexpinfodata?.length > 0">
+        <p>Work Experience</p>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="workexpinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th>Sr. No.</th>
+              <th>Designation</th>
+              <th>Organization</th>
+              <th>Country</th>
+              <th>State</th>
+              <th>District</th>
+              <th>Working</th>
+              <th>CTC(INR in lakhs)</th>
+              <th>Period [From]</th>
+              <th>Period [To]</th>
+              <th>Experience</th>
+              <th>Job Description</th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dbworkexp of workexpinfodata;let i=index">
+              <td>{{ i+1 }} </td>
+              <td>{{ dbworkexp.jobTitle }} </td>
+              <td>{{ dbworkexp.companyName }} </td>
+              <td>India</td>
+              <td>{{ dbworkexp.stateName}}</td>
+              <td>{{ dbworkexp.districtName }}</td>
+              <td>{{ dbworkexp.currentlyWorking==true?"Yes":"No" }} </td>
+              <td>{{ dbworkexp.currentCtc }} </td>
+              <td>{{ dbworkexp.jobPeriodFrom | date: 'dd/MM/yyyy'}}</td>
+              <td>{{ dbworkexp.jobPeriodTo | date: 'dd/MM/yyyy'}}</td>
+              <td>{{dbworkexp.totalExp}}</td>
+              <td>
+                <a class="viewit" style="color:blue" href="javascript:void(0)" title="Read More" (click)="viewcandidateDescription(dbworkexp.jobDesc,template3)">
+                  {{dbworkexp.jobDesc| slice:0:20}}...
+                </a>
+              </td>
+              <td style="text-align:center"><a href="javascript:void(0)" class="" title="View Details" (click)="openpiaData(temppia,dbworkexp.id,'MRIGS')"><i
+                    class="fas fa-address-card" aria-hidden="true"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-head dash-head-2" *ngIf="empcertinfodata?.length > 0">
+        <p>Certificate</p>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="empcertinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th>Certification No/UID</th>
+              <th>Program Name/ Scheme</th>
+              <th>Issued By</th>
+              <th>Issued On</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dbcert of empcertinfodata;let i=index">
+              <td>{{ dbcert.certificationNo }} </td>
+              <td>{{ dbcert.programName }} </td>
+              <td>{{ dbcert.issuedBy}}</td>
+              <td>{{ dbcert.issuedOn | date: 'dd/MM/yyyy'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-head dash-head-2" *ngIf="addressinfodata?.length > 0">
+        <p>Address</p>
+      </div>
+      <div class="table-responsive" *ngIf="addressinfodata?.length > 0">
+        <table class="table table-bordered table-striped margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th scope="col">Sr. No.</th>
+              <th scope="col">District of birth </th>
+              <th scope="col">State</th>
+              <th scope="col">Country</th>
+              <th scope="col">Address</th>
+              <th scope="col">Pincode</th>
+              <th scope="col">Landmark</th>
+              <th scope="col">Address Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="ng-star-inserted" *ngFor="let address of addressinfodata;let i = index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{address.districtName}}</td>
+              <td>{{address.stateName}}</td>
+              <td>India</td>
+              <td>{{address.address}}</td>
+              <td>{{address.pinCode}}</td>
+              <td>{{address.landmark}}</td>
+              <td>{{address.addressType=='P'?'Permanent':'Correspondence'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-head dash-head-2" *ngIf="langinfodata?.length > 0">
+        <p>Language</p>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="langinfodata?.length > 0" class="table table-bordered table-striped margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th scope="col">Sr. No.</th>
+              <th>Language</th>
+              <th>Read</th>
+              <th>Write</th>
+              <th>Speak</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lang of langinfodata;let i = index">
+              <td>{{ i+1}}</td>
+              <td>{{ lang.languageName }}</td>
+              <td>{{ lang.isRead==true?"Yes":"No"}}</td>
+              <td>{{ lang.isWrite==true?"Yes":"No"}}</td>
+              <td>{{ lang.isSpeak==true?"Yes":"No"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-head dash-head-2" *ngIf="areainfodata?.length > 0">
+        <p>Interest/hobby</p>
+      </div>
+      <div class="table-responsive">
+        <table *ngIf="areainfodata?.length > 0" class="table table-bordered table-striped margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th>Sr. No.</th>
+              <th>Hobbies</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let area of areainfodata;let i = index">
+              <td>{{ i+1 }}</td>
+              <td>{{ area.interest }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-head dash-head-2" *ngIf="familyinfodata?.length > 0">
+        <p>Family Details</p>
+      </div>
+      <div class="table-responsive" *ngIf="familyinfodata?.length > 0">
+        <table *ngIf="familyinfodata?.length > 0" class="table table-striped table-bordered margin-top-20">
+          <thead class="bg-info">
+            <tr>
+              <th>Sr. No.</th>
+              <th>Name</th>
+              <th>Relation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dbfamily of familyinfodata;let i=index">
+              <td>{{i+1}}</td>
+              <td>{{ dbfamily.name}}</td>
+              <td>{{ dbfamily.relation }} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="cleafix"></div>
+  <div class="modal-footer form-group text-right">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-w-shadow no-rd" aria-label="Close" (click)="modalRef.hide()">
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #template3>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Job Description</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRefdesc.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="dash-head dash-head-2">
+
+  </div>
+  <div class="modal-body">
+    {{CandiadateDescr}}
+  </div>
+</ng-template>
+
+
+<ng-template #temppia>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Contact Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modaldpia.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="PiaContacDetials.contactHtml!=null">
+    <span [innerHtml]="PiaContacDetials.contactHtml | KeepHtml: 'html' "></span>
+  </div>
+  <div class="modal-body" *ngIf="PiaContacDetials.contactHtml==null">
+    <p class="text-center"> {{'No Records Found'}} </p>
+  </div>
+</ng-template>

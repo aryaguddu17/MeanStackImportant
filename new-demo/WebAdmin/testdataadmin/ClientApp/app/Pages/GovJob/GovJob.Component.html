@@ -1,0 +1,1383 @@
+<div *ngIf="(formview==0)">
+  <div class="dash-head">
+    <p> Government Job Post</p>
+    <a (click)="Closegovform()" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" title="Close">
+      Close
+    </a>
+  </div>
+  <!-- ***************Government Job Post Form **************** -->
+  <form [formGroup]="GOVFORM" (submit)="AdminSetGovJob()">
+    <div class="job-posting">
+      <div class="form-group">
+        <div class="col-md-12">
+          <div class="legend-box">
+            <div class="col-md-12 row">
+              <span class="legend-title"><label class="biz-label">Job Details</label></span>
+            </div>
+
+            <div class="form-group">
+
+              <div class="col-md-4">
+                <label>Company Name </label>
+                <input type="text" class="form-control"
+                  oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                  formControlName="COMPANYNAME" placeholder="Company Name" maxlength="200" />
+                <errors [control]="GOVFORM.controls.COMPANYNAME"></errors>
+              </div>
+              <div class="col-md-4">
+                <label>Job Position </label>
+                <input
+                  oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                  type="text" class="form-control" formControlName="JOBPOSITION" placeholder="Job Position"
+                  maxlength="100" />
+                <errors [control]="GOVFORM.controls.JOBPOSITION"></errors>
+              </div>
+              <div class="col-md-4">
+                <label>State </label>
+                <select (change)="onChangeState(GOVFORM.value.STATE)" class="form-control" formControlName="STATE">
+                  <option value="" class="" selected>--Select--</option>
+                  <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+                </select>
+                <errors [control]="GOVFORM.controls.STATE"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4">
+                <label>District </label>
+                <select class="form-control" formControlName="DISTRICT">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option *ngFor="let item of district" value="{{item.id}}">{{item.districtName}}</option>
+                </select>
+                <errors [control]="GOVFORM.controls.DISTRICT"></errors>
+              </div>
+
+              <div class="col-md-4">
+                <label>Start Date </label>
+                <div class="input-group">
+                  <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="STARTDATE"
+                    (bsValueChange)="MinDate($event)" [minDate]="startminDate" [maxDate]="maxDate"
+                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" bsDatepicker>
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label>End Date </label>
+                <div class="input-group">
+                  <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="ENDDATE"
+                    (bsValueChange)="MaxDate($event)" [minDate]="minDate"
+                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" bsDatepicker>
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4">
+                <label>Experience (in yrs.) </label>
+                <input type="text" class="form-control" formControlName="EXP" placeholder="Experience"
+                  maxlength="200" />
+              </div>
+
+              <div class="col-md-4">
+                <label>Salary (INR) </label>
+                <input type="text" class="form-control" formControlName="SALARY" placeholder="Salary" maxlength="200" />
+
+              </div>
+              <div class="col-md-4">
+                <label>Ministry Name </label>
+                <input type="text" class="form-control"
+                  oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                  formControlName="MINISTRYNAME" placeholder="Ministry Name" maxlength="100" />
+                <errors [control]="GOVFORM.controls.MINISTRYNAME"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4 upload-auto-searchs">
+                <label>Qualification</label>
+                <select style="display:none" class="form-control" formControlName="QUALIFICATION">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option [ngValue]="item.id" *ngFor="let item of QualificationDetailbind">{{item.name}}</option>
+                </select>
+                <ng-multiselect-dropdown [placeholder]="'please select Qualification'" [data]="QualificationDetailbind"
+                  formControlName="QUALIFICATION" [settings]="dropdownSettings" (onDeSelect)="onItemDeSelect($event)"
+                  (onDeSelectAll)="onDeSelectAll($event)" (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)">
+                </ng-multiselect-dropdown>
+                <!-- <errors [control]="GOVFORM.controls.QUALIFICATION"></errors> -->
+                <button class="new-add" tabindex="0" type="button" (click)="AddQualification(QualificationTemplate)"
+                  title="">Add Qualification</button>
+
+
+              </div>
+              <div class="col-md-4">
+                <label>Gender </label>
+                <div class="clearfix"></div>
+                <label>
+                  <input type="checkbox" name="Male" formControlName="MALE" id="Gender-1" value="Male"
+                    (change)="Gender($event.target.value)" />
+                  Male
+                </label>
+                <label>
+                  <input type="checkbox" name="Female" formControlName="FEMALE" id="Gender-2" value="Female"
+                    (change)="Gender($event.target.value)" />
+                  Female
+                </label>
+                <label>
+                  <input type="checkbox" name="Transgender" formControlName="TRANSGENDER" id="Gender-3"
+                    value="Transgender" (change)="Gender($event.target.value)" />
+                  Transgender
+                </label>
+                <!-- <errors [control]="GOVFORM.controls.Gender"></errors> -->
+              </div>
+              <div class="col-md-4">
+                <label>Job Type </label>
+                <div class="cleafix"></div>
+                <select class="form-control" formControlName="JOBTYPE">
+                  <option value="" selected>--Select--</option>
+                  <option value="FullTime" selected>FullTime</option>
+                  <option value="PartTime" selected>PartTime</option>
+                  <option value="Contractual" selected>Contractual</option>
+                  <option value="Freelancer" selected>Freelancer</option>
+                </select>
+                <errors [control]="GOVFORM.controls.JOBTYPE"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4">
+                <label>Job Under </label>
+                <div class="cleafix"></div>
+                <select class="form-control" formControlName="JOBUNDER">
+                  <option value="" selected>--Select--</option>
+                  <option value="Central Government" selected>Central Government</option>
+                  <option value="State Government" selected>State Government</option>
+
+                </select>
+                <errors [control]="GOVFORM.controls.JOBUNDER"></errors>
+              </div>
+              <div class="col-md-4">
+                <label>Category</label>
+                <select style="display:none" class="form-control" formControlName="INDUSTRYAREA">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option [ngValue]="item.id" *ngFor="let item of IndustryDetail">{{item.name}}</option>
+                </select>
+                <ng-multiselect-dropdown [placeholder]="'please select Category '" [data]="IndustryDetail"
+                  formControlName="INDUSTRYAREA" [settings]="dropdownSettings" (onDeSelect)="onItemDeSelect($event)"
+                  (onDeSelectAll)="onDeSelectAll($event)" (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)">
+                </ng-multiselect-dropdown>
+
+                <button class="new-add" tabindex="0" type="button" (click)="AddIndustryArea(IndustryAreaTemplate)"
+                  title="">Add Category</button>
+
+
+              </div>
+
+              <div class="col-md-4">
+                <label>Department </label>
+                <select style="display:none" class="form-control" formControlName="DEPARTMENT">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option [ngValue]="item.id" *ngFor="let item of DepartmentDetail">{{item.name}}</option>
+                </select>
+                <ng-multiselect-dropdown [placeholder]="'please select Department'" [data]="DepartmentDetail"
+                  formControlName="DEPARTMENT" [settings]="dropdownSettings" (onDeSelect)="onItemDeSelect($event)"
+                  (onDeSelectAll)="onDeSelectAll($event)" (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)">
+                </ng-multiselect-dropdown>
+                <button class="new-add" tabindex="0" type="button" (click)="AddDepartment(DepartmentTemplate)"
+                  title="">Add
+                  Department</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">
+                <label>Description</label>
+                <ckeditor [editor]="Editor" formControlName="DESCRIPTION" maxlength="6300"></ckeditor>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4 text-left">
+                <label>Upload File<span style="color:red;"> *</span></label>
+                <label for="type-file" class="type-file">
+                  Choose File
+                  <input type="file" (change)="onUploadChange($event)" class="" formControlName="FILE" id="type-file">
+                </label>
+              </div>
+              <div class="col-md-4 text-left">
+                <label> <span style="color:red;"> </span></label>
+                <!-- <button class="btn btn-w-shadow no-rd" tabindex="0" type="button"
+                  (click)="AddQualification(QualificationTemplate)" title="Add Qualification,Industry,Department">Add Qualification</button> -->
+              </div>
+
+              <ng-template #QualificationTemplate>
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                  <div class="legend-box m-b-5">
+                    <div class="col-md-12 row">
+                      <span class="legend-title"><label class="biz-label">Add Details</label></span>
+                    </div>
+
+                    <div class="form-group">
+
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Qualification </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" value="" class="form-control" placeholder="Qualification" #Qualification
+                          maxlength="200" />
+                      </div>
+
+                      <!-- <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Industry Area </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" class="form-control" placeholder="Industry Area" #IndustryArea
+                          maxlength="200" />
+                      </div> -->
+
+                      <!-- <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Department </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" class="form-control" placeholder="Department" maxlength="200" #Department />
+                      </div> -->
+
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer p-t-0 text-right">
+                  <button class="btn btn-w-shadow no-rd" type="button"
+                    (click)="SubmitQUALIFICATION(Qualification.value)">Submit</button>
+                  <button class="btn btn-w-shadow no-rd" type="button" (click)="CloseQID()">Close</button>
+                </div>
+              </ng-template>
+              <ng-template #IndustryAreaTemplate>
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                  <div class="legend-box m-b-5">
+                    <div class="col-md-12 row">
+                      <span class="legend-title"><label class="biz-label">Add Details</label></span>
+                    </div>
+
+                    <div class="form-group">
+
+                      <!-- <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Qualification </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" value="" class="form-control" placeholder="Qualification" #Qualification
+                          maxlength="200" />
+                      </div> -->
+
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Category </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" class="form-control" placeholder="Category" #IndustryArea maxlength="200" />
+                      </div>
+
+                      <!-- <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Department </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" class="form-control" placeholder="Department" maxlength="200" #Department />
+                      </div> -->
+
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer p-t-0 text-right">
+                  <button class="btn btn-w-shadow no-rd" type="button"
+                    (click)="SubmitIndustryArea(IndustryArea.value)">Submit</button>
+                  <button class="btn btn-w-shadow no-rd" type="button" (click)="CloseQID()">Close</button>
+                </div>
+              </ng-template>
+              <ng-template #DepartmentTemplate>
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                  <div class="legend-box m-b-5">
+                    <div class="col-md-12 row">
+                      <span class="legend-title"><label class="biz-label">Add Details</label></span>
+                    </div>
+
+                    <div class="form-group">
+
+                      <!-- <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Qualification </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" value="" class="form-control" placeholder="Qualification" #Qualification
+                          maxlength="200" />
+                      </div> -->
+
+                      <!-- <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Industry Area </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" class="form-control" placeholder="Industry Area" #IndustryArea
+                          maxlength="200" />
+                      </div> -->
+
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <label>Department </label>
+                      </div>
+                      <div class="col-md-6 col-sm-5 col-xs-6">
+                        <input type="text" class="form-control" placeholder="Department" maxlength="200" #Department />
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer p-t-0 text-right">
+                  <button class="btn btn-w-shadow no-rd" type="button"
+                    (click)="SubmitDepartment(Department.value)">Submit</button>
+                  <button class="btn btn-w-shadow no-rd" type="button" (click)="CloseQID()">Close</button>
+                </div>
+              </ng-template>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend-box">
+        <div class="col-md-12 row">
+          <span class="legend-title"><label class="biz-label">Fee Detail</label></span>
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+            <label>Caste</label>
+            <div class="cleafix"></div>
+            <select class="form-control" formControlName="CASTE">
+              <option value="" selected>--Select--</option>
+              <option value="All" selected>All</option>
+              <option value="Gen" selected>General</option>
+              <option value="Obc" selected>Obc</option>
+              <option value="Sc" selected>Sc</option>
+              <option value="St" selected>St</option>
+            </select>
+            <errors [control]="GOVFORM.controls.CASTE"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>No of Vacancy </label>
+            <input type="text" class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              formControlName="VACANCY" placeholder="No of Vacancy" maxlength="5" />
+            <errors [control]="GOVFORM.controls.VACANCY"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Application Fee (INR) </label>
+            <input type="text" class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              formControlName="FEE" placeholder="Application Fee" maxlength="10" />
+
+            <errors [control]="GOVFORM.controls.FEE"></errors>
+          </div>
+
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+            <label>Age (in yrs.) </label>
+
+            <input type="text" class="form-control" formControlName="AGE" placeholder="Age" maxlength="200" />
+          </div>
+          <div class="col-md-4">
+            <label class="col-md-12">&nbsp;</label>
+            <button class="btn btn-w-shadow no-rd" tabindex="0" type="button" (click)="AddCastevalue()">Add</button>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-12">
+              <div class="all-jobs-list">
+                <div id="" class="searchResults">
+                  <ul class="joblist-wrapper">
+                    <li class="job-wrapper ps-relative" *ngFor="let item of Catsevalue; let i=index">
+                      <ng-template #templateSector>
+                        <div class="modal-body text-center">
+                          <p>Do You Want To Delete This Fee Detail?</p>
+                          <br />
+                          <br />
+                          <button type="button" class="btn yl-btn no-rd" (click)="deleteSector(i)">Yes</button>
+                          <button type="button" (click)="declineBoxSecor()" class="btn bl-btn no-rd">No</button>
+                        </div>
+                      </ng-template>
+                      <div class="clearfix"></div>
+                      <div class="form-group">
+                        <div class="row">
+                          <div class="col-md-6"><strong>Caste : </strong> <span>{{item.strCaste}}</span>
+                          </div>
+                          <div class="col-md-6"><strong>No. of Vacancy : </strong> <span>{{item.intVacancy}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6"><strong>Application Fee : </strong>
+                            <span>{{item.strApplicationFee}}</span>
+                          </div>
+                          <div class="col-md-6"><strong>Age : </strong> <span>{{item.strAge}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="job-list-action card-view-btns">
+                          <a class="viewit" href="javascript:void(0)" (click)="PusTemplateSector(templateSector)"
+                            title="Delete">Delete</a>
+                        </div>
+                      </div>
+                      <div class="clearfix"></div>
+                      <div class="clearfix"></div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="legend-box">
+        <div class="col-md-12 row">
+          <span class="legend-title"><label class="biz-label">Contact Detail</label></span>
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+            <label>Email </label>
+            <input type="text" class="form-control" formControlName="EMAIL" placeholder="Email" maxlength="200" />
+            <errors [control]="GOVFORM.controls.EMAIL"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Phone </label>
+            <input type="text" class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              formControlName="PHONE" placeholder="Phone" maxlength="12" />
+            <errors [control]="GOVFORM.controls.PHONE"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Apply URL</label>
+            <input type="text" class="form-control" formControlName="APPLYURL" placeholder="Apply URL"
+              maxlength="120" />
+            <errors [control]="GOVFORM.controls.APPLYURL"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Advertisement URL </label>
+            <input type="text" class="form-control" formControlName="ADVERTISEMENTURL" placeholder="Advertisement URL"
+              maxlength="120" />
+            <errors [control]="GOVFORM.controls.ADVERTISEMENTURL"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Advertisement Number </label>
+            <input type="text" class="form-control" formControlName="ADVERTISEMENTNUMBER"
+              placeholder="Advertisement Number" maxlength="30" />
+            <errors [control]="GOVFORM.controls.ADVERTISEMENTNUMBER"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Pincode</label>
+            <input type="text" class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              formControlName="PINCODE" placeholder="Pincode" maxlength="6" minlength="6" />
+            <errors [control]="GOVFORM.controls.PINCODE"></errors>
+          </div>
+          <div class="form-group">
+            <div class="col-md-12">
+              <label>Address </label>
+              <textarea type="text" placeholder="Address" class="form-control" formControlName="ADDRESS"
+                maxlength="499"></textarea>
+              <errors [control]="GOVFORM.controls.ADDRESS"></errors>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-12 text-center p-r-0">
+          <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" [disabled]="!GOVFORM.valid">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- ***************Government Job Post Form  End Here**************** -->
+
+<!-- *******************Government Card View ******************** -->
+<div [ngClass]="cardview==1?'show':'hide'">
+  <div>
+    <div class="dash-head" style="margin-top: 0">
+      <p>
+        Government Job List
+      </p>
+      <a href="javascript:void(0)" (click)="Showgovform()" class="btn pull-right btn-back-reg"
+        title="Create Government Job">
+        Create Job
+      </a>
+    </div>
+
+
+    <div class="page-filters">
+      <h2>
+        <a href="javascript:void(0);">
+          <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+          <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+        </a>
+      </h2>
+      <form [formGroup]="Filtergovform">
+        <div class="filter-wrapper">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-4">
+              <label>Search Keywords<span></span></label>
+              <input type="text" class="form-control" formControlName="SEARCH" placeholder="Search" />
+            </div>
+          </div>
+          <div class="form-group text-center m-t-5">
+            <button type="reset" class="btn btn-w-shadow no-rd" (click)="Resetfilter()">Reset</button>
+            <button type="submit" class="btn btn-w-shadow no-rd filter-toggle"
+              (click)="GetGovJob(Filtergovform.value)">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <div class="all-jobs-list">
+    <div class="searchResults">
+      <ul class="joblist-wrapper">
+
+        <li class="job-wrapper ps-relative" *ngFor="let item of  GetGovJobdata">
+
+          <div class="job-view fos">
+            <div>
+              <a href="javascript:void(0)" target="_blank">
+                <img class="img-thumbnail" height="50" width="50"
+                  src="{{ item.strDocName!='' && item.strDocPath!=''?       item.strDocPath:'assets/images/NoImage.png'}}"
+                  onError="this.src='../assets/images/NoImage.png'">
+              </a>
+            </div>
+            <div>
+              <h2 class="job-title" title="{{item.strCompanyName}}">{{ (item.strCompanyName.length>20)?
+                (item.strCompanyName | slice:0:20)+'..':(item.strCompanyName) }}</h2>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-12"><strong>Location : </strong> {{item.strStateName?item.strStateName:'NA'}}</div>
+
+                  <div class="col-md-12"><strong>Experience (In yr): </strong>
+                    {{item.strExperience?item.strExperience:'NA'
+                    }}</div>
+                  <div class="col-md-12"><strong>Industry : </strong> {{item.strIndustryName?item.strIndustryName:'NA'
+                    }}</div>
+                  <div class="col-md-12">
+                    <strong>Job Under : </strong>
+
+                    {{item.strJobUnder?item.strJobUnder:'NA'}}
+                  </div>
+                  <div class="col-md-12">
+                    <strong>Qualification : </strong>
+                    {{item.strQualifiaction?item.strQualifiaction:'NA'}}
+                  </div>
+
+                  <div class="col-md-12"><strong>Job Type : </strong> {{item.strJobType?item.strJobType:'NA'}}</div>
+
+                  <div class="col-md-12">
+                    <strong>Salary(In Rs) : </strong>
+                    {{item.strSalary?item.strSalary:'NA'}}
+                  </div>
+
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="job-list-action card-view-btns">
+                  <a class="viewit" href="javascript:void(0)" (click)="ViewgovJob(item.lnID)" title="View">View</a>
+                  <a class="viewit" href="javascript:void(0)" (click)="EditgovJob(item.lnID)" title="Edit">Edit</a>
+
+                  <!-- <a class="postit" href="javascript:void(0)" (click)="PostgovJob(item.lnID)" title="Post Job">Post</a> -->
+
+                  <a class="postit" href="javascript:void(0)"
+                    (click)="ViewpostedgovJob(item.lnID,viewPostedjobtemplate)" title="View Posted Job">Review</a>
+                </div>
+
+                <ng-template #viewPostedjobtemplate>
+                  <div class="modal-header">
+                    <h6 class="modal-title pull-left">Government Job Details </h6>
+
+                    <button type="button" class="btn btn-w-shadow no-rd pull-right" aria-label="Close"
+                      (click)="CloseReviewDetails()" title="Close">
+                      Close
+                    </button>
+
+                    <!-- <button type="button" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)"
+                      aria-label="Close" (click)="PostgovJob(item.lnID)" title="Post Job">
+                      Post
+                    </button> -->
+                    <ng-template #templatePostGovConfimation>
+                      <div class="modal-body text-center">
+                        <p>Do You Want To Post Government Job</p>
+                        <br />
+                        <br />
+                        <button type="button" class="btn yl-btn no-rd"
+                        (click)="PostgovJob(item.lnID)" title="Yes">Yes</button>
+                        <button type="button" (click)="declineBoxSecor1()" class="btn bl-btn no-rd" title="No">No</button>
+                      </div>
+                    </ng-template>
+
+                    <button type="button" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)"
+                    aria-label="Close" (click)="PostGovConfimation(templatePostGovConfimation)"
+                    title="Post Government Job">
+                    Post
+                  </button>
+                    <!-- <a class="postit" href="javascript:void(0)" (click)="PostgovJob(item.lnID)" title="Post Job">Post</a> -->
+
+
+                  </div>
+                  <div class="modal-body">
+
+                    <!-- <div class="col-md-12"> -->
+                    <span [innerHtml]="htmlget | KeepHtml: 'html'"></span>
+                    <!-- </div> -->
+                  </div>
+                </ng-template>
+
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- *************************View Job Details********************** -->
+<div *ngIf="(Viewjob==1)">
+  <div class="dash-head">
+    <p> Government Job Details</p>
+    <a (click)="ClosegovDetails()" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" title="Back">
+      Back
+    </a>
+  </div>
+  <h6>Basic Job Details</h6>
+  <p class="row">
+    <label class="col-md-4">
+      <span class="text-strong">Company Name:</span>
+      {{GetGovJobPostByIddata.strCompanyName?GetGovJobPostByIddata.strCompanyName:'NA'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">Job Position:</span>
+      {{GetGovJobPostByIddata.strJobPosition?GetGovJobPostByIddata.strJobPosition:'NA'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">State:</span>
+      {{GetGovJobPostByIddata.strStateName?GetGovJobPostByIddata.strStateName:'NA'}}
+    </label>
+  </p>
+  <p class="row">
+    <label class="col-md-4">
+      <span class="text-strong">District:</span>
+      {{GetGovJobPostByIddata.strDistrictName?GetGovJobPostByIddata.strDistrictName:'NA'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">Start Date:</span> {{GetGovJobPostByIddata.dtStartDate|date:'dd/MM/yyyy'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">End Date:</span> {{GetGovJobPostByIddata.dtEndDate |date:'dd/MM/yyyy'}}
+    </label>
+  </p>
+
+
+  <p class="row">
+    <label class="col-md-4">
+      <span class="text-strong">Experience (in yrs.) :</span>
+      {{GetGovJobPostByIddata.strExperience?GetGovJobPostByIddata.strExperience:'NA'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">Salary:(INR):</span> {{GetGovJobPostByIddata.strSalary}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">Ministry Name:</span>
+      {{GetGovJobPostByIddata.strMinistryName?GetGovJobPostByIddata.strMinistryName:'NA'}}
+    </label>
+  </p>
+
+  <p class="row">
+
+
+
+    <label class="col-md-4">
+      <span class="text-strong">Qualification:</span> <span
+        *ngFor="let item of GetGovJobPostByIddata.lstQualification; let isLast=last">{{item.name}}{{isLast
+        ? '' : ', '}}</span>
+
+    </label>
+
+
+
+    <label class="col-md-4">
+      <span class="text-strong">Gender:</span> {{GetGovJobPostByIddata.strGender?GetGovJobPostByIddata.strGender:'NA'}}
+    </label>
+
+    <label class="col-md-4">
+      <span class="text-strong">Job Type:</span>
+      {{GetGovJobPostByIddata.strJobType?GetGovJobPostByIddata.strJobType:'NA'}}
+    </label>
+  </p>
+
+
+  <p class="row">
+    <label class="col-md-4">
+      <span class="text-strong">Job Under:</span>
+      {{GetGovJobPostByIddata.strJobUnder?GetGovJobPostByIddata.strJobUnder:'NA'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">Category:</span> <span
+        *ngFor="let item of GetGovJobPostByIddata.lstIndustry; let isLast=last">{{item.name}}{{isLast
+        ? '' : ', '}}</span>
+    </label>
+
+    <label class="col-md-4">
+      <span class="text-strong">
+        Department:</span><span *ngFor="let item of GetGovJobPostByIddata.lstDepartment; let isLast=last">{{item.name}}{{isLast
+        ? '' : ', '}}</span>
+    </label>
+  </p>
+  <br>
+  <h6>Contact Details</h6>
+
+  <p class="row">
+    <label class="col-md-4">
+      <span class="text-strong">Email:</span> {{GetGovJobPostByIddata.strEmail?GetGovJobPostByIddata.strEmail:'NA'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">Phone:</span> {{GetGovJobPostByIddata.strPhone?GetGovJobPostByIddata.strPhone:'NA'}}
+    </label>
+
+    <label class="col-md-4">
+      <span class="text-strong">
+        Apply URL:</span> {{GetGovJobPostByIddata.strApplyUrl?GetGovJobPostByIddata.strApplyUrl:'NA'}}
+    </label>
+  </p>
+
+  <p class="row">
+    <label class="col-md-4">
+      <span class="text-strong">Advertisement URL:</span>
+      {{GetGovJobPostByIddata.strAdvertisementUrl?GetGovJobPostByIddata.strAdvertisementUrl:'NA'}}
+    </label>
+    <label class="col-md-4">
+      <span class="text-strong">Advertisement Number:</span>
+      {{GetGovJobPostByIddata.strAdvertisementNo?GetGovJobPostByIddata.strAdvertisementNo:'NA'}}
+    </label>
+
+    <label class="col-md-4">
+      <span class="text-strong">
+        Pincode:</span> {{GetGovJobPostByIddata.strPinCode?GetGovJobPostByIddata.strPinCode:'NA'}}
+    </label>
+
+    <label class="col-md-12">
+      <span class="text-strong">
+        Address:</span> {{GetGovJobPostByIddata.strAddress?GetGovJobPostByIddata.strAddress:'NA'}}
+    </label>
+
+    <label class="col-md-12">
+      <span class="text-strong">
+        Description:</span>
+      <span [innerHtml]="GetGovJobPostByIddata.strSkill | KeepHtml: 'html'"></span>
+    </label>
+  </p>
+
+  <div class="dash-head dash-head-2">
+    <p>Fee Details</p>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-md-12">
+      <div class="all-jobs-list">
+        <div id="" class="searchResults">
+          <ul class="joblist-wrapper">
+            <li class="job-wrapper ps-relative" *ngFor="let item of GetGovJobPostByIddata.lstJobDetails; let i=index">
+              <div class="clearfix"></div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-6"><strong>Caste : </strong> <span>{{item.strCaste}}</span>
+                  </div>
+                  <div class="col-md-6"><strong>No. of Vacancy : </strong> <span>{{item.intVacancy}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6"><strong>Application Fee : </strong>
+                    <span>{{item.strApplicationFee}}</span>
+                  </div>
+                  <div class="col-md-6"><strong>Age (in yrs.) : </strong> <span>{{item.strAge}}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="form-group">
+                <div class="job-list-action card-view-btns">
+                  <a class="viewit" href="javascript:void(0)" (click)="openfeedetailseditform(item)"
+                    title="Edit">Edit</a>
+                </div>
+              </div> -->
+              <div class="clearfix"></div>
+              <div class="clearfix"></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- *******************Government Card View End Here******************** -->
+
+<!-- ********************Update Form******************** -->
+
+<div *ngIf="(updategovform==1)">
+  <div class="dash-head">
+    <p> Update Government Job </p>
+    <a (click)="Closeupdategovform()" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" title="Close">
+      Close
+    </a>
+  </div>
+  <form [formGroup]="UpdateGOVFORM" (submit)="AdminUpdateGovJob(GetGovJobPostByIddata)">
+    <div class="job-posting">
+      <div class="form-group">
+        <div class="col-md-12">
+          <div class="legend-box">
+            <div class="col-md-12 row">
+              <span class="legend-title"><label class="biz-label">Job Details</label></span>
+            </div>
+            <div class="form-group">
+
+              <div class="col-md-4">
+                <label>Company Name </label>
+                <input type="text" class="form-control"
+                  oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                  formControlName="COMPANYNAME" placeholder="Company Name" maxlength="200" />
+                <errors [control]="UpdateGOVFORM.controls.COMPANYNAME"></errors>
+              </div>
+              <div class="col-md-4">
+                <label>Job Position </label>
+                <input
+                  oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                  type="text" class="form-control" formControlName="JOBPOSITION" placeholder="Job Position"
+                  maxlength="100" />
+                <errors [control]="UpdateGOVFORM.controls.JOBPOSITION"></errors>
+              </div>
+              <div class="col-md-4">
+                <label>State </label>
+                <select (change)="onChangeState(UpdateGOVFORM.value.STATE)" class="form-control"
+                  formControlName="STATE">
+                  <option value="" class="" selected>--Select--</option>
+                  <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+                </select>
+                <errors [control]="UpdateGOVFORM.controls.STATE"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4">
+                <label>District </label>
+                <select class="form-control" formControlName="DISTRICT">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option *ngFor="let item of district" value="{{item.id}}">{{item.districtName}}</option>
+                </select>
+                <errors [control]="UpdateGOVFORM.controls.DISTRICT"></errors>
+              </div>
+
+              <div class="col-md-4">
+                <label>Start Date </label>
+                <div class="input-group">
+                  <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="STARTDATE"
+                    (bsValueChange)="MinDate($event)" [minDate]="startminDate" [maxDate]="maxDate"
+                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" bsDatepicker>
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label>End Date </label>
+                <div class="input-group">
+                  <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="ENDDATE"
+                    (bsValueChange)="MaxDate($event)" [minDate]="minDate"
+                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" bsDatepicker>
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4">
+                <label>Experience (in yrs.) </label>
+                <input type="text" class="form-control" formControlName="EXP" placeholder="Experience"
+                  maxlength="200" />
+              </div>
+
+              <div class="col-md-4">
+                <label>Salary (INR) </label>
+                <input type="text" class="form-control" formControlName="SALARY" placeholder="Salary" maxlength="200" />
+
+              </div>
+              <div class="col-md-4">
+                <label>Ministry Name </label>
+                <input type="text" class="form-control"
+                  oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                  formControlName="MINISTRYNAME" placeholder="Ministry Name" maxlength="100" />
+                <errors [control]="UpdateGOVFORM.controls.MINISTRYNAME"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4 upload-auto-searchs">
+                <label>Qualification</label>
+                <select style="display:none" class="form-control" formControlName="QUALIFICATION">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option [ngValue]="item.id" *ngFor="let item of QualificationDetailbind">{{item.name}}</option>
+                </select>
+                <ng-multiselect-dropdown [placeholder]="'please select Qualification'" [data]="QualificationDetailbind"
+                  formControlName="QUALIFICATION" [settings]="dropdownSettings" (onDeSelect)="onItemDeSelect($event)"
+                  (onDeSelectAll)="onDeSelectAll($event)" (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)">
+                </ng-multiselect-dropdown>
+
+                <button class="new-add" tabindex="0" type="button" (click)="AddQualification(QualificationTemplate)"
+                  title="">Add Qualification</button>
+
+                <ng-template #QualificationTemplate>
+                  <div class="modal-header">
+                  </div>
+                  <div class="modal-body">
+                    <div class="legend-box m-b-5">
+                      <div class="col-md-12 row">
+                        <span class="legend-title"><label class="biz-label">Add Details</label></span>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-5 col-xs-6">
+                          <label>Qualification </label>
+                        </div>
+                        <div class="col-md-6 col-sm-5 col-xs-6">
+                          <input type="text" value="" class="form-control" placeholder="Qualification" #Qualification
+                            maxlength="200" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer p-t-0 text-right">
+                    <button class="btn btn-w-shadow no-rd" type="button"
+                      (click)="SubmitQUALIFICATION(Qualification.value)">Submit</button>
+                    <button class="btn btn-w-shadow no-rd" type="button" (click)="CloseQID()">Close</button>
+                  </div>
+                </ng-template>
+                <!-- <errors [control]="UpdateGOVFORM.controls.QUALIFICATION"></errors> -->
+              </div>
+              <div class="col-md-4">
+                <label>Gender </label>
+                <div class="clearfix"></div>
+                <label>
+                  <input type="checkbox" name="Male" formControlName="MALE" id="Gender-1" value="Male"
+                    (change)="Gender($event.target.value)" />
+                  Male
+                </label>
+                <label>
+                  <input type="checkbox" name="Female" formControlName="FEMALE" id="Gender-2" value="Female"
+                    (change)="Gender($event.target.value)" />
+                  Female
+                </label>
+                <label>
+                  <input type="checkbox" name="Transgender" formControlName="TRANSGENDER" id="Gender-3"
+                    value="Transgender" (change)="Gender($event.target.value)" />
+                  Transgender
+                </label>
+                <!-- <errors [control]="UpdateGOVFORM.controls.Gender"></errors> -->
+              </div>
+              <div class="col-md-4">
+                <label>Job Type </label>
+                <div class="cleafix"></div>
+                <select class="form-control" formControlName="JOBTYPE">
+                  <option value="" selected>--Select--</option>
+                  <option value="FullTime" selected>FullTime</option>
+                  <option value="PartTime" selected>PartTime</option>
+                  <option value="Contractual" selected>Contractual</option>
+                  <option value="Freelancer" selected>Freelancer</option>
+                </select>
+                <errors [control]="UpdateGOVFORM.controls.JOBTYPE"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4">
+                <label>Job Under </label>
+                <div class="cleafix"></div>
+                <select class="form-control" formControlName="JOBUNDER">
+                  <option value="" selected>--Select--</option>
+                  <option value="Central Government" selected>Central Government</option>
+                  <option value="State Government" selected>State Government</option>
+
+                </select>
+                <errors [control]="UpdateGOVFORM.controls.JOBUNDER"></errors>
+              </div>
+              <div class="col-md-4">
+                <label>Category</label>
+                <select style="display:none" class="form-control" formControlName="INDUSTRYAREA">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option [ngValue]="item.id" *ngFor="let item of IndustryDetail">{{item.name}}</option>
+                </select>
+                <ng-multiselect-dropdown [placeholder]="'please select Qualification'" [data]="IndustryDetail"
+                  formControlName="INDUSTRYAREA" [settings]="dropdownSettings" (onDeSelect)="onItemDeSelect($event)"
+                  (onDeSelectAll)="onDeSelectAll($event)" (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)">
+                </ng-multiselect-dropdown>
+                <button class="new-add" tabindex="0" type="button" (click)="AddIndustryArea(IndustryAreaTemplate)"
+                  title="">Add Category</button>
+                <ng-template #IndustryAreaTemplate>
+                  <div class="modal-header">
+                  </div>
+                  <div class="modal-body">
+                    <div class="legend-box m-b-5">
+                      <div class="col-md-12 row">
+                        <span class="legend-title"><label class="biz-label">Add Details</label></span>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-5 col-xs-6">
+                          <label>Category </label>
+                        </div>
+                        <div class="col-md-6 col-sm-5 col-xs-6">
+                          <input type="text" class="form-control" placeholder="Category" #IndustryArea
+                            maxlength="200" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer p-t-0 text-right">
+                    <button class="btn btn-w-shadow no-rd" type="button"
+                      (click)="SubmitIndustryArea(IndustryArea.value)">Submit</button>
+                    <button class="btn btn-w-shadow no-rd" type="button" (click)="CloseQID()">Close</button>
+                  </div>
+                </ng-template>
+              </div>
+              <div class="col-md-4">
+                <label>Department </label>
+                <select style="display:none" class="form-control" formControlName="DEPARTMENT">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option [ngValue]="item.id" *ngFor="let item of DepartmentDetail">{{item.name}}</option>
+                </select>
+                <ng-multiselect-dropdown [placeholder]="'please select Qualification'" [data]="DepartmentDetail"
+                  formControlName="DEPARTMENT" [settings]="dropdownSettings" (onDeSelect)="onItemDeSelect($event)"
+                  (onDeSelectAll)="onDeSelectAll($event)" (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)">
+                </ng-multiselect-dropdown>
+
+                <button class="new-add" tabindex="0" type="button" (click)="AddDepartment(DepartmentTemplate)"
+                  title="">Add
+                  Department</button>
+                <ng-template #DepartmentTemplate>
+                  <div class="modal-header">
+                  </div>
+                  <div class="modal-body">
+                    <div class="legend-box m-b-5">
+                      <div class="col-md-12 row">
+                        <span class="legend-title"><label class="biz-label">Add Details</label></span>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-5 col-xs-6">
+                          <label>Department </label>
+                        </div>
+                        <div class="col-md-6 col-sm-5 col-xs-6">
+                          <input type="text" class="form-control" placeholder="Department" maxlength="200"
+                            #Department />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer p-t-0 text-right">
+                    <button class="btn btn-w-shadow no-rd" type="button"
+                      (click)="SubmitDepartment(Department.value)">Submit</button>
+                    <button class="btn btn-w-shadow no-rd" type="button" (click)="CloseQID()">Close</button>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12">
+                <label>Description</label>
+                <ckeditor [editor]="Editor" formControlName="DESCRIPTION" maxlength="6300"></ckeditor>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-4 text-left">
+                <label>Upload File</label>
+                <label for="type-file" class="type-file">
+                  Choose File
+                  <input type="file" (change)="onUploadChange($event)" class="" formControlName="FILE" id="type-file">
+                </label>
+              </div>
+
+              <div class="col-sm-4 visible-sm"></div>
+              <div class="col-md-3 recruiter-logo">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend-box">
+        <!-- Fee Details1 -->
+        <div class="col-md-12 row">
+          <span class="legend-title"><label class="biz-label">Fee Details</label>
+          </span>
+          <button class="btn btn-w-shadow no-rd pull-right" tabindex="0" type="button"
+            (click)="AddFeedetails(FeedetailUpdateTemplate)" title="Add">Add</button>
+          <ng-template #FeedetailUpdateTemplate>
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+              <div class="legend-box m-b-5">
+                <div class="col-md-12 row">
+                  <span class="legend-title"><label class="biz-label">Add Fee Details</label></span>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+                    <label>Caste <span style="color:red;"> *</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+
+                    <select class="form-control" #caste>
+
+                      <option value="All" selected>All</option>
+                      <option value="Gen" selected>General</option>
+                      <option value="Obc" selected>Obc</option>
+                      <option value="Sc" selected>Sc</option>
+                      <option value="St" selected>St</option>
+                      <option value="" selected>--Select--</option>
+                    </select>
+                    <!-- <input type="text" value="" class="form-control" placeholder="Qualification" #Qualification
+                        maxlength="200" /> -->
+                  </div>
+
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+                    <label>No. of Vacancy </label>
+                  </div>
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+                    <input type="text" class="form-control" placeholder="No. of Vacancy" #vacancy maxlength="200" />
+                  </div>
+
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+                    <label>Application Fee </label>
+                  </div>
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+                    <input type="text" class="form-control" placeholder="Application Fee" maxlength="200"
+                      #applicationfee />
+                  </div>
+
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+                    <label>Age (in yrs.) </label>
+                  </div>
+                  <div class="col-md-6 col-sm-5 col-xs-6">
+                    <input type="text" class="form-control" placeholder="Age (in yrs.)" maxlength="200" #age />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer p-t-0 text-right">
+              <button class="btn btn-w-shadow no-rd" type="button"
+                (click)="Submitnewfeedetails(caste.value,vacancy.value,applicationfee.value,age.value)">Submit</button>
+              <button class="btn btn-w-shadow no-rd" type="button" (click)="CloseQID()">Close</button>
+            </div>
+          </ng-template>
+
+        </div>
+        <div class="form-group">
+          <div class="col-md-12">
+            <div class="all-jobs-list">
+              <div id="" class="searchResults">
+                <ul class="joblist-wrapper">
+                  <ng-container *ngFor="let item of Catsevalue; let i=index">
+                    <li *ngIf="item.bIsactive==1">
+                      <div class="job-wrapper ps-relative">
+                        <!-- {{FeeId}} -->
+                        <ng-template #templatedeletefee>
+                          <div class="modal-body text-center">
+                            <p>Do You Want To Delete This Fee Detail?</p>
+                            <br />
+                            <br />
+                            <button type="button" class="btn yl-btn no-rd"
+                              (click)="DeleteFeeDetail(i,item)">Yes</button>
+                            <button type="button" (click)="declineBoxSecor()" class="btn bl-btn no-rd">No</button>
+                          </div>
+                        </ng-template>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-6"><strong>Caste : </strong>
+                              <span>{{item.strCaste?item.strCaste:'NA'}}</span>
+                            </div>
+                            <div class="col-md-6"><strong>No. of Vacancy : </strong>
+                              <span>{{item.intVacancy?item.intVacancy:'NA'}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6"><strong>Application Fee : </strong>
+                              <span>{{item.strApplicationFee?item.strApplicationFee:'NA'}}</span>
+                            </div>
+                            <div class="col-md-6"><strong>Age (in yrs.) : </strong>
+                              <span>{{item.strAge?item.strAge:'NA'}}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="job-list-action card-view-btns">
+                            <a class="viewit" href="javascript:void(0)" (click)="openfeedetailseditform(item)"
+                              *ngIf="item.lnGovJobId" title="Edit">Edit</a>
+                            <a class="viewit" href="javascript:void(0)" (click)="DeleteFeeDetails(templatedeletefee)"
+                              title="Delete">Delete</a>
+                          </div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                    </li>
+                  </ng-container>
+                  <div class="clearfix"></div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend-box">
+        <div class="col-md-12 row">
+          <span class="legend-title"><label class="biz-label">Contact Detail</label></span>
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+            <label>Email </label>
+            <input type="text" class="form-control" formControlName="EMAIL" placeholder="Email" maxlength="200" />
+            <errors [control]="UpdateGOVFORM.controls.EMAIL"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Phone </label>
+            <input type="text" class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              formControlName="PHONE" placeholder="Phone" maxlength="12" />
+            <errors [control]="UpdateGOVFORM.controls.PHONE"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Apply URL</label>
+            <input type="text" class="form-control" formControlName="APPLYURL" placeholder="Apply URL"
+              maxlength="120" />
+            <errors [control]="UpdateGOVFORM.controls.APPLYURL"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Advertisement URL </label>
+            <input type="text" class="form-control" formControlName="ADVERTISEMENTURL" placeholder="Advertisement URL"
+              maxlength="120" />
+            <errors [control]="UpdateGOVFORM.controls.ADVERTISEMENTURL"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Advertisement Number </label>
+            <input type="text" class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              formControlName="ADVERTISEMENTNUMBER" placeholder="Advertisement Number" maxlength="30" />
+            <errors [control]="UpdateGOVFORM.controls.ADVERTISEMENTNUMBER"></errors>
+          </div>
+          <div class="col-md-4">
+            <label>Pincode</label>
+            <input type="text" class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              formControlName="PINCODE" placeholder="Pincode" maxlength="6" minlength="6" />
+            <errors [control]="UpdateGOVFORM.controls.PINCODE"></errors>
+          </div>
+          <div class="form-group">
+            <div class="col-md-12">
+              <label>Address </label>
+              <textarea type="text" placeholder="Address" class="form-control" formControlName="ADDRESS"
+                maxlength="499"></textarea>
+              <errors [control]="UpdateGOVFORM.controls.ADDRESS"></errors>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-12 text-center p-r-0">
+          <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit"
+            [disabled]="!UpdateGOVFORM.valid">Update</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="(updatefeedetailform==1)">
+  <div class="dash-head">
+    <p> Update Government Fee Detail </p>
+    <a (click)="Closefeedeatilupdateform()" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)"
+      title="Close">
+      Close
+    </a>
+  </div>
+
+  <form [formGroup]="UpdateFeeFORM" (submit)="AdminUpdateGovFeeDetails(GetGovJobPostByIddata)">
+    <div class="job-posting">
+      <div class="form-group">
+        <div class="col-md-12">
+          <div class="legend-box">
+            <div class="col-md-12 row">
+              <span class="legend-title"><label class="biz-label">Fee Details</label></span>
+            </div>
+
+            <div class="form-group">
+
+              <div class="col-md-4">
+                <label>Caste</label>
+                <div class="cleafix"></div>
+                <select class="form-control" formControlName="CASTE" disabled>
+                  <option value="" selected>--Select--</option>
+                  <option value="All" selected>All</option>
+                  <option value="Gen" selected>General</option>
+                  <option value="Obc" selected>Obc</option>
+                  <option value="Sc" selected>Sc</option>
+                  <option value="St" selected>St</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label>No of Vacancy </label>
+                <input type="text" class="form-control" formControlName="VACANCY" placeholder="No of Vacancy"
+                  maxlength="5" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+              </div>
+
+              <div class="col-md-4">
+                <label>Application Fee (INR) </label>
+                <input type="text" class="form-control"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                  formControlName="FEE" placeholder="Application Fee" maxlength="10" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-4">
+                <label>Age (in yrs.) </label>
+                <input type="text" class="form-control" formControlName="AGE" placeholder="Age" maxlength="200" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-12 text-center p-r-0">
+          <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit">Update</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

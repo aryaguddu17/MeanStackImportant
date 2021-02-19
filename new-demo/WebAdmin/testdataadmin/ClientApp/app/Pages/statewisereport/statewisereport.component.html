@@ -1,0 +1,149 @@
+<div class="dash-head">
+    <p>Report</p>
+    <!-- <a (click)="backbtn()" *ngIf="previousbtn" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0">
+        <i aria-hidden="true" class="fa fa-arrow-left"></i>
+    </a> -->
+    <!-- <a (click)="backbtn1()" *ngIf="previousbtn1" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0">
+        <i aria-hidden="true" class="fa fa-arrow-left"></i>
+    </a> -->
+
+    <a *ngIf="ShowCount" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)"
+        (click)="ShowAllexcelExport()">
+        <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+    </a>
+    <a *ngIf="ShowStateWise" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)"
+        (click)="ShowStateWiseexcelExport()">
+        <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+    </a>
+    <a *ngIf="ShowdistrictWise" class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)"
+        (click)="ShowdistrictWiseexcelExport()">
+        <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+    </a>
+</div>
+<div class="col-md-12">
+    <ul class="breadcrumb">
+        <li *ngIf="HomeUrl=='0'">Home</li>
+        <li *ngIf="HomeUrl=='1'"><a href="javascript:void(0)" (click)="setnavigation('H')">Home</a></li>
+        <li *ngIf="HomeUrl=='1'&& StateUrl=='0'">{{this.Statename}}</li>
+        <li *ngIf="HomeUrl=='1'&& StateUrl=='1' &&(Showstates ||ShowStateWise)"><a href="javascript:void(0)"
+                (click)="setnavigation('S')">{{this.Statename}}</a></li>
+        <li *ngIf="ShowdistrictWise">
+            <!-- <a href="javascript:void(0)" (click)="setnavigation('D')"></a>-->{{DistricName}}</li>
+    </ul>
+</div>
+<div class="col-md-12">
+    <div class="update-profile">
+        <div id="" class="searchResults1">
+            <!--<div style="float: left" *ngIf="ShowCount">
+                        <button (click)="ShowAllexcelExport()">Export to Excel</button>
+                </div>
+                <div style="float: left" *ngIf="ShowStateWise">
+                        <button (click)="ShowStateWiseexcelExport()">Export to Excel</button>
+                </div>
+                <div style="float: left" *ngIf="ShowdistrictWise">
+                        <button (click)="ShowdistrictWiseexcelExport()">Export to Excel</button>
+                </div>
+            <div class="row pull-right">
+            </div>-->
+            <div class="clearfix"></div>
+            <!-- <div class="table-responsive" *ngIf="ShowCount"> -->
+            <div class="all-jobs-list" *ngIf="ShowCount">
+                <div id="" class="searchResults">
+                    <div class="ui-widget-header ui-widget-header-r">
+                        <input #gb type="text" pInputText size="50" placeholder="Search">
+                    </div>
+                    <p-dataTable [(value)]="statewisedata" [paginator]="true" [rows]="10" [pageLinks]="3"
+                        [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                        <p-column header="S. No." [style]="{'width':'50px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="statename" header="State Name" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="statename" let-item="rowData" pTemplate type="body">
+                                <a href="javascript:void(0);" class="mandatory"
+                                    (click)="ShowStateWiseData(item.stateid)">
+                                    {{item.statename}}</a>
+                            </ng-template>
+                        </p-column>
+                        <p-column field="noofcompanies" header="Number Of Company" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column field="noofjobs" header="Number of Jobs" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column field="noofopening" header="Number of Opening" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column field="applicationreceived" header="Number of Application Received" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                    </p-dataTable>
+
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- <div class="table-responsive" *ngIf="ShowStateWise"> -->
+            <div class="all-jobs-list" *ngIf="ShowStateWise">
+                <div id="" class="searchResults">
+                    <div class="ui-widget-header ui-widget-header-r">
+                        <input #gb type="text" pInputText size="50" placeholder="Search">
+                    </div>
+                    <p-dataTable [(value)]="StateReportById" [paginator]="true" [rows]="10" [pageLinks]="3"
+                        [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                        <p-column header="S. No." [style]="{'width':'50px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="statename" header="State Name" [sortable]="true" [style]="{'width':'100px'}">
+                        </p-column>
+                        <p-column field="district" header="District" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="district" let-item="rowData" pTemplate type="body">
+                                <a href="javascript:void(0);" class="mandatory"
+                                    (click)="GetDistrictWiseReport(item.districtid)">{{item.district}}</a>
+                            </ng-template>
+                        </p-column>
+                        <p-column field="noofcompanies" header="Number of Company" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column field="noofjobs" header="Number of Jobs" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column field="noofopening" header="Number of Opening" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column field="applicationreceived" header="Number of Application Received" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                    </p-dataTable>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- <div class="table-responsive" *ngIf="ShowdistrictWise"> -->
+            <div class="all-jobs-list" *ngIf="ShowdistrictWise">
+                <div id="" class="searchResults">
+                    <div class="ui-widget-header ui-widget-header-r">
+                        <input #gb type="text" pInputText size="50" placeholder="Search">
+                    </div>
+                    <p-dataTable [(value)]="DistrictById" [paginator]="true" [rows]="10" [pageLinks]="3"
+                        [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                        <p-column header="S. No." [style]="{'width':'50px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="statename" header="State Name" [sortable]="true" [style]="{'width':'100px'}">
+                        </p-column>
+                        <p-column field="district" header="District" [sortable]="true" [style]="{'width':'100px'}">
+                        </p-column>
+                        <p-column field="companyname" header="Company Name" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column header="Job Title" [sortable]="true" [style]="{'width':'200px'}">
+                            <ng-template let-name="rowData" let-i="rowIndex" pTemplate type="body">
+                                {{ (name.jobtitle.length>50)?
+                                            (name.jobtitle | slice:0:40)+'...':(name.jobtitle) }}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="noofvancancy" header="Number of Vacancy" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+                        <p-column field="noofapplicationreceived" header="Number of Application Received"
+                            [sortable]="true" [style]="{'width':'100px'}"></p-column>
+                    </p-dataTable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

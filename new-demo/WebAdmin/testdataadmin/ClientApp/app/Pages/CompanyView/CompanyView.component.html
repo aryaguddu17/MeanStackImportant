@@ -1,0 +1,147 @@
+<div class="dash-head">
+    <p>Company View</p>
+</div>
+
+<app-Common-Layout (clicked)="onClicked($event)" (backcliked)="onbackregist()"></app-Common-Layout>
+
+<div class="col-md-12" *ngIf="companyviewshow=='1'">
+    <div class="cleafix"></div>
+    <div *ngIf="companyviewshow=='1'">
+        <div class="cleafix"></div>
+        <div class="update-profile">
+            <div *ngIf="(RegistrationView=='1')" class="col-md-12">
+                <div class="jd-detail job-wrapper searchResults ps-relative">
+                    <div class="job-list-action">
+                        <a class="viewit" href="javascript:void(0)" (click)="EditCompanyRegis()" *ngIf="(EditButton=='1')"
+                            title="Edit">Edit</a>
+                    </div>
+                    <h4>COMPANY DETAILS</h4>
+                    <div class="form-group">
+                        <div class="col-md-4 lang-ellip">
+                            <p>
+                                <span class="text-strong">Company Name:</span>
+                                <span title={{companydetails.companyName}}>{{companydetails.companyName==null?'NA':companydetails.companyName}}</span>
+                            </p>
+                        </div>
+                        <div class="col-md-4 ">
+                            <p>
+                                <span class="text-strong"> State:</span>
+                                {{companydetails.stateName==null?'NA':companydetails.stateName}}
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                                <span class="text-strong">District:</span>
+                                {{companydetails.districtName==null?'NA':companydetails.districtName}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 ">
+                            <p>
+                                <span class="text-strong"> Industry:</span>
+                                {{companydetails.industryType==null?'NA':companydetails.industryType}}
+                            </p>
+                        </div>
+                        <div class="col-md-4 lang-ellip">
+                            <p>
+                                <span class="text-strong"> Description:</span>
+                                <span title={{companydetails.description}}>{{companydetails.description==null?'NA':companydetails.description}}</span>
+                            </p>
+                        </div>
+                        <div class="col-md-4 lang-ellip">
+                            <p>
+                                <span class="text-strong"> Office Address:</span>
+                                <span title={{companydetails.officeAddress}}>{{companydetails.officeAddress==null?'NA':companydetails.officeAddress}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 lang-ellip">
+                            <p><span class="text-strong"> GSTIN:</span>
+                                {{companydetails.gstn==null?'NA':companydetails.gstn}}</p>
+                            <a *ngIf="companydetails.gstinImage!=null" href="{{ companydetails.gstinImage}}" target="_blank"><img
+                                    class="img-thumbnail" height="50px" width="50px" src="{{ companydetails.gstinImage!=null?companydetails.gstinImage:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'"></a>
+
+                            <a *ngIf="companydetails.gstinImage==null" href="javascript:void(0)"><img class="img-thumbnail"
+                                    height="50px" width="50px" src="{{ companydetails.gstinImage!=null?companydetails.gstinImage:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'"></a>
+                        </div>
+
+                        <div class="col-md-4">
+                            <p> <span class="text-strong"> PAN:</span>
+                                {{companydetails.pan==null?'NA':companydetails.pan}}</p>
+                            <a *ngIf="companydetails.panImage!=null" href="{{companydetails.panImage}}" target="_blank"><img
+                                    class="img-thumbnail" height="50" width="50" src="{{ companydetails.panImage!=null?companydetails.panImage:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'"></a>
+
+                            <a *ngIf="companydetails.panImage==null" href="javascript:void(0)"><img class="img-thumbnail"
+                                    height="50" width="50" src="{{ companydetails.panImage!=null?companydetails.panImage:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'"></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="update-profile">
+        <div *ngIf="(RegistrationView=='1')" class="col-md-12">
+            <div class="jd-detail job-wrapper searchResults ps-relative" *ngFor="let item of companyregisterdatashow">
+                <div class="job-list-action">
+                    <a class="viewit" href="javascript:void(0)" (click)="EditCompanyRegis()" *ngIf="(EditButton=='1')"
+                        title="Edit">Edit</a>
+                </div>
+                <h4>User Details</h4>
+                <div class="form-group">
+                    <div class="col-md-4 lang-ellip">
+                        <p> <span class="text-strong">Company Name:</span> <span title={{item.COMPANYNAME}}>{{item.COMPANYNAME}} </span></p>
+                    </div>
+                    <div class="col-md-4 lang-ellip">
+                        <p> <span class="text-strong"> Name:</span> <span title={{item.FIRSTNAME}}>{{item.FIRSTNAME==null?'NA':item.FIRSTNAME}}</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p> <span class="text-strong"> Login Type:</span> {{item.LOGINTYPE}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 lang-ellip">
+                        <p><span class="text-strong"> Email:</span><span title={{item.EMAIL}}> {{item.EMAIL}}</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><span class="text-strong"> Mobile:</span> {{item.PHONENO}}</p>
+                    </div>
+                    <div class="col-md-4 lang-ellip">
+                        <p> <span class="text-strong"> Username:</span><span title={{item.USERNAME}}> {{item.USERNAME}}</span></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 lang-ellip">
+                        <p><span class="text-strong"> Designation:</span><span title={{item.DESIGNATION}}> {{item.DESIGNATION==null?'NA':item.DESIGNATION}}</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><span class="text-strong"> GSTIN:</span> {{item.GSTNO==''?'NA':item.GSTNO}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p> <span class="text-strong"> PAN:</span> {{item.PANCARD==''?'NA':item.PANCARD}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <p> <span class="text-strong"> State:</span> {{item.STATENAME}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p> <span class="text-strong"> District:</span> {{item.DISTRICTNAME}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

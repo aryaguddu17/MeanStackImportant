@@ -1,0 +1,422 @@
+<div class="dash-head">
+    <p>Company Status Reports</p>
+    <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="ShowAllexcelExport(profiledata)">
+        <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+    </a>
+</div>
+<!-- {{companydetails|json}} -->
+<!-- {{profiledata|json}} -->
+<div class="col-md-12" *ngIf="companyviewshow=='1'">
+    <div id="" class="usersWrapper" *ngIf="viewdatashow=='1'">
+        <!-- <div class="table-responsive">
+            <table datatable id="DataTables_Table_0" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Company Name</th>
+                        <th>Login Type</th>
+                        <th>Contact Name</th>
+                        <th>Email</th>
+                        <th>Mobile No</th>
+                        <th>Designation</th>
+                        <th>State</th>
+                        <th>District</th>
+                        <th>Total User</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of profiledata let i=index">
+                        <td>{{ i+ 1 }}</td>
+                        <td>{{ item.companyName }}</td>
+                        <td>{{ item.loginType}}</td>
+                        <td>{{ item.firstName }}{{ item.lastName }}</td>
+                        <td>{{ item.email }}</td>
+                        <td>{{ item.phoneNo }}</td>
+                        <td>{{ item.designation }}</td>
+                        <td>{{ item.stateName }}</td>
+                        <td>{{ item.districtName }}</td>
+                        <td>{{ item.totalUser }}</td>
+                        <td>{{item.isActivE==true?'Approved':'Pending' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+
+        <div id="" class="searchResults">
+            <div class="ui-widget-header ui-widget-header-r">
+                <input #gb type="text" pInputText size="50" placeholder="Search">
+            </div>
+            <p-dataTable [(value)]="profiledata" [paginator]="true" [rows]="10" [pageLinks]="3"
+                [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                <p-column header="S. No." [style]="{'width':'50px'}">
+                    <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                        {{i+1}}
+                    </ng-template>
+                </p-column>
+                <p-column field="companyName" header="Company Name" [sortable]="true" [style]="{'width':'200px'}">
+                </p-column>
+                <p-column field="loginType" header="Login Type" [sortable]="true" [style]="{'width':'100px'}">
+                </p-column>
+                <p-column header="Contact Name" [sortable]="true" [style]="{'width':'200px'}">
+                    <ng-template let-name="rowData" let-i="rowIndex" pTemplate type="body">
+                        {{ (name.firstName.length>50)?
+                                    (name.firstName | slice:0:40)+'...':(name.firstName) }}
+                    </ng-template>
+                </p-column>
+                <p-column field="email" header="Email" [sortable]="true" [style]="{'width':'200px'}"></p-column>
+                <p-column field="phoneNo" header="Mobile No" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+                <p-column field="designation" header="Designation" [sortable]="true" [style]="{'width':'200px'}">
+                </p-column>
+                <p-column field="stateName" header="State" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+                <p-column field="districtName" header="District" [sortable]="true" [style]="{'width':'100px'}">
+                </p-column>
+                <p-column field="totalUser" header="Total User" [sortable]="true" [style]="{'width':'100px'}">
+                </p-column>
+                <p-column field="isActivE" header="Status" [sortable]="true" [style]="{'width':'100px'}">
+                    <ng-template field="isActivE" let-item="rowData" pTemplate type="body">
+                        {{item.isActivE==true?'Approved':'Pending' }}
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+
+    </div>
+</div>
+
+<div class="box-title" *ngIf="updatadatashow == '1'">
+
+    <!-- <a href="javascript:void(0)" (click)="Back()" class="btn btn-info pull-right">Back</a> <br><br> -->
+
+    <div class="box-title">
+        <p class="box-title-content">
+            Company Verification
+        </p>
+        <div class="panel-body form-inline">
+            <div class="form-group">
+                <label>COMPANY NAME:</label>
+                {{ companydetails.companyName }}
+            </div>
+
+            <div class="form-group">
+                <label>State:</label>
+                {{ companydetails.stateName }}
+            </div>
+            <div class="form-group">
+                <label>District:</label>
+                {{ companydetails.districtName }}
+            </div>
+            <div class="form-group">
+                <label>Industry:</label>
+                {{ companydetails.industryType }}
+            </div>
+            <div class="form-group">
+                <label>Industry:</label>
+                {{ companydetails.industryType }}
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                {{ companydetails.description }}
+            </div>
+            <div class="form-group">
+                <label>Office Address:</label>
+            </div>
+
+            <div class="form-group">
+                <label>GSTIN:</label>
+                <strong>{{ companydetails.gstn }} </strong>
+                <a href="{{ companydetails.gstinImage}}" target="_blank"><img class="img-thumbnail" height="150px"
+                        width="150px" src="{{ companydetails.gstinImage}}"></a>
+                <input type="checkbox" (change)="getGstValue($event)">
+            </div>
+            <div class="form-group">
+                <label>Pan:</label>
+                <strong>{{ companydetails.pan }} </strong>
+                <a href="{{ companydetails.panImage}}" target="_blank"><img class="img-thumbnail" height="150px"
+                        width="150px" src="{{ companydetails.panImage}}"></a>
+                <input type="checkbox" (change)="getPanValue($event)">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="button" (click)="approveComapny(companydetails.companyId)" value="Approve"
+                class="btn btn-success">
+
+        </div>
+    </div>
+
+</div>
+
+<!--- update password model-->
+<div class="modal fade" id="updatepassword" role="dialog" *ngIf="updpassword=='1'">
+    <div class="modal-dialog roj-admin-login-otp">
+        <div class="modal-content box-shadow-0">
+            <div>
+                <h2>Update Password</h2>
+                <button type="button" (click)="resetform()" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div>
+                <form name="myform" [formGroup]="changepasswordForm">
+                    <div class="group-wrapper new-group">
+                        <input id="password" name="password" class="form-control" type="password"
+                            data-validation="password" formControlName="password" maxlength="24">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <errors> </errors>
+                        <label>Password <span class="mandatory">*</span></label>
+                        <div class="hello-new1">
+                            <img src="../../../assets/img/info.png" width="20" class="tool-new-img">
+
+                            <p class="tool-new-pass">
+                                Atleast 1 Digit.<br>
+                                Atleast 1 small-case letter.<br>
+                                Atleast 1 Capital letter.<br>
+                                Atleast 1 Special character.<br>
+                                Length should be between 6-24 characters.
+                            </p>
+                        </div>
+                        <div class="alert new-alert">
+                            <errors [control]="changepasswordForm.controls.password"></errors>
+                        </div>
+                        <span id="error_password" class="text-danger"></span>
+                    </div>
+
+                    <div class="group-wrapper">
+                        <input id="cnfpassword" name="cnfpassword" class="form-control" type="password"
+                            data-validation="cnfpassword" formControlName="cnfpassword" maxlength="24">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <errors> </errors>
+                        <label>Confirm Password<span class="mandatory">*</span></label>
+                    </div>
+
+                    <div class="form-group margin-bottom-40">
+                        <!-- <button class="btn btn-w-shadow no-rd btn-block" type="submit" data-dismiss="modal" (click)="changepassword()">
+                            Update Password <span><i aria-hidden="true" class="fa fa-chevron-right"></i></span></button> -->
+                        <!-- <input type="submit" class="btn btn-w-shadow no-rd" value="Update Password" /> -->
+                        <button (click)="changepassword(changepasswordForm.value)" class="btn btn-w-shadow no-rd">Update
+                            Password</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" *ngIf="editdata == '1'">
+    <h2>Edit Company Details</h2>
+    <form class="form-horizontal" [formGroup]="update_company_profile" (ngSubmit)="updateprofiledata()">
+        <div class="form-group">
+            <label class="col-sm-4" for="email">Company Name:</label>
+            <div class="col-sm-6 ">
+                <input formControlName="name" name="company_name" readonly type="text" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="pwd">Company Short Name:</label>
+            <div class="col-sm-6">
+                <input formControlName="shortname" name="company_shortname" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="pwd">Company Tagline:</label>
+            <div class="col-sm-6">
+                <input formControlName="tagline" name="tagline" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="pwd">Company PAN:</label>
+            <div class="col-sm-6">
+                <input formControlName="pan" name="pan" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="pwd">Company GSTIN:</label>
+            <div class="col-sm-6">
+                <input name="gstin" formControlName="gstin" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="pwd">Company INDUSTRYNAME:</label>
+            <div class="col-sm-6">
+                <input formControlName="industry" name="industry" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="company_description">Company Description:</label>
+            <div class="col-sm-6">
+                <textarea formControlName="description" name="description" class="form-control" rows="5"
+                    col="5"></textarea>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="state">State:</label>
+            <div class="col-sm-6">
+                <input formControlName="state" name="state" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="distirct">District:</label>
+            <div class="col-sm-6">
+                <input formControlName="distirct" name="distirct" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" for="pwd">Office Address:</label>
+            <div class="col-sm-6">
+                <input formControlName="office_address" name="distirct" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button class="btn btn-primary" (click)="editBack()">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal fade" id="companydetails" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Company Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>Name:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.companyName==null?'Not Available':companydetails.companyName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>State:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.stateName==null?'Not Available':companydetails.stateName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>District:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.districtName==null?'Not Available':companydetails.districtName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>Industry:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.industryType==null?'Not Available':companydetails.industryType">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>Description:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.description==null?'Not Available':companydetails.description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>Office Address:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.officeAddress==null?'Not Available':companydetails.officeAddress">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>GSTIN:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.gstn==null?'Not Available':companydetails.gstn">
+                            </div>
+                            <div class="col-md-4">
+                                <a *ngIf="companydetails.gstinImage!=null" href="{{ companydetails.gstinImage}}"
+                                    target="_blank"><img class="img-thumbnail" height="50px" width="50px"
+                                        src="{{ companydetails.gstinImage!=null?companydetails.gstinImage:'assets/images/NoImage.png'}}"
+                                        onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                <a *ngIf="companydetails.gstinImage==null" href="javascript:void(0)"><img
+                                        class="img-thumbnail" height="50px" width="50px"
+                                        src="{{ companydetails.gstinImage!=null?companydetails.gstinImage:'assets/images/NoImage.png'}}"
+                                        onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                &nbsp;&nbsp;<input *ngIf="verifysts==null || verifysts==0 " type="checkbox"
+                                    (change)="getGstValue($event)">
+
+                                <input *ngIf="verifysts==1" type="checkbox" checked disabled>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4 text-right">
+                                <label>Pan:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input readonly type="text" class="form-control"
+                                    [value]="companydetails.pan==null?'Not Available':companydetails.pan">
+                            </div>
+                            <div class="col-md-4">
+                                <a *ngIf="companydetails.panImage!=null" href="{{companydetails.panImage}}"
+                                    target="_blank"><img class="img-thumbnail" height="50" width="50"
+                                        src="{{ companydetails.panImage!=null?companydetails.panImage:'assets/images/NoImage.png'}}"
+                                        onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                <a *ngIf="companydetails.panImage==null" href="javascript:void(0)"><img
+                                        class="img-thumbnail" height="50" width="50"
+                                        src="{{ companydetails.panImage!=null?companydetails.panImage:'assets/images/NoImage.png'}}"
+                                        onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                &nbsp;&nbsp;<input *ngIf="verifysts==null || verifysts==0" type="checkbox"
+                                    (change)="getPanValue($event)">
+                                <input *ngIf="verifysts==1" type="checkbox" disabled checked>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input *ngIf="verifysts==null || verifysts==0" type="button" value="Approve"
+                            class="btn btn-w-shadow no-rd" mwlConfirmationPopover [popoverTitle]="popoverTitle"
+                            [popoverMessage]="popoverMessage" placement="top"
+                            (confirm)="confirmClicked(companydetails.companyId)" (cancel)="cancelClicked()">
+                        <button type="button" class="btn btn-w-shadow no-rd" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

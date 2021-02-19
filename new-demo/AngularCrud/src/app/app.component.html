@@ -1,0 +1,149 @@
+<br>
+<div class="container" style="max-width: 1350px !important;">
+  <div class="card">
+    <br>
+    <div class="action-container" style="text-align: right">
+      <span><b>Round Decimal</b></span>&nbsp;
+      <input type="checkbox" [(ngModel)]="saveUsername" [ngModelOptions]="{standalone: true}" />
+    </div><br>
+    <form [formGroup]="userTable">
+      <table class="table" style="text-align: right;">
+        <thead>
+          <th>Catalog Id <span class="ui-column-resizer" dragableColumn> </span></th>
+          <th>Vat Type</th>
+          <th>Item</th>
+          <th>Item Description<span class="ui-column-resizer" dragableColumn> </span></th>
+          <th>Quantity<span class="ui-column-resizer" dragableColumn> </span></th>
+          <th>Unit Price<span class="ui-column-resizer" dragableColumn> </span></th>
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <ng-container formArrayName="tableRows" *ngFor="let group of getFormControls.controls ; let i=index">
+            <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
+              <td>
+                <mat-form-field>
+                  <input matInput type="text" formControlName="catalogid">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-select formControlName="vattype">
+                    <mat-option value="included">Included</mat-option>
+                    <mat-option value="notincluded">Not Included</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <input matInput type="tetx" formControlName="item">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <input matInput type="tetx" formControlName="itemdesc">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <input matInput type="tetx" formControlName="quantity">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <input matInput type="text" formControlName="unitprice">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-icon class="delete" (click)="deleteRow(i)">delete_forever</mat-icon>
+                <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
+              </td>
+            </tr>
+            <tr *ngIf="!group.get('isEditable').value">
+              <td>
+                {{group.get('catalogid').value}}
+              </td>
+              <td>
+                {{group.get('vattype').value}}
+              </td>
+              <td>
+                {{group.get('item').value}}
+              </td>
+              <td>
+                {{group.get('itemdesc').value}}
+              </td>
+              <td>
+                {{group.get('quantity').value}}
+              </td>
+              <td>
+                {{group.get('unitprice').value}}
+              </td>
+
+              <td>
+                <mat-icon class="edit" (click)="editRow(group)">edit</mat-icon>
+              </td>
+            </tr>
+
+          </ng-container>
+
+        </tbody>
+        <tr>
+          <div class="action-container" style="text-align: left;">
+            <button mat-raised-button type="submit" (click)="addRow()">Add row</button>&nbsp;
+            <button mat-raised-button [disabled]="userTable.invalid" type="submit"
+              (click)="submitForm()">Submit</button>
+          </div><br>
+        </tr>
+      </table>
+
+    </form>
+      <table class="tablealign">
+        <thead>
+          <tr>
+            <td ><b>SubTotal</b></td>
+            <td ></td>
+            <td>
+              <mat-form-field>
+                <input matInput type="text" value="{{subTotal | number:'1.0-0'}}" disabled>
+              </mat-form-field>
+            </td>
+
+          </tr>
+          <tr>
+            <td ><b>Discount</b></td>
+            <td>%
+              <mat-form-field>
+                <input matInput type="text" [(ngModel)]="discountper" >
+              </mat-form-field>
+            </td> 
+            <td>
+              <mat-form-field>
+                <input *ngIf="saveUsername == true" matInput type="text" value="{{discount | number:'1.2-2'}}" disabled>
+                <input *ngIf="saveUsername == false" matInput type="text" value="{{addDecimalDiscount | number:'1.2-2'}}" disabled>
+              </mat-form-field>
+            </td>
+            
+          </tr>
+          <tr>
+            <td ><b>Vat</b></td>
+            <td ></td>
+            <td>+
+              <mat-form-field>
+                <input matInput type="text" value="{{vat | number:'1.2-2'}}" disabled>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td><b>Total</b></td>
+            <td ></td>
+            <td>
+              <mat-form-field>
+                <input *ngIf="saveUsername == true" matInput type="text" value="{{grandTotal | number:'1.2-2'}}" disabled>
+                <input *ngIf="saveUsername == false" matInput type="text" value="{{grandTotal | number:'1.0-0'}}" disabled>
+              </mat-form-field>
+            </td>
+          </tr>
+        </thead>
+      </table>
+  </div>
+</div>

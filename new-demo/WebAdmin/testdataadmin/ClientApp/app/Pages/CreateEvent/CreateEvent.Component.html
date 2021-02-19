@@ -1,0 +1,1545 @@
+<div class="dash-head" *ngIf="EListShow=='1'">
+    <p>Create Event List</p>
+    <!-- <a class="btn btn-w-shadow no-rd pull-right" tabindex="0" title="Go Back" *ngIf="Eventlistshow==0" (click)="showhide('B');"><i aria-hidden="true" class="fa fa-arrow-left"></i></a> -->
+    <a class="btn btn-w-shadow no-rd pull-right" tabindex="0" title="" *ngIf="Eventformshow=='0'" (click)="showhide('C');">Create</a>
+</div>
+<div class="dash-head" *ngIf="EDetailsShow=='1'">
+    <p>Create Event Details</p>
+    <a class="btn btn-w-shadow no-rd pull-right" tabindex="0" title="Go Back" (click)="showhide('');"><i aria-hidden="true"
+            class="fa fa-arrow-left"></i></a>
+
+</div>
+
+<div class="dash-head" *ngIf="EViewShow=='1'">
+    <p>View/Update Event </p>
+    <a class="btn btn-w-shadow no-rd pull-right" tabindex="0" title="Go Back" (click)="showhide('');" *ngIf="this.ViewBack=='1';"><i
+            aria-hidden="true" class="fa fa-arrow-left"></i> </a>
+
+    <a class="btn btn-w-shadow no-rd pull-right" tabindex="0" title="Go Back" (click)="CloseAllEditSection();" *ngIf="this.EditBack=='1';"><i
+            aria-hidden="true" class="fa fa-arrow-left"></i> </a>
+</div>
+
+<div [ngClass]="ApplyFilterShow=='1'?'show':'hide'">
+    <div class="page-filters">
+        <h2>
+            <a href="javascript:void(0);">
+                <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            </a>
+        </h2>
+        <form [formGroup]="FilterEventForm" (submit)="GetEventList(0,'','search')">
+            <div class="filter-wrapper">
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-6">
+                        <label>Event Type</label>
+                        <select class="form-control" formControlName="EvenType">
+                            <option value="" selected="selected">--Select--</option>
+                            <option *ngFor="let item of EventtypeList" value="{{item.eventId}}">{{item.eventName}}</option>
+                        </select>
+                        <errors [control]="FilterEventForm.controls.EvenType"></errors>
+
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>State</label>
+
+                        <select (change)="onChangeState(FilterEventForm.value.stateId);" class="form-control"
+                            formControlName="stateId">
+                            <option value="" class="" selected>--Select--</option>
+                            <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+                        </select>
+                        <errors [control]="FilterEventForm.controls.stateId"></errors>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>District</label>
+                        <select class="form-control" formControlName="districtId">
+                            <option value="" class="" selected="selected">--Select--</option>
+                            <option *ngFor="let item of district" value="{{item.id}}">{{item.districtName}}</option>
+                        </select>
+                        <errors [control]="FilterEventForm.controls.districtId"></errors>
+
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <label>Search Keywords<span></span></label>
+                        <input type="text" formControlName="Search" class="form-control" placeholder="Search" />
+                        <errors [control]="FilterEventForm.controls.Search"></errors>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-6">
+                        <label>Start Date</label>
+                        <div class="input-group">
+                            <input type="text" #validTo="bsDatepicker" placeholder="Select Date" disabled bsDatepicker
+                                [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }" value="" class="form-control m-b-0" [minDate]="startminDate" [maxDate]="maxDates" (bsValueChange)="MinDate($event)" formControlName="filterstartDate" />
+                            <span class="input-group-addon" (click)="validTo.toggle()" [attr.aria-expanded]="validTo.isOpen"><i
+                                    class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>End Date</label>
+                        <div class="input-group">
+                            <input type="text" #validfrom="bsDatepicker" [minDate]="minDates" placeholder="Select Date" disabled bsDatepicker [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }" value="" (bsValueChange)="MaxDate($event)" class="form-control m-b-0" formControlName="filterendDate" />
+                            <span class="input-group-addon" (click)="validfrom.toggle()" [attr.aria-expanded]="validfrom.isOpen"><i
+                                    class="fa fa-calendar"></i></span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="form-group text-center m-t-10">
+                    <button type="reset" class="btn btn-w-shadow no-rd" (click)="EventReset();">Reset</button>
+                    <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+                </div>
+                <div class="form-group text-center m-t-10">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- <form (ngSubmit)="scroll(target)" [formGroup]="EventForm"> -->
+<div class="col-md-12" *ngIf="Eventformshow=='1'">
+    <div class="legend-box m-b-10 margin-top-20">
+        <div class="col-md-12">
+            <span class="legend-title"><label class="biz-label">Event Details</label></span>
+        </div>
+        <form [formGroup]="EventForm">
+            <div>
+                <div class="event-creation">
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Event Name<span class="mandatory">*</span></span>
+                        </div>
+                        <!-- <div class="col-md-4 col-sm-3">
+                            <input required oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                type="text" class="form-control" formControlName="eventName" placeholder="Event Name"
+                                maxlength="200" />
+                            <errors [control]="EventForm.controls.eventName"></errors>
+                        </div> -->
+                        <div class="col-md-4 col-sm-3">
+                            <input required 
+                                type="text" class="form-control" formControlName="eventName" placeholder="Event Name"
+                                maxlength="" />
+                            <errors [control]="EventForm.controls.eventName"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Type<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-4 col-sm-3">
+                            <select class="form-control" formControlName="eventType">
+                                <option value="" class="" selected>--Select--</option>
+                                <option *ngFor="let item of EventtypeList" value="{{item.eventId}}">{{item.eventName}}</option>
+                            </select>
+                            <errors [control]="EventForm.controls.eventType"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Start Date<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="input-group">
+                                <input type="text" #validTo="bsDatepicker" placeholder="Select Date" disabled
+                                    bsDatepicker [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }"
+                                    value="" class="form-control m-b-0" formControlName="startDate" />
+                                <span class="input-group-addon" (click)="validTo.toggle()" [attr.aria-expanded]="validTo.isOpen"><i
+                                        class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong"> Start Time<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <input type="time" formControlName="startTime" class="form-control" atp-time-picker
+                                placeholder="Select Walk-In From Time" />
+                            <errors [control]="EventForm.controls.startTime"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">End Date<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="input-group">
+                                <input type="text" #validfrom="bsDatepicker" placeholder="Select Date" disabled
+                                    bsDatepicker [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }"
+                                    value="" class="form-control m-b-0" formControlName="endDate" />
+                                <span class="input-group-addon" (click)="validfrom.toggle()" [attr.aria-expanded]="validfrom.isOpen"><i
+                                        class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong"> End Time<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <input type="time" formControlName="endTime" class="form-control" atp-time-picker
+                                placeholder="Select Walk-In To Time " />
+                            <errors [control]="EventForm.controls.endTime"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Venue<span class="mandatory">*</span></span>
+                        </div>
+                        <!-- <div class="col-md-8 col-sm-9">
+                            <input required oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                type="text" class="form-control" formControlName="address" placeholder="Venue"
+                                maxlength="1000" />
+                            <errors [control]="EventForm.controls.address"></errors>
+                        </div> -->
+                        <div class="col-md-8 col-sm-9">
+                            <input required 
+                                type="text" class="form-control" formControlName="address" placeholder="Venue"
+                                maxlength="" />
+                            <errors [control]="EventForm.controls.address"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">State<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <select (change)="onChangeState(EventForm.value.stateId);codeAddres($event.target.value,'ST')"
+                                class="form-control" formControlName="stateId">
+                                <option value="" class="" selected>--Select--</option>
+                                <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+                            </select>
+                            <errors [control]="EventForm.controls.stateId"></errors>
+                            <!-- <div class="m-t-10">
+                                <img src="../../../assets/images/map.jpg" class="img-responsive" alt="Image" />
+                            </div> -->
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span class="text-strong">District<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-2">
+                            <select class="form-control" (change)="codeAddres($event.target.value,'DT')"
+                                formControlName="districtId">
+                                <option value="" class="" selected="selected">--Select--</option>
+                                <option *ngFor="let item of district" value="{{item.id}}">{{item.districtName}}</option>
+                            </select>
+                            <errors [control]="EventForm.controls.districtId"></errors>
+                            <!-- <div class="m-t-10">
+                                <img src="../../../assets/images/map.jpg" class="img-responsive" alt="Image" />
+                            </div> -->
+                        </div>
+                        <!-- <div class="col-md-2 col-sm-2">
+                            <button class="btn btn-w-shadow no-rd" tabindex="0" type="button" (click)="geoLocation(geolocationModal,'view')">Geo Location</button>
+                        </div> -->
+                    </div>
+                    <!-----------Geo Location Code  Add -->
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+
+                        </div>
+                        <div class="col-md-8 col-sm-9">
+                            <div>
+                                <app-geo-location-common (change)="getLatLang($event)"></app-geo-location-common>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--------------------- Geo Location End Code-->
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Facilitated By<span class="mandatory"></span></span>
+                        </div>
+                        <!-- <div class="col-md-4 col-sm-3">
+                            <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                formControlName="lstEventFacilitated" placeholder="Facilitated By " [attr.disabled]=""
+                                maxlength="200" />
+                            <errors [control]="EventForm.controls.lstEventFacilitated"></errors>
+                        </div> -->
+                        <div class="col-md-4 col-sm-3">
+                            <input type="text" class="form-control"
+                                formControlName="lstEventFacilitated" placeholder="Facilitated By " [attr.disabled]=""
+                                maxlength="" />
+                            <errors [control]="EventForm.controls.lstEventFacilitated"></errors>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <label for="upload1" class="upload1">
+                                <input type="file" id="upload1" formControlName="FacilitatedImage" (change)="onUploadChangePic($event,'FCI')" />
+                                Select Logo <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                            </label>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-xs-6">
+                            <button class="event-add" (click)="AddFacilated()">Add More Image<span><i class="fa fa-plus"
+                                        aria-hidden="true"></i></span></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong"></span>
+                        </div>
+                        <div class="col-md-6 col-sm-3">
+                            <!-- <div class="event-logo m-b-10">
+
+                             <div>
+                                <img src="../../../assets/images/rojgaar-logo.png" class="img-responsive" />
+                            </div>
+
+
+                                   </div>-->
+                            <div class="event-logo m-b-10" *ngFor="let item of AddFacilitedShow; let i = index;let isLast=last ">
+                                <ng-template #templateFaciltedBY>
+                                    <div class="modal-body text-center">
+                                        <p>Do You Want To Delete Facilitated By?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd" (click)="deleteFacilitedBy(i)">Yes</button>
+                                        <button type="button" (click)="declineBoxFacilted()" class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+                                <div>
+                                    <b>{{item.facilatedBy}}</b>
+                                </div>
+                                <div>
+                                    <img src="{{item.imageName!=''?item.imageName:'assets/images/NoImage.png'}}" class="img-responsive" />
+                                </div>
+                                <div>
+                                    <div class="event-logo-action-btn">
+                                        <ul>
+                                            <!-- <li><a href="javascript:void(0)"><i class="fas fa-pencil-alt text-link"></i></a></li> -->
+                                            <li><a href="javascript:void(0)" title="Delete This Facilitated By Detail"
+                                                    (click)="PusFacilitedByTemplate(templateFaciltedBY)"><i class="fas fa-trash-alt mandatory"></i></a></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group m-t-10">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Description
+                                <!-- <span class="mandatory">*</span> -->
+                            </span>
+                        </div>
+                        <div class="col-md-8 col-sm-9">
+                            <!-- <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                formControlName="eventDescription" placeholder="Description " [attr.disabled]=""
+                                maxlength="1000" /> -->
+
+                                <input type="text" class="form-control"
+                                formControlName="eventDescription" placeholder="Description " [attr.disabled]=""
+                                maxlength="" />
+                            <!-- <errors [control]="EventForm.controls.eventDescription"></errors> -->
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-t-10">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Select Event Banner<span class="mandatory"></span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <label for="upload2" class="upload1">
+                                <input type="file" id="upload2" formControlName="PosterEventImage" (change)="onUploadChangePic($event,'PosterImageEvent')" />
+                                Select Banner <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                            </label>
+
+                            <!-- <label for="upload2" class="upload2">
+                                <input type="file" id="upload2" />  <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                            </label> <span></span> -->
+                        </div>
+                        <div class="col-md-2 col-sm-3 col-xs-6">
+                            <button class="event-add" (click)="AddEventImage()">Add More Banner<span><i class="fa fa-plus"
+                                        aria-hidden="true"></i></span></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong"></span>
+                        </div>
+                        <div class="col-md-6 col-sm-3">
+                            <div class="event-logo m-b-10" *ngFor="let item of PosterImageAddShow; let i = index;let isLast=last ">
+                                <ng-template #templatePosterEvent>
+                                    <div class="modal-body text-center">
+                                        <p>Do You Want To Delete Upload Event Banner Detail?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd" (click)="deletePosterEvent(i)">Yes</button>
+                                        <button type="button" (click)="declineBoxPosterEvent()" class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+                                <div class="text-center">
+                                    <!-- <img src="../../../assets/images/rojgaar-logo.png" class="img-responsive" /> -->
+                                    <img src="{{item.imageNameposter!=''?item.imageNameposter:'assets/images/NoImage.png'}}"
+                                        class="img-responsive" />
+                                </div>
+                                <div>
+                                    <div class="event-logo-action-btn">
+                                        <ul>
+                                            <!-- <li><a href="javascript:void(0)"><i class="fas fa-pencil-alt text-link"></i></a></li> -->
+                                            <li><a href="javascript:void(0)" title="Delete This Upload Event Document Detail"
+                                                    (click)="PusPosterEventTemplate(templatePosterEvent)"><i class="fas fa-trash-alt mandatory"></i></a></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Chief Guest<span class="mandatory"></span></span>
+                        </div>
+                        <!-- <div class="col-md-8 col-sm-9">
+                            <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                formControlName="lstEventGuest" placeholder="Chief Guest " [attr.disabled]="" maxlength="200" />
+                            <errors [control]="EventForm.controls.lstEventGuest"></errors>
+                        </div> -->
+                        <div class="col-md-8 col-sm-9">
+                            <input type="text" class="form-control" 
+                                formControlName="lstEventGuest" placeholder="Chief Guest " [attr.disabled]="" maxlength="" />
+                            <errors [control]="EventForm.controls.lstEventGuest"></errors>
+                        </div>
+                    </div>
+                    <div class="legend-box m-b-5 p-l-0 margin-top-40">
+                        <div class="col-md-12">
+                            <span class="legend-title"><label class="biz-label">Event Co-ordinator Details</label></span>
+                        </div>
+                        <div class="form-group m-t-10">
+                            <div class="col-md-2 col-sm-3">
+                                <span class="text-strong">Name<span class="mandatory">*</span></span>
+                            </div>
+                            <!-- <div class="col-md-3 col-sm-3">
+                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                    formControlName="Name" placeholder="Name" [attr.disabled]="" maxlength="200" />
+                                <errors [control]="EventForm.controls.Name"></errors>
+                            </div> -->
+                            <div class="col-md-3 col-sm-3">
+                                <input type="text" class="form-control" 
+                                    formControlName="Name" placeholder="Name" [attr.disabled]="" maxlength="" />
+                                <errors [control]="EventForm.controls.Name"></errors>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2 col-sm-3">
+                                <span class="text-strong">Designation<span class="mandatory"></span></span>
+                            </div>
+                            <!-- <div class="col-md-3 col-sm-3">
+                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                    formControlName="Designation" placeholder="Designation" [attr.disabled]=""
+                                    maxlength="200" />
+                                <errors [control]="EventForm.controls.Designation"></errors>
+                            </div> -->
+                            <div class="col-md-3 col-sm-3">
+                                <input type="text" class="form-control" 
+                                    formControlName="Designation" placeholder="Designation" [attr.disabled]=""
+                                    maxlength="" />
+                                <errors [control]="EventForm.controls.Designation"></errors>
+                            </div>
+                            <div class="col-md-2 col-sm-3">
+                                <span class="text-strong">Department<span class="mandatory"></span></span>
+                            </div>
+                            <!-- <div class="col-md-3 col-sm-3">
+                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                    formControlName="Department" placeholder="Department" [attr.disabled]="" maxlength="200" />
+                                <errors [control]="EventForm.controls.Department"></errors>
+                            </div> -->
+                            <div class="col-md-3 col-sm-3">
+                                <input type="text" class="form-control" 
+                                    formControlName="Department" placeholder="Department" [attr.disabled]="" maxlength="" />
+                                <errors [control]="EventForm.controls.Department"></errors>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2 col-sm-3">
+                                <span class="text-strong">Email<span class="mandatory">*</span></span>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <input type="text" class="form-control" formControlName="Email" placeholder="Email "
+                                    [attr.disabled]="" maxlength="" (keypress)="nospace($event)" />
+                                <errors [control]="EventForm.controls.Email"></errors>
+                            </div>
+                            <div class="col-md-2 col-sm-3">
+                                <span class="text-strong">Mobile<span class="mandatory">*</span></span>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <input maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                                    type="text" class="form-control" formControlName="Mobile" placeholder="Mobile"
+                                    [attr.disabled]="" />
+                                <errors [control]="EventForm.controls.Mobile"></errors>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2 col-sm-3">
+                                <span class="text-strong">Remarks<span class="mandatory"></span></span>
+                            </div>
+                            <!-- <div class="col-md-8 col-sm-7">
+                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                    formControlName="Remarks" placeholder="Remarks" [attr.disabled]="" maxlength="200" />
+                                <errors [control]="EventForm.controls.Remarks"></errors>
+                            </div> -->
+                            <div class="col-md-8 col-sm-7">
+                                <input type="text" class="form-control"
+                                    formControlName="Remarks" placeholder="Remarks" [attr.disabled]="" maxlength="" />
+                                <errors [control]="EventForm.controls.Remarks"></errors>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button class="event-add" [disabled]="!(EventForm.controls.Name.valid && EventForm.controls.Designation.valid&& EventForm.controls.Department.valid && EventForm.controls.Email.valid && EventForm.controls.Mobile.valid&& EventForm.controls.Remarks.valid)"
+                                    (click)="AddEventCoordinatorDetail()">Add More <span><i class="fa fa-plus"
+                                            aria-hidden="true"></i></span></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="newAttributeShow.length>0">
+                            <div class="col-md-12">
+                                <div class="all-jobs-list">
+                                    <div>
+                                        <ul class="joblist-wrapper">
+                                            <!-- <li class="job-wrapper ps-relative "> -->
+                                            <li class="job-wrapper ps-relative" *ngFor="let field of newAttributeShow; let i = index;let isLast=last ">
+                                                <ng-template #template>
+                                                    <div class="modal-body text-center">
+                                                        <p>Do You Want To Delete Event Co-ordinator Detail?</p>
+                                                        <br />
+                                                        <br />
+                                                        <button type="button" class="btn yl-btn no-rd" (click)="deleteCoordinater(i)">Yes</button>
+                                                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                                                    </div>
+                                                </ng-template>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-12"><strong>Name: </strong> <span>{{field.Name}}</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6"><strong>Designation: </strong> <span>{{(field.Designation!=null
+                                                                && field.Designation!='')?field.Designation:'NA'}}</span></div>
+                                                        <div class="col-md-6"><strong>Department: </strong> <span>{{(field.Department!=null
+                                                                && field.Department!='')?field.Department:'NA'}}</span></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6"><strong>Email id: </strong> <span>{{field.Email}}</span></div>
+                                                        <div class="col-md-6"><strong>Mobile No.: </strong> <span>{{field.Mobile}}</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-12"><strong>Remarks: </strong> <span>{{(field.Remarks!=null
+                                                                && field.Remarks!='')?field.Remarks:'NA'}}</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="job-list-action card-view-btns">
+                                                        <!-- <a class="viewit" href="javascript:void(0)" title="">Edit</a> -->
+                                                        <a class="postit" href="javascript:void(0)" title="Delete This Co-ordinator Detail"
+                                                            (click)="PushedTemplate(template)">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" [disabled]="!(EventForm.valid)"  (click)="savedata(EventForm.value)">Submit</button>
+                        </div>
+                    </div> -->
+
+                </div>
+            </div>
+            <!--  add new code for submit button-->
+            <div class="form-group m-t-10" *ngIf="newAttributeShow.length>0">
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" [disabled]="!(EventForm.valid)"
+                        (click)="savedata(EventForm.value)">Submit</button>
+                </div>
+            </div>
+            <!--   End Code For Submit Button-->
+        </form>
+
+    </div>
+</div>
+<!-- 
+    <ng-template #geolocationModal>
+        <div class="modal-header">
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="legend-box">
+                    <div class="col-md-12 row">
+                        <span class="legend-title"><label class="biz-label">Geo Location</label></span>
+                    </div>
+                    <div class="form-group">
+                        <Geolocation (myOutput)="getLatLang($event)">
+                        </Geolocation>
+                    </div>
+                    <div class="form-group">
+                        <div class="job-list-action card-view-btns r-btn-group">
+
+                            <button class="btn btn-w-shadow no-rd" tabindex="0" type="button" (click)="addGeoLocation()">Add</button>
+                            <button class="btn btn-w-shadow no-rd" tabindex="0" type="button" (click)="closeViewModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template> -->
+
+<div class="col-md-12" *ngIf="Eventlistshow=='1'">
+    <div class="form-group">
+        <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-8 p-r-0">
+            <div class="legends">
+                <ul>
+                    <li><span class="l3"></span> Expired Events</li>
+                    <li><span class="l2"></span> Ongoing Events</li>
+                    <li><span class="l1"></span> Upcomming Events</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="all-jobs-list">
+        <div class="searchResults ">
+                <!-- || ( item.endDate >startminDate?'posted':'') || (item.startDate > startminDate?'disapproved':'') -->
+            <ul class="joblist-wrapper">
+                <!--bindings={
+                      "ng-reflect-ng-for-of": "[object Object],[object Object"
+                    }-->
+              
+                <li *ngFor="let item of GetRegisteredEventList; let i=index;" class="job-wrapper ps-relative {{(item.status == 'ONGOING' ?'approved':'') || (item.status == 'EXPIRED' ?'posted':'') || (item.status == 'UPCOMING' ?'disapproved':'') }}" >
+                     <div class="job-view fos">
+                        <div>
+                            <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{item.imagepath!=''?item.imagepath:'assets/images/NoImage.png'}}"
+                                class="img-thumbnail" alt="Image">
+                        </div>
+                        <div>
+                            <h2 class="job-title 1a" title="Vimal">
+
+                                {{item.eventName}}
+                            </h2>
+                            <div class="clearfix"></div>
+
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-md-12"><strong>Event Type : </strong> {{item.eventType}}</div>
+                                    <div class="col-md-12">
+                                        <strong>Venue : </strong>
+
+
+                                        {{item.address}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-md-12"><strong>Start Date : </strong> {{item.startDate}}</div>
+                                    <!-- <div class="col-md-6"><strong>Start Time : </strong> {{item.startTime}}</div> -->
+                                    <div class="col-md-12"><strong>End Date : </strong> {{item.endDate}}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-md-12"><strong>State : </strong> {{item.stateName}}</div>
+                                    <div class="col-md-12"><strong>District : </strong> {{item.districtName}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="job-list-action card-view-btns">
+                                    <a class="viewit" href="javascript:void(0)" (click)="ViewEvent(item.eventId)">View/Edit</a>
+
+                                    <!-- <a class="postit" [routerLink]="'/EventsGallery'" [queryParams]="{EventId:[item.eventId]}">Event Gallery</a> -->
+                                    <!-- <a class="postit" href="javascript:void(0)" (click)="EventsGallery(item.eventId)"
+                                                *ngIf="today>item.endDate">Event Gallery</a> -->
+
+                                    <a class="postit" href="javascript:void(0)" (click)="EventsGallery(item.eventId)">Event
+                                        Gallery</a>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="cleafix"></div>
+<div  *ngIf="GetRegisteredEventList.length==0" class="alert alert-danger col-md-12">
+ <strong>No Records Found !</strong>
+</div>
+<!---  Event Edit Section        -->
+<div class="col-md-12 event-creation" *ngIf="EventEditformSection=='1'">
+    <!----------Co ordinate Detials-->
+    <form [formGroup]="CordinateEventForm" *ngIf="EditCordinate=='1'">
+        <div class="legend-box m-b-5 p-l-0 margin-top-40 ps-relative">
+            <div class="job-list-action">
+                <a class="postit" href="javascript:void(0)" title="Close" (click)="CloseAllEditSection()">Close</a>
+            </div>
+            <div class="col-md-12">
+                <span class="legend-title"><label class="biz-label">Event Co-ordinator Detail</label></span>
+            </div>
+
+            <div class="form-group m-t-10">
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Name<span class="mandatory">*</span></span>
+                </div>
+                <!-- <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                        formControlName="Name" placeholder="Name" [attr.disabled]="" maxlength="200" />
+                    <errors [control]="CordinateEventForm.controls.Name"></errors>
+                </div> -->
+
+                <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" 
+                        formControlName="Name" placeholder="Name" [attr.disabled]="" maxlength="" />
+                    <errors [control]="CordinateEventForm.controls.Name"></errors>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Designation<span class="mandatory"></span></span>
+                </div>
+                <!-- <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                        formControlName="Designation" placeholder="Designation" [attr.disabled]="" maxlength="200" />
+                    <errors [control]="CordinateEventForm.controls.Designation"></errors>
+                </div> -->
+                <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" 
+                        formControlName="Designation" placeholder="Designation" [attr.disabled]="" maxlength="" />
+                    <errors [control]="CordinateEventForm.controls.Designation"></errors>
+                </div>
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Department<span class="mandatory"></span></span>
+                </div>
+                <!-- <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                        formControlName="Department" placeholder="Department" [attr.disabled]="" maxlength="200" />
+                    <errors [control]="CordinateEventForm.controls.Department"></errors>
+                </div> -->
+                <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" 
+                        formControlName="Department" placeholder="Department" [attr.disabled]="" maxlength="" />
+                    <errors [control]="CordinateEventForm.controls.Department"></errors>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Email<span class="mandatory">*</span></span>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" formControlName="Email" placeholder="Email "
+                        [attr.disabled]="" maxlength="" (keypress)="nospace($event)" />
+                    <errors [control]="CordinateEventForm.controls.Email"></errors>
+                </div>
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Mobile<span class="mandatory">*</span></span>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <input maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                        type="text" class="form-control" formControlName="Mobile" placeholder="Mobile" [attr.disabled]="" />
+                    <errors [control]="CordinateEventForm.controls.Mobile"></errors>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Remarks<span class="mandatory"></span></span>
+                </div>
+                <!-- <div class="col-md-8 col-sm-7">
+                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                        formControlName="Remarks" placeholder="Remarks" [attr.disabled]="" maxlength="1000" />
+                    <errors [control]="CordinateEventForm.controls.Remarks"></errors>
+                </div> -->
+                <div class="col-md-8 col-sm-7">
+                    <input type="text" class="form-control" 
+                        formControlName="Remarks" placeholder="Remarks" [attr.disabled]="" maxlength="" />
+                    <errors [control]="CordinateEventForm.controls.Remarks"></errors>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <hr>
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" (click)="UpdateEventCoordinatorDetail()"
+                            [disabled]="!(CordinateEventForm.controls.Name.valid && CordinateEventForm.controls.Designation.valid&& CordinateEventForm.controls.Department.valid && CordinateEventForm.controls.Email.valid && CordinateEventForm.controls.Mobile.valid&& CordinateEventForm.controls.Remarks.valid)">
+                            {{
+                            CordinateEventForm.value.eventCoordinatorId==''?'Add
+                            ':'Update'
+                            }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-----------End Co ordinate Details-->
+    <!------------------Guest Section Start ----------------->
+    <div class="event-creation col-md-12">
+        <form [formGroup]="GuestEventForm" *ngIf="EditGuest=='1'">
+            <div class="legend-box m-b-5 p-l-0 margin-top-40 ps-relative">
+                <div class="job-list-action">
+                    <a class="postit" href="javascript:void(0)" title="Close" (click)="CloseAllEditSection()">Close</a>
+                </div>
+                <div class="col-md-12">
+                    <span class="legend-title"><label class="biz-label">Chief Guest Detail</label></span>
+                </div>
+
+                <div class="form-group m-t-10">
+                    <div class="col-md-2 col-sm-3">
+                        <span class="text-strong">Chief Guest<span class="mandatory">*</span></span>
+                    </div>
+                    <!-- <div class="col-md-6 col-sm-7">
+                        <input type="text" required class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                            formControlName="lstEventGuest" placeholder="Chief Guest " [attr.disabled]="" maxlength="200" />
+                        <errors [control]="GuestEventForm.controls.lstEventGuest"></errors>
+                    </div> -->
+
+                    <div class="col-md-6 col-sm-7">
+                        <input type="text" required class="form-control" 
+                            formControlName="lstEventGuest" placeholder="Chief Guest " [attr.disabled]="" maxlength="" />
+                        <errors [control]="GuestEventForm.controls.lstEventGuest"></errors>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <hr>
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" (click)="UpdateGuestDetail()"
+                                [disabled]="!(GuestEventForm.controls.lstEventGuest.valid)">
+                                {{
+                                GuestEventForm.value.eventGuestId==''?'Add
+                                ':'Update'
+                                }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-------------------------End Guest Section------------------------------>
+    <!------------------Pposter Image Section Start ----------------->
+    <form [formGroup]="PosterEventForm" *ngIf="EditPosterImage=='1'">
+        <div class="legend-box m-b-5 p-l-0 margin-top-40 ps-relative">
+            <div class="job-list-action">
+                <a class="postit" href="javascript:void(0)" title="Close" (click)="CloseAllEditSection()">Close</a>
+            </div>
+            <div class="col-md-12">
+                <span class="legend-title"><label class="biz-label">Upload Event Bannner</label></span>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <label for="upload4" class="upload1">
+                    <input type="file" id="upload4" formControlName="PosterEventImage" (change)="onUploadChangePic($event,'PosterImageEvent')" />
+                    Select Banner <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                </label>
+
+                <!-- <label for="upload2" class="upload2">
+            <input type="file" id="upload2" />  <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+        </label> <span></span> -->
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-3">
+                <button class="event-add" (click)="EditEventImage()">Add More Banner <span><i class="fa fa-plus"
+                            aria-hidden="true"></i></span></button>
+            </div>
+
+
+
+            <div class="form-group" *ngIf="PosterImageEditShow.length>0">
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong"></span>
+                </div>
+                <div class="col-md-6 col-sm-3">
+                    <div class="event-logo m-b-10" *ngFor="let item of PosterImageEditShow; let i = index;let isLast=last ">
+                        <ng-template #templatePosterEventTepmData>
+                            <div class="modal-body text-center">
+                                <p>Do You Want To Delete Upload Event Banner Detail?</p>
+                                <br />
+                                <br />
+                                <button type="button" class="btn yl-btn no-rd" (click)="deletePosterEventTepmData(i)">Yes</button>
+                                <button type="button" (click)="declineBoxPosterEventTepmData()" class="btn bl-btn no-rd">No</button>
+                            </div>
+                        </ng-template>
+                        <div>
+                            <img src="{{item.imageNameposter!=''?item.imageNameposter:'assets/images/NoImage.png'}}"
+                                class="img-responsive m-x-auto" />
+                        </div>
+                        <div>
+                            <div class="event-logo-action-btn">
+                                <ul>
+                                    <!-- <li><a href="javascript:void(0)"><i class="fas fa-pencil-alt text-link"></i></a></li> -->
+                                    <li><a href="javascript:void(0)" title="Delete This Upload Event Document Detail"
+                                            (click)="PusPosterEventTemplateTepmData(templatePosterEventTepmData)"><i
+                                                class="fas fa-trash-alt mandatory"></i></a></li>
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!----------->
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <hr>
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" (click)="UpdatePosterDetail()">Add</button>
+                        </div>
+                    </div>
+                </div>
+                <!--------------->
+
+            </div>
+
+
+        </div>
+    </form>
+
+    <!-------------------------End poster Section------------------------------>
+    <!---------------------------Start Facilited Images --------------------------------->
+    <div class="col-md-12 event-creation">
+        <form [formGroup]="FacilitedEventForm" *ngIf="EditFacilitedImage=='1'">
+            <div class="legend-box m-b-5 p-l-0 margin-top-40 ps-relative">
+                <div class="job-list-action">
+                    <a class="postit" href="javascript:void(0)" title="Close" (click)="CloseAllEditSection()">Close</a>
+                </div>
+                <div class="col-md-12">
+                    <span class="legend-title"><label class="biz-label">Facilitated By</label></span>
+                </div>
+                <!-- <div class="col-md-6 col-sm-3">
+                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                        formControlName="lstEventFacilitated" placeholder="Facilitated By " [attr.disabled]=""
+                        maxlength="200" />
+                    <errors [control]="FacilitedEventForm.controls.lstEventFacilitated"></errors>
+                </div> -->
+                <div class="col-md-6 col-sm-3">
+                    <input type="text" class="form-control"
+                        formControlName="lstEventFacilitated" placeholder="Facilitated By " [attr.disabled]=""
+                        maxlength="" />
+                    <errors [control]="FacilitedEventForm.controls.lstEventFacilitated"></errors>
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-6">
+                    <label for="upload3" class="upload1">
+                        <input type="file" id="upload3" formControlName="FacilitatedImage" (change)="onUploadChangePic($event,'FCI')" />
+                        Select Logo <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                    </label>
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-6">
+                    <button class="event-add" (click)="EditFacilated()">Add More Image<span><i class="fa fa-plus"
+                                aria-hidden="true"></i></span></button>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="m-b-10 m-t-10" *ngFor="let item of EditFacilitedShow; let i = index;let isLast=last ">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong"></span>
+                        </div>
+                        <div class="event-logo">
+                            <ng-template #templateFaciltedEventTepmData>
+                                <div class="modal-body text-center">
+                                    <p>Do You Want To Delete Facilitated By?</p>
+                                    <br />
+                                    <br />
+                                    <button type="button" class="btn yl-btn no-rd" (click)="deleteFaciltedEventTepmData(i)">Yes</button>
+                                    <button type="button" (click)="declineBoxFaciltedEventTepmData()" class="btn bl-btn no-rd">No</button>
+                                </div>
+                            </ng-template>
+                            <div>
+                                <b>{{item.facilatedBy}}</b>
+                            </div>
+                            <div>
+                                <img src="{{item.imageName!=''?item.imageName:'assets/images/NoImage.png'}}" class="img-responsive m-x-auto" />
+                            </div>
+                            <div>
+                                <div class="event-logo-action-btn">
+                                    <ul>
+                                        <!-- <li><a href="javascript:void(0)"><i class="fas fa-pencil-alt text-link"></i></a></li> -->
+                                        <li><a href="javascript:void(0)" title="Delete This Facilitated By Detail"
+                                                (click)="PusFaciltedEventTemplateTepmData(templateFaciltedEventTepmData)"><i
+                                                    class="fas fa-trash-alt mandatory"></i></a></li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!----------->
+                    <div class="form-group " *ngIf="EditFacilitedShow.length>0">
+                        <div class="col-md-12">
+                            <hr>
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" (click)="UpdateFacilitedDetail()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--------------->
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <!-------------------------------------End Facilited  Images -------------------------->
+    <!------------------------------------- Edit Section of Events Form ------------- ---- --->
+    <div class="legend-box m-b-5 p-l-0 margin-top-40 ps-relative" *ngIf="EditEventFormSection=='1'">
+        <div class="job-list-action">
+            <a class="postit" href="javascript:void(0)" title="Close" (click)="CloseAllEditSection()">Close</a>
+        </div>
+        <div class="col-md-12">
+            <span class="legend-title"><label class="biz-label">Edit Events Details</label></span>
+        </div>
+        <form [formGroup]="EventEditForm">
+            <div class="col-md-12">
+                <div class="event-creation">
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Event Name<span class="mandatory">*</span></span>
+                        </div>
+                        <!-- <div class="col-md-4 col-sm-3">
+                            <input required oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                type="text" class="form-control" formControlName="eventName" placeholder="Event Name"
+                                maxlength="200" />
+                            <errors [control]="EventEditForm.controls.eventName"></errors>
+                        </div> -->
+                        <div class="col-md-4 col-sm-3">
+                            <input required 
+                                type="text" class="form-control" formControlName="eventName" placeholder="Event Name"
+                                maxlength="" />
+                            <errors [control]="EventEditForm.controls.eventName"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Type<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-4 col-sm-3">
+                            <select class="form-control" formControlName="eventType">
+                                <option value="" required class="" selected="selected">--Select--</option>
+                                <option *ngFor="let item of EventtypeList" value="{{item.eventId}}">{{item.eventName}}</option>
+                            </select>
+                            <errors [control]="EventEditForm.controls.eventType"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Start Date<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="input-group">
+                                <input type="text" #validTo="bsDatepicker" disabled placeholder="Select Date" bsDatepicker
+                                    [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }" value="" class="form-control m-b-0"
+                                    formControlName="startDate" />
+                                <span class="input-group-addon" (click)="validTo.toggle()" [attr.aria-expanded]="validTo.isOpen"><i
+                                        class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong"> Start Time<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <input type="time" formControlName="startTime" class="form-control" atp-time-picker
+                                placeholder="Select Walk-In From Time" />
+                            <errors [control]="EventEditForm.controls.startTime"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">End Date<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <div class="input-group">
+                                <input type="text" #validfrom="bsDatepicker" disabled placeholder="Select Date" bsDatepicker
+                                    [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }" value="" class="form-control m-b-0"
+                                    formControlName="endDate" />
+                                <span class="input-group-addon" (click)="validfrom.toggle()" [attr.aria-expanded]="validfrom.isOpen"><i
+                                        class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">End Time<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <input type="time" formControlName="endTime" class="form-control" atp-time-picker
+                                placeholder="Select Walk-In To Time " />
+                            <errors [control]="EventEditForm.controls.endTime"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Venue<span class="mandatory">*</span></span>
+                        </div>
+                        <!-- <div class="col-md-8 col-sm-8">
+                            <input required oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                type="text" class="form-control" formControlName="address" placeholder="Venue"
+                                maxlength="1000" />
+                            <errors [control]="EventEditForm.controls.address"></errors>
+                        </div> -->
+                        <div class="col-md-8 col-sm-8">
+                            <input required 
+                                type="text" class="form-control" formControlName="address" placeholder="Venue"
+                                maxlength="" />
+                            <errors [control]="EventEditForm.controls.address"></errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-2">
+                            <span class="text-strong">State<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <select (change)="onChangeState(EventEditForm.value.stateId);codeAddres($event.target.value,'ST')"
+                                class="form-control" formControlName="stateId">
+                                <option value="" class="" selected>--Select--</option>
+                                <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+                            </select>
+                            <errors [control]="EventEditForm.controls.stateId"></errors>
+                            <!-- <div class="m-t-10">
+                            <img src="../../../assets/images/map.jpg" class="img-responsive" alt="Image" />
+                        </div> -->
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <span class="text-strong">District<span class="mandatory">*</span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <select class="form-control" (change)="codeAddres($event.target.value,'DT')"
+                                formControlName="districtId">
+                                <option value="" class="" selected="selected">--Select--</option>
+                                <option *ngFor="let item of district" value="{{item.id}}">{{item.districtName}}</option>
+                            </select>
+                            <errors [control]="EventEditForm.controls.districtId"></errors>
+                            <!-- <div class="m-t-10">
+                            <img src="../../../assets/images/map.jpg" class="img-responsive" alt="Image" />
+                        </div> -->
+                        </div>
+                        <!-- <div class="col-md-2 col-sm-2">
+                                <button class="btn btn-w-shadow no-rd" tabindex="0" type="button" (click)="geoLocation(geolocationModal,'view')">Geo Location</button>
+                            </div> -->
+                    </div>
+                    <!-----------Geo Location Code  Add -->
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+
+                        </div>
+                        <div class="col-md-8 col-sm-9">
+                            <div>
+                                <app-geo-location-common (change)="getLatLang($event)"></app-geo-location-common>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--------------------- Geo Location End Code-->
+                    <div class="form-group m-t-10">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Description
+                                <!-- <span class="mandatory">*</span> -->
+                            </span>
+                        </div>
+                        <div class="col-md-8 col-sm-8">
+                            <!-- <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@$%\^&*+=\\[\]\\'{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                formControlName="eventDescription" placeholder="Description " [attr.disabled]=""
+                                maxlength="1000" /> -->
+
+                                <input type="text" class="form-control" 
+                                formControlName="eventDescription" placeholder="Description " [attr.disabled]=""
+                                maxlength="" />
+                            <!-- <errors [control]="EventEditForm.controls.eventDescription"></errors> -->
+                        </div>
+                    </div>
+                    <!--  add new code for submit button-->
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" [disabled]="!(EventEditForm.valid)"
+                                (click)="UpdateEventdata(EventEditForm.value)">Update</button>
+                        </div>
+                    </div>
+                    <!--   End Code For Submit Button-->
+                    <!-- <div class="form-group">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" [disabled]="!(EventForm.valid)"  (click)="savedata(EventForm.value)">Submit</button>
+                    </div>
+                </div> -->
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-------------------------------------End  Edit Section of Events Form ------------- ---- --->
+
+</div>
+<!--   Event Edit Section    -->
+<!---  Event Edit Form Show  27-05-2019 -->
+
+<div *ngIf="EventView=='1'">
+    <!-- <div class="dash-head dash-head-2">
+            <p>Location Wise Openings</p>
+            <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" tabindex="0">Add</a>
+        </div> -->
+
+    <div class="col-md-12">
+        <div class="job-description">
+            <div class="searchResults" id="">
+                <ul class="joblist-wrapper">
+                    <li class="job-wrapper ps-relative">
+                        <div class="job-list-action">
+                            <a class="viewit" href="javascript:void(0)" title="Edit  This Event" (click)="EditEventData(EventViewData);">Edit</a>
+                            <a class="postit" href="javascript:void(0)" title="Close" (click)="CloseView();">Close</a>
+                        </div>
+                        <h2 class="job-title fnt-20" style="text-transform:capitalize"> {{EventViewData.eventName}}</h2><br>
+                        <!-- <h3 class="company-name fnt-18">FCS</h3>
+                            <h3 class="company-name fnt-18 ">J201905000324</h3>
+                            <div class="clearfix margin-bottom-20"></div> -->
+                        <h6>Basic Event Details</h6>
+                        <!-- <div class="clearfix margin-bottom-20"></div> -->
+                        <p class="row">
+                            <label class="col-md-4">
+                                <span class="text-strong ">Event Type:</span>
+                                {{EventViewData.eventType}}
+                            </label>
+                            <label class="col-md-4">
+                                <span class="text-strong ">Start Date:</span>
+                                {{EventViewData.startDate}}
+                            </label>
+                            <label class="col-md-4">
+                                <span class="text-strong">Start Time:</span>
+                                {{EventViewData.startTime}}
+                            </label>
+                        </p>
+                        <p class="row">
+                            <label class="col-md-4">
+                                <span class="text-strong ">End Date:</span>
+                                {{EventViewData.endDate}}
+                            </label>
+                            <label class="col-md-4">
+                                <span class="text-strong">End Time:</span>
+                                {{EventViewData.endTime}}
+                            </label>
+                            <label class="col-md-4">
+                                <span class="text-strong ">Venue:</span>
+                                {{EventViewData.address}}
+                            </label>
+
+                        </p>
+                        <p class="row">
+                            <label class="col-md-4">
+                                <span class="text-strong ">State:</span>
+                                {{EventViewData.stateName}}
+                            </label>
+                            <label class="col-md-4">
+                                <span class="text-strong">District:</span>
+                                {{EventViewData.districtName}}
+                            </label>
+                            <label class="col-md-4">
+                                <span class="text-strong ">Description:</span>
+                                {{EventViewData.eventDescription?EventViewData.eventDescription:'NA'}}
+                            </label>
+
+                        </p>
+                        <div class="cleafix margin-bottom-30"></div>
+                        <div class="row location-details-wrapper">
+                        </div>
+
+                        <!-----------------Facilited By Details---------------->
+                        <div class="cleafix margin-bottom-20"></div>
+                        <div class="dash-head dash-head-2">
+                            <p>Facilitated By Details</p>
+                            <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" tabindex="0" (click)="EditEventAction('Facilited');">
+                                Add Facilitated By</a>
+                        </div>
+                        <div class="cleafix margin-bottom-30"></div>
+                        <div class="row location-details-wrapper" *ngFor="let facilited of EventViewData.lstEventFacilitated;let i=index">
+                            <ng-template #templateEditFacilited>
+                                <div class="modal-body text-center">
+                                    <p>Do You Want To Delete Facilitated By Detail?</p>
+                                    <br />
+                                    <br />
+                                    <button type="button" class="btn yl-btn no-rd" (click)="deleteEditSectionFacilited(i)">Yes</button>
+                                    <button type="button" (click)="declineFacilitedBox()" class="btn bl-btn no-rd">No</button>
+                                </div>
+                            </ng-template>
+
+
+                            <div class="form-group">
+                                <div class="col-md-10 col-sm-12 col-md-offset-1">
+                                    <div class="event-logo m-b-10 ng-star-inserted">
+                                        <div>
+                                            {{facilited.facilatedBy!=''&&
+                                            facilited.facilatedBy!=null?facilited.facilatedBy:'NA'}}
+                                        </div>
+                                        <div>
+                                            <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{facilited.imagePath!=''?facilited.imagePath:'assets/images/NoImage.png'}}"
+                                                class="img-responsive m-x-auto" alt="Image">
+                                        </div>
+                                        <div>
+                                            <div class="event-logo-action-btn">
+                                                <ul>
+
+                                                    <li class="job-list-action card-view-btns" style="border-top:none">
+                                                        <a class="postit" href="javascript:void(0)" title="Delete"
+                                                            (click)="FacilitedTemplate(templateEditFacilited,facilited.facilatedById)">Delete</a>
+                                                        <!--<a href="javascript:void(0)" title="Delete This Facilitated By Detail"><i class="fas fa-trash-alt mandatory"></i></a>-->
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="label-normal ps-relative location-details">
+                                    <div class="job-list-action">
+
+                                        <a class="postit" href="javascript:void(0)" title="Delete" (click)="FacilitedTemplate(templateEditFacilited,facilited.facilatedById)">Delete</a>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4 col-sm-6">
+                                                    <span class="text-strong">Name:</span>
+                                                    {{facilited.facilatedBy!=''&& facilited.facilatedBy!=null?facilited.facilatedBy:'NA'}}
+                                                </div>
+                                                <div class="col-md-4 col-sm-6">
+                                                    <span class="text-strong">Image:</span>
+                                                    <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{facilited.imagePath!=''?facilited.imagePath:'assets/images/NoImage.png'}}"
+                                                         class="img-thumbnail" alt="Image">
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix margin-bottom-20"></div>
+
+                                </div>-->
+
+                        </div>
+                        <div class="alert alert-info" *ngIf="EventViewData.lstEventFacilitated?.length==0"> No Records
+                            Founds </div>
+                        <!---------------------Upload Event Image---------------------------->
+                        <div class="cleafix margin-bottom-20"></div>
+                        <div class="dash-head dash-head-2">
+                            <!-- Uploaded Event Document Details -->
+                            <p>
+
+                                Uploaded Image Banner
+                            </p>
+                            <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" tabindex="0" (click)="EditEventAction('POSTER');">
+                                Add Upload Event Banner</a>
+                        </div>
+                        <div class="cleafix margin-bottom-30"></div>
+                        <div class="row location-details-wrapper" *ngFor="let poster of EventViewData.lstEventPoster;let i=index">
+                            <ng-template #templateEditPoster>
+                                <div class="modal-body text-center">
+                                    <p>Do You Want To Delete Upload Event Banner Detail?</p>
+                                    <br />
+                                    <br />
+                                    <button type="button" class="btn yl-btn no-rd" (click)="deleteEditSectionPoster(i)">Yes</button>
+                                    <button type="button" (click)="declinePosterBox()" class="btn bl-btn no-rd">No</button>
+                                </div>
+                            </ng-template>
+
+                            <div class="form-group">
+                                <div class="col-md-10 col-sm-12 col-md-offset-1">
+                                    <div class="event-logo m-b-10 ng-star-inserted">
+
+                                        <div>
+                                            <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{poster.posterImagePath!=''?poster.posterImagePath:'assets/images/NoImage.png'}}"
+                                                class="" alt="Image">
+                                        </div>
+                                        <div>
+                                            <div class="event-logo-action-btn">
+                                                <ul>
+
+                                                    <li class="job-list-action card-view-btns" style="border-top:none">
+                                                        <a class="postit" href="javascript:void(0)" title="Delete"
+                                                            (click)="PosterTemplate(templateEditPoster,poster.eventPosterId)">Delete</a>
+                                                        <!--<a href="javascript:void(0)" title="Delete This Facilitated By Detail"><i class="fas fa-trash-alt mandatory"></i></a>-->
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- <div class="label-normal ps-relative location-details">
+                                    <div class="job-list-action">
+                                        <a class="postit" href="javascript:void(0)" title="Delete" (click)="PosterTemplate(templateEditPoster,poster.eventPosterId)">Delete</a>
+                                    </div>
+                                     <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4 col-sm-6">
+                                                    <span class="text-strong">Image:</span>
+                                                    <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{poster.posterImagePath!=''?poster.posterImagePath:'assets/images/NoImage.png'}}"
+                                                  class="img-thumbnail" alt="Image">
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix margin-bottom-20"></div>
+
+                                </div> -->
+
+                        </div>
+
+                        <div class="alert alert-info" *ngIf="EventViewData.lstEventPoster?.length==0"> No Records
+                            Founds </div>
+                        <!----------  Guest Dtails-------->
+                        <div class="cleafix margin-bottom-20"></div>
+                        <div class="dash-head dash-head-2">
+
+                            <p>
+                                Chief Guest Details
+                            </p>
+
+                            <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" tabindex="0" (click)="EditEventAction('CHGT');">Add
+                                Chief Guest</a>
+                        </div>
+                        <div class="cleafix margin-bottom-30"></div>
+                        <div class="row location-details-wrapper" *ngFor="let guest of EventViewData.lstEventGuest;let i=index">
+                            <ng-template #templateEditGuest>
+                                <div class="modal-body text-center">
+                                    <p>Do You Want To Delete Chief Guest Detail?</p>
+                                    <br />
+                                    <br />
+                                    <button type="button" class="btn yl-btn no-rd" (click)="deleteEditSectionGuest(i)">Yes</button>
+                                    <button type="button" (click)="declineGuestBox()" class="btn bl-btn no-rd">No</button>
+                                </div>
+                            </ng-template>
+                            <div class="label-normal ps-relative location-details">
+                                <div class="job-list-action">
+                                    <a class="viewit" href="javascript:void(0)" title="Edit" (click)="EditGuestDetails(guest);">Edit</a>
+                                    <a class="postit" *ngIf="guest.guestName!=null" href="javascript:void(0)" title="Delete" (click)="GuestTemplate(templateEditGuest,guest.eventGuestId)">Delete</a>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-6">
+                                                <span class="text-strong">Chief Guest Name:</span>
+                                                {{guest.guestName!=null?guest.guestName:'NA'}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix margin-bottom-20"></div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="alert alert-info" *ngIf="EventViewData.lstEventGuest?.length==0"> No Records Founds
+                        </div>
+                        <!-----------------Co -OrdinaterDetials------------>
+                        <div class="cleafix margin-bottom-20"></div>
+                        <div class="dash-head dash-head-2">
+                            <p>Event Co-ordinator Detail</p>
+                            <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" tabindex="0" (click)="EditEventAction('CO');">
+                                Add Event Co-ordinator Details</a>
+                        </div>
+                        <div class="cleafix margin-bottom-30"></div>
+                        <div class="row location-details-wrapper" *ngFor="let codinate of EventViewData.lstEventCoordinateDetail;let i=index">
+                            <ng-template #templateEditCodinater>
+                                <div class="modal-body text-center">
+                                    <p>Do You Want To Delete Event Co-ordinator Detail?</p>
+                                    <br />
+                                    <br />
+                                    <button type="button" class="btn yl-btn no-rd" (click)="deleteEditSectionCoordinater(EventViewData.lstEventCoordinateDetail)">Yes</button>
+                                    <button type="button" (click)="declineCordinaterBox()" class="btn bl-btn no-rd">No</button>
+                                </div>
+                            </ng-template>
+                            <div class="label-normal ps-relative location-details">
+                                <div class="job-list-action">
+                                    <a class="viewit" href="javascript:void(0)" (click)="EditCordinaterDetails(codinate);"
+                                        title="Edit">Edit</a>
+                                    <a class="postit" *ngIf="guestName!=null"  href="javascript:void(0)" title="Delete" (click)="CordinateTemplate(templateEditCodinater,codinate.eventCoordinatorId)">Delete</a>
+                                </div>
+                                <div class="col-md-12">
+                                    <!-- <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-12 col-sm-12">
+                                                    <h6>Contact Person Details</h6>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-6">
+                                                <span class="text-strong">Name:</span>
+                                                {{codinate.name}}
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <span class="text-strong">Designation:</span>
+                                                {{codinate.designation}}
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <span class="text-strong">Department:</span>
+                                                {{codinate.department}}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-6">
+                                                <span class="text-strong">Email ID:</span>
+                                                {{codinate.email}}
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <span class="text-strong">Mobile:</span>
+                                                {{codinate.mobile}}
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <span class="text-strong">Remarks:</span>
+                                                {{codinate.remarks}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix margin-bottom-20"></div>
+
+                            </div>
+
+                        </div>
+                        <div class="alert alert-info" *ngIf="EventViewData.lstEventCoordinateDetail?.length==0"> No
+                            Records Founds </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--   End  Event Edit Form Show 27-05-2018 -->

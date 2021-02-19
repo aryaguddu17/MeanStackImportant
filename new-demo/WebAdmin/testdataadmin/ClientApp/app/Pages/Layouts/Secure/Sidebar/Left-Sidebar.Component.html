@@ -1,0 +1,263 @@
+<nav id="sidebar" class="sidebarNav">
+    <div class="sidebar-wrapper">
+        <ul class="list-unstyled components">
+            <li [routerLinkActive]="['active']">
+                <a href="javascript:void(0)" [routerLink]="'/Dashboard'">
+                    <i class="fas fa-tachometer-alt fa-fw"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li [routerLinkActive]="['active']">
+                <a href="javascript:void(0)" [routerLink]="'/Register'">
+                    <i class="fa fa-registered fa-fw" aria-hidden="true"></i>
+                    Register Company
+                </a>
+            </li>
+            <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="">
+                    <i aria-hidden="true" class="fa fa-briefcase fa-fw"></i> Job
+                </a>
+                <ul class="list-unstyled page-Submenu collapse" id="pageSubmenu" aria-expanded="true" style="">
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/JobList'"><i class="fas fa-circle"></i>Job Post</a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/GovJob'"><i class="fas fa-circle"></i> Gov. Job Post</a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/WalkinList'"><i class="fas fa-circle"></i> Walk-In</a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/ReviewApplication'">
+                            <i class="fas fa-circle"></i>Review
+                            Application
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li [routerLinkActive]="['active']">
+                <a href="javascript:void(0)" [routerLink]="'/UserManagement'">
+                    <i class="fa fa-users fa-fw" aria-hidden="true"></i>
+                    User Management
+                </a>
+            </li>
+            <li [routerLinkActive]="['active']">
+                <a href="javascript:void(0)" [routerLink]="'/Feedbackview'">
+                    <i class="fas fa-file-alt fa-fw"></i>
+                    Feedback View
+                </a>
+            </li>
+            <li [routerLinkActive]="['active']">
+                <!-- CreateJob -->
+                <a href="javascript:void(0)" [routerLink]="'/SuscribeUser'">
+                    <i class="fa fa-users fa-fw" aria-hidden="true"></i>
+                    Subscribe User
+                </a>
+            </li>
+            <li>
+                <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="">
+                    <i class="fas fa-file-alt fa-fw"></i>
+                    Report
+                </a>
+                <ul class="list-unstyled page-Submenu collapse" id="pageSubmenu3" aria-expanded="true" style="">
+
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/Report'"><i class="fas fa-circle"></i> View Report</a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/statewisereport'">
+                            <i class="fas fa-circle"></i>
+                            State Wise Report
+                        </a>
+                    </li>
+
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/companywisejobs'">
+                            <i class="fas fa-circle"></i>
+                            Company Wise Jobs
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <!--  <a href="javascript:void(0)" [routerLink]="'/CompanyReport'"><i class="fas fa-circle"></i> Company View Report</a> -->
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/CompanyVerify'">
+                            <i class="fas fa-circle"></i>
+                            Company Verify Status
+                        </a>
+                    </li>
+                    <!-- <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/AgentReport'">
+                            <i class="fas fa-circle"></i> Agent
+                            Report
+                        </a>
+                    </li> -->
+                    <!-- <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/PlacedCandidate'">
+                            <i class="fas fa-circle"></i>
+                            Placed Candidate Report
+                        </a>
+                    </li> -->
+                </ul>
+            </li>
+            <li [routerLinkActive]="['active']">
+                <a href="javascript:void(0)" [routerLink]="'/CompanyDetails'">
+                    <i class="fa fa-building fa-fw" aria-hidden="true"></i> Company Details
+                </a>
+            </li>
+            <li>
+                <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="">
+                    <i class="fa fa-gift fa-fw" aria-hidden="true"></i> Interview &amp; Offer Letter
+                </a>
+                <ul class="list-unstyled page-Submenu collapse" id="pageSubmenu1" aria-expanded="false" style="">
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/InterviewList'">
+                            <i class="fas fa-circle"></i>Schedule
+                            Interview
+                        </a>
+                    </li>
+                    <!-- <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/InterviewListNew'"><i class="fas fa-circle"></i>Schedule
+                            Interview New</a>
+                    </li> -->
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/SelectedCandidateList'">
+                            <i class="fas fa-circle"></i>
+                            Candidate Selection
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/OfferLetterList'">
+                            <i class="fas fa-circle"></i>
+                            Offer Released
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <!-- CreateJob -->
+                        <a href="javascript:void(0)" [routerLink]="'/JoiningCandidateList'">
+                            <i class="fas fa-circle"></i>
+                            Joining Confirmation
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- <li [routerLinkActive]="['active']">
+                <a href="javascript:void(0)" [routerLink]="'/suggestivesearch'">
+                    <i class="fa fa-table" aria-hidden="true"></i>Suggestive
+                    Search
+                </a>
+            </li> -->
+            <!-- <li>
+                <a href="#pageSubmenu5" data-toggle="collapse" aria-expanded="false" class=""><i class="fas fa-user-alt fa-fw"></i>FOS</a>
+                <ul class="list-unstyled page-Submenu collapse" id="pageSubmenu5" aria-expanded="true">
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/fos'"><i class="fas fa-circle"></i>Agent</a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/fosemployer'">
+                            <i class="fas fa-circle"></i>
+                            Employer
+                        </a>
+                    </li>
+                </ul>
+            </li> -->
+            <!---   add new code prakash singh-->
+            <li>
+                <a href="#pageSubtc" data-toggle="collapse" aria-expanded="false" class="">
+                    <i class="fa fa-building" aria-hidden="true"></i> TC Search
+                </a>
+                <ul class="list-unstyled page-Submenu collapse" id="pageSubtc" aria-expanded="true">
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/TCSearch'">
+                            <i class="fas fa-circle"></i>
+                            Training Center Search
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#pageSubpridictive" data-toggle="collapse" aria-expanded="false" class="">
+                    <i class="fa fa-search" aria-hidden="true"></i> Predictive Search
+                </a>
+                <ul class="list-unstyled page-Submenu collapse" id="pageSubpridictive" aria-expanded="true">
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/PredictiveSearch'">
+                            <i class="fas fa-circle"></i>
+                            Predictive Search
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- end code Prakash Singh-->
+            <li [routerLinkActive]="['active']">
+                <!-- CreateJob -->
+                <a href="javascript:void(0)" [routerLink]="'/ScreeningQuestion'">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>Screening Question
+                </a>
+            </li>
+            <!-- Rajeev -->
+            <li>
+                <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="">
+                    <i class="fa fa-calendar" aria-hidden="true"></i> Event
+                </a>
+
+                <ul class="list-unstyled page-Submenu collapse" id="pageSubmenu2" aria-expanded="true" style="">
+
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/CreateEventType'">
+                            <i class="fas fa-circle"></i>
+                            Create Event Type
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/CreateEvents'">
+                            <i class="fas fa-circle"></i>
+                            Create Events
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/Events'">
+                            <i class="fas fa-circle"></i>
+                            Register for Event
+                        </a>
+                    </li>
+
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/EventsCandidate'">
+                            <i class="fas fa-circle"></i>
+                            Release Offer Letter
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/OfferletterReleased'">
+                            <i class="fas fa-circle" aria-hidden="true"></i>
+                            Released Offer Letter List
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            <li [routerLinkActive]="['active']">
+                <a href="javascript:void(0)" [routerLink]="'/Testimonials'">
+                    <i class="fas fa-quote-left" aria-hidden="true"></i>
+                    Testimonials
+                </a>
+            </li>
+            <!-- <li [routerLinkActive]="['active']">
+                        <a href="javascript:void(0)" [routerLink]="'/OfferletterReleased'">
+                            <i class="fas fa-circle" aria-hidden="true"></i>
+                            Offer Letter Released
+                        </a>
+                    </li> -->
+            <!-- Rajeev -->
+        </ul>
+    </div>
+</nav>

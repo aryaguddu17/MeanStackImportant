@@ -1,0 +1,228 @@
+
+<div class="dash-head">
+  <p>Rojggar Mela</p>
+  <a (click)="Back()" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0"><i aria-hidden="true" class="fa fa-arrow-left"></i></a>
+  <!--<a (click)="Back()" class="back-button pull-right" href="javascript:void(0)" title="Go Back"><i aria-hidden="true" class="fa fa-arrow-left"></i></a>-->
+</div>
+<!-- <div class="col-md-12">
+  <label class="col-md-12 required-field" style="text-align: center;">Please make sure to <a [routerLink]="'/updateprofile'">Update Profile</a> and <a [routerLink]="'/companyprofile'">Company Profile</a> before creating and posting jobs</label>
+</div> -->
+<form  (ngSubmit)="submitevent()" [formGroup]="RojgaarMelaForm">
+  <div class="job-posting">
+  
+    <div class="form-group">
+      <div class="col-md-12">
+        <div class="legend-box">
+          <div class="col-md-12 row">
+            <span class="legend-title"><label class="biz-label">Details</label></span>
+          </div>
+          <div class="">
+            <div class="form-group">
+              <div class="col-md-6"> 
+                <label>Type <span style="color:red;"> *</span></label>
+                <select  class="form-control" formControlName="FareType">
+                  <option value="" class="" selected>--Select--</option>
+                  <option *ngFor="let item of EventList" value="{{item.eventId}}">{{item.eventName}}</option>
+                </select>
+                <errors [control]="RojgaarMelaForm.controls.FareType"></errors>
+              </div>
+            </div>  
+            <div class="form-group">
+              <div class="col-md-6">
+                <label>Event Name <span style="color:red;"> *</span></label>
+                <input type="text" required class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                formControlName="EventName" placeholder="Event Name" [attr.disabled]="" maxlength="200" />
+              <errors [control]="RojgaarMelaForm.controls.EventName"></errors>
+              </div>
+            </div>
+           
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <label>Valid upto <span style="color:red;"> *</span></label>
+              <div class="input-group">
+                <input type="text" #validTo="bsDatepicker" placeholder="Select Date" disabled bsDatepicker
+                       [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }"
+                       value=""
+                       [minDate]="mintoDate"
+                       class="form-control" formControlName="ValidDateTo" />
+                <span class="input-group-addon" (click)="validTo.toggle()" [attr.aria-expanded]="validTo.isOpen"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <label>Valid upto <span style="color:red;"> *</span></label>
+              <div class="input-group">
+                <input type="text" #validfrom="bsDatepicker" placeholder="Select Date" disabled bsDatepicker
+                       [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }"
+                       value=""
+                       [minDate]="mintoDate"
+                       class="form-control" formControlName="ValidDateFrom" />
+                <span class="input-group-addon" (click)="validfrom.toggle()" [attr.aria-expanded]="validfrom.isOpen"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+            <div class="form-group">
+              
+              <div class="col-md-6">
+                <label> From Time<span class="mandatory"> *</span></label>
+                <div class="input-group">
+                  <input type="time" formControlName="melafromtime" class="form-control" atp-time-picker placeholder="Select Walk-In From Time"/>
+                  <errors [control]="RojgaarMelaForm.controls.melafromtime"></errors>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label> Time To<span class="mandatory"> *</span></label>
+                <div class="input-group">
+                  <input type="time" formControlName="melatotime" class="form-control" atp-time-picker  placeholder="Select Walk-In To Time "/>
+                  <errors [control]="RojgaarMelaForm.controls.melatotime"></errors>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6">
+                <label>Venue <span style="color:red;"> *</span></label>
+                <input type="text" required class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                formControlName="Venue" placeholder="Venue Name" [attr.disabled]="" maxlength="200" />
+              <errors [control]="RojgaarMelaForm.controls.Venue"></errors>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12">
+                <label>Job Description <span style="color:red;"> *</span></label>
+                <textarea class="form-control" placeholder="Job Description" rows="2" formControlName="Description"
+                  [ngClass]="{highlight: !RojgaarMelaForm && RojgaarMelaForm.controls.Description.errors}" maxlength="1000"> </textarea>
+                <errors [control]="RojgaarMelaForm.controls.Description"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-6">
+                <label>Facilated By <span style="color:red;"> *</span></label>
+                <input type="text" required class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                formControlName="FacilatedBy" placeholder="Facilated By " [attr.disabled]="" maxlength="200" />
+              <errors [control]="RojgaarMelaForm.controls.FacilatedBy"></errors>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-6">
+                <label>Chief Guest <span style="color:red;"> *</span></label>
+                <input type="text" required class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                formControlName="ChiefGuest" placeholder="Chief Guest " [attr.disabled]="" maxlength="200" />
+              <errors [control]="RojgaarMelaForm.controls.ChiefGuest"></errors>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                <label>State <span style="color:red;"> *</span></label>
+                <select (change)="onChangeState(RojgaarMelaForm.value.StateID);codeAddres($event.target.value,'ST')" class="form-control" formControlName="StateID">
+                  <option value="" class="" selected>--Select--</option>
+                  <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+                </select>
+                <errors [control]="RojgaarMelaForm.controls.StateID"></errors>
+              </div>
+
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                <label>District <span style="color:red;"> </span></label>
+                  <select class="form-control" (change)="codeAddres($event.target.value,'DT')" formControlName="DistrictID">
+                  <option value="" class="" selected="selected">--Select--</option>
+                  <option *ngFor="let item of district" value="{{item.id}}">{{item.districtName}}</option>
+                </select>
+                <errors [control]="RojgaarMelaForm.controls.DistrictID"></errors>
+              </div>
+
+               <div class="col-md-4 col-sm-4 col-xs-12">
+                    <label>City <span style="color:red;"> </span></label>
+                    <select class="form-control"  formControlName="CityID">
+                      <option value="" class="" selected="selected">--Select--</option>
+                      <option *ngFor="let item of city" value="{{item.id}}">{{item.cityname}}</option>
+                    </select>
+                    <errors [control]="RojgaarMelaForm.controls.CityID"></errors>
+                  </div>
+
+                
+
+            </div>
+           
+            <div class="form-group">
+            
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                <label class="col-md-12 col-sm-12 col-xs-12">&nbsp;</label>
+                <button class="btn btn-w-shadow no-rd" tabindex="0" type="button"  (click)="geoLocation(geolocationModal,'view')">Geo Location</button>
+                <br/>
+                <button class="btn btn-w-shadow no-rd m-t-10" tabindex="0" type="button" [disabled]="!(RojgaarMelaForm.controls.StateID.valid)" (click)="addFieldValue()">Add Openings</button>    
+                
+                <ng-template #geolocationModal>
+                  <div class="modal-header">
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <div class="legend-box">
+                          <div class="col-md-12 row">
+                            <span class="legend-title"><label class="biz-label">Geo Location</label></span>
+                          </div>
+                          <div class="form-group">  
+                               <Geolocation (myOutput)="getLatLang($event)">
+                              </Geolocation>       
+                          </div>
+                          <div class="form-group">  
+                          <div class="job-list-action card-view-btns r-btn-group"> 
+                            
+                              <button class="btn btn-w-shadow no-rd" tabindex="0" type="button" (click)="addGeoLocation()">Add</button>
+                              <button class="btn btn-w-shadow no-rd" tabindex="0" type="button"  (click)="closeViewModal()" >Close</button>
+                            </div> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              </ng-template>
+              
+                <!--<button type="button" [disabled]="!(JobForm.controls.StateID.valid)" (click)="addFieldValue()" class="btn bl-btn add-button"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>-->
+             
+                <ng-template #geolocationModal>
+                    <div class="modal-header">
+                        <!-- <button class="btn btn-w-shadow no-rd pull-right" tabindex="0" type="button"  (click)="closeViewModal()" >Close</button> -->
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <div class="legend-box">
+                            <div class="col-md-12 row">
+                              <span class="legend-title"><label class="biz-label">Geo Location</label>
+                                </span>
+                            </div>
+                            <div class="form-group">  
+                                <Geolocation (LatLogEvent)=getLatLang($event)>
+                                </Geolocation>       
+                            </div>
+                            <div class="form-group">  
+                            <div class="job-list-action card-view-btns r-btn-group"> 
+                                <button class="btn btn-w-shadow no-rd" tabindex="0" type="button" (click)="addGeoLocation()">Add</button>
+                                <button class="btn btn-w-shadow no-rd" tabindex="0" type="button"  (click)="closeViewModal()" >Close</button>
+                              </div> 
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </ng-template>
+              </div>
+       
+              
+            </div>
+            <div class="form-group">                 
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                  <label class="col-md-12 col-sm-12 col-xs-12">&nbsp;</label>
+                  
+                </div>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-12 text-center p-r-0">
+        <button class="btn btn-w-shadow no-rd" tabindex="0" type="submit" [disabled]="!(RojgaarMelaForm.valid)">Submit</button>
+        <!--<button type="submit" [disabled]="!(JobForm.valid && jobFromvalid && JobFormDesable)" class="btn yl-btn">Submit</button>-->
+      </div>
+    </div>
+  </div>
+</form>
+
+

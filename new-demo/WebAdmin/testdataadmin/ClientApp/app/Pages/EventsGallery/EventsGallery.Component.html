@@ -1,0 +1,212 @@
+<ng-template #GallerySlider>
+    <div class="modal-body text-center">
+        <carousel [interval]="myInterval" [(activeSlide)]="activeSlideIndex">
+            <slide *ngFor="let item of ImageData; let i=index;">
+                <img src="{{item.imagePath}}" class="img-thumbnail" alt="Image">
+
+                <div class="carousel-caption">
+
+                    <p>{{item.title}}</p>
+                </div>
+            </slide>
+        </carousel>
+    </div>
+</ng-template>
+
+
+<div class="col-md-12">
+    <div class="dash-head">
+        <p>Event Gallery</p>
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="BackToEvent()" title="Back To Event"
+            *ngIf="AddImageButton==1">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="BackToEventImage()"
+            title="Back To Event Image Page" *ngIf="AddImageButton==0">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+    </div>
+
+    <div class="event-creation ">
+        <!-- <div class="page-filters" *ngIf="AddImage!=1">
+            <h2>
+                <a href="javascript:void(0);">
+                    <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                    <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                </a>
+            </h2>
+            <form [formGroup]="EventList">
+                <div class="filter-wrapper">
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="text-strong">Select Event</span>
+                        </div>
+                        <div class="col-md-4 col-sm-3">
+                            <select class="form-control" formControlName="EventId" (change)="onChangeEvent(EventList.value.EventId)">
+                                <option value="" selected="selected">--Select--</option>
+                                <option *ngFor="let item of ShowEvent" value="{{item.eventId}}">{{item.eventName}}</option>
+                            </select>
+                            <errors [control]="EventList.controls.EventId"></errors>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </div> -->
+        <div *ngIf="AddImageButton==1">
+            <button class="event-add pull-right" (click)="EventImageForm()">Add Images <span><i class="fa fa-plus"
+                        aria-hidden="true"></i></span></button>
+        </div>
+
+
+        <!-- <div class="col-md-12 " *ngIf="EventImageShow=='1'">
+            <div class="all-jobs-list">
+                <div class="searchResults ">
+                    <div class="col-md-4 col-sm-3" *ngFor="let item of ImageData; let i=index;">
+                        <div class="job-view fos" (click)="activeSlider(GallerySlider)">
+                            <img src="{{item.imagePath}}" class="img-thumbnail" alt="Image">
+                        </div>
+                        <div class="job-list-action">
+                            <a class="postit" href="javascript:void(0)" title="Delete" (click)="DeleteGalleryImage(GalleryImageDelete,item.id)">Delete1</a>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div> -->
+        <div class="col-md-12" *ngIf="EventImageShow=='1'">
+            <div class="all-jobs-list">
+                <div class="searchResults">
+                    <ul class="joblist-wrapper">
+                        <li class="job-wrapper ps-relative" *ngFor="let item of ImageData; let i=index;">
+                            <h2 class="job-title  lang-ellip" title={{item.title}}>{{item.title}} </h2>
+
+                            <div class="job-view fos" (click)="activeSlider(GallerySlider)">
+                        <li>
+                            <a href="javascript:void(0)" target="_blank">
+                                <img height="250" width="350" src="{{item.imagePath}}" class="img-thumbnail" alt="Image"
+                                    title="{{item.title}}">
+                            </a>
+                        </li>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <div class="job-list-action card-view-btns">
+                        <a class="postit" href="javascript:void(0)" title="Delete"
+                            (click)="DeleteGalleryImage(GalleryImageDelete,item.id)">Delete</a>
+                    </div>
+                </div>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #GalleryImageDelete>
+        <div class="modal-body text-center">
+            <p>Do You Want To Delete This Image?</p>
+            <br />
+            <br />
+            <button type="button" class="btn yl-btn no-rd" (click)="deleteImage(i)">Yes</button>
+            <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+        </div>
+    </ng-template>
+
+
+    <div class="legend-box m-b-5 p-l-0 margin-top-20 margin-bottom-20" *ngIf="AddImage==1">
+        <div class="col-md-12">
+            <span class="legend-title"><label class="biz-label">Add Event Images</label></span>
+        </div>
+
+        <!-- <form [formGroup]="EventList">
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-3">
+                        <span class="text-strong">Select Event</span>
+                    </div>
+                    <div class="col-md-4 col-sm-3">
+                        <select class="form-control" formControlName="EventId" (change)="onChangeEvent(EventList.value.EventId)">
+                            <option value="" selected="selected">--Select--</option>
+                            <option *ngFor="let item of ShowEvent" value="{{item.eventId}}">{{item.eventName}}</option>
+                        </select>
+                        <errors [control]="EventList.controls.EventId"></errors>
+                    </div>
+                </div>
+            </form> -->
+        <div class="form-group m-t-10">
+            <form [formGroup]="EventAdd">
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Image Title<span class="mandatory"></span></span>
+                </div>
+                <!-- <div class="col-md-3 col-sm-3">
+                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                            formControlName="EventTitle" placeholder="Image Title" maxlength="200" />
+                    </div> -->
+                <div class="col-md-3 col-sm-3">
+                    <input type="text" class="form-control" formControlName="EventTitle" placeholder="Image Title"
+                        maxlength="200" />
+                </div>
+
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Select Event Image<span class="mandatory"></span></span>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-6">
+                    <label for="upload2" class="upload1">
+                        <input type="file" id="upload2" formControlName="eventImg"
+                            (change)="onUploadChangePic($event)" />
+                        Select Image <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                    </label>
+                </div>
+            </form>
+            <div class="col-md-2 col-sm-3 col-xs-6">
+                <button class="event-add" (click)="AddEventImage()">Add Image <span><i class="fa fa-plus"
+                            aria-hidden="true"></i></span></button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6 col-sm-6" *ngFor="let item of PosterImageAddShow; let i = index;let isLast=last ">
+                <div class="event-logo m-b-10">
+                    <ng-template #templatePosterEvent>
+                        <div class="modal-body text-center">
+                            <p>Do You Want To Delete Selected Image?</p>
+                            <br />
+                            <br />
+                            <button type="button" class="btn yl-btn no-rd" (click)="deletePosterEvent(i)">Yes</button>
+                            <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                        </div>
+                    </ng-template>
+                    <div class="text-center">
+                        <!-- <p><b>{{item.imgtitle?item.imgtitle:''}}</b></p> -->
+                        <!-- <div class="job-list-action card-view-btns"> -->
+                        <h2 class="job-title  lang-ellip" title={{item.imgtitle}}>{{item.imgtitle?item.imgtitle:''}}
+                        </h2>
+                        <!-- </div> -->
+                        <img src="{{item.imageNameposter!=''?item.imageNameposter:'assets/images/NoImage.png'}}"
+                            class="img-responsive" />
+                    </div>
+                    <div>
+                        <div class="event-logo-action-btn">
+                            <ul>
+                                <li><a href="javascript:void(0)" title="Delete This Uploaded Event Image"
+                                        (click)="PusPosterEventTemplate(templatePosterEvent)"><i
+                                            class="fas fa-trash-alt mandatory"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group text-center m-t-10">
+            <button class="btn btn-w-shadow no-rd" (click)="UploadEventImages()"
+                [disabled]="PosterImageAddData.length==0" type="submit">Submit</button>
+        </div>
+    </div>
+</div>
+<div class="cleafix"></div>
+<div  *ngIf="GellaryEventList" class="alert alert-danger col-md-12">
+     <strong>No Records Found !</strong>
+</div>
+</div>

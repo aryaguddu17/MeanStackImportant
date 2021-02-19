@@ -1,0 +1,755 @@
+<div class="" style="margin-top: 0" *ngIf="getdata=='Placed'">
+    <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="BackToDashboard()">
+        Back
+    </a>
+</div>
+
+
+<div class="dash-head" *ngIf="Companywiselist=='1'">
+    <p>Placed Candidate Reports</p>
+    <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="ShowAllexcelExport(PlaceCandidateDetails)">
+        <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+    </a>
+    <!-- <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="RegisterCandidate(Candidate)">
+        &nbsp;&nbsp;Add candidate
+    </a> -->
+    <!-- <a (click)="backbtn()" *ngIf="previousbtn" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0"><i
+        aria-hidden="true" class="fa fa-arrow-left"></i></a> -->
+    <!--
+            <a (click)="backbtn1()" *ngIf="previousbtn1" title="Go Back" class="btn btn-w-shadow no-rd pull-right" tabindex="0"><i
+                aria-hidden="true" class="fa fa-arrow-left"></i></a> -->
+</div>
+
+<div class="col-md-12" *ngIf="Companywiselist=='1'">
+    <div class="update-profile">
+        <div id="" class="searchResults1">
+            <div class="clearfix"></div>
+
+            <div class="all-jobs-list">
+                <div id="" class="searchResults">
+                    <div class="ui-widget-header ui-widget-header-r">
+                        <input #gb type="text" pInputText size="50" placeholder="Search">
+                    </div>
+                    <p-dataTable [(value)]="PlaceCandidateDetails" [paginator]="true" [rows]="10" [pageLinks]="3"
+                        [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                        <p-column header="S. No." [style]="{'width':'50px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="candName" header="Candidate Name" [sortable]="true" [style]="{'width':'200px'}"></p-column>
+                        <p-column field="email" header="Email" [sortable]="true" [style]="{'width':'200px'}">
+                            <ng-template field="email" let-item="rowData" pTemplate type="body">
+                                {{item.email?item.email:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="mobile" header="Mobile No." [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="mobile" let-item="rowData" pTemplate type="body">
+                                {{item.mobile?item.mobile:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="gender" header="Gender" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="gender" let-item="rowData" pTemplate type="body">
+                                {{item.gender?item.gender:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="scheme" header="Scheme" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="scheme" let-item="rowData" pTemplate type="body">
+                                {{item.scheme?item.scheme:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="tpname" header="PIA/TP" [sortable]="true" [style]="{'width':'200px'}">
+                            <ng-template field="tpname" let-item="rowData" pTemplate type="body">
+                                {{item.tpname?item.tpname:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="employername" header="Employer Name" [sortable]="true" [style]="{'width':'200px'}">
+                            <ng-template field="employername" let-item="rowData" pTemplate type="body">
+                                {{item.employername?item.employername:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="joininglocation" header="Joining Location" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="joininglocation" let-item="rowData" pTemplate type="body">
+                                {{item.joininglocation?item.joininglocation:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="designationoffered" header="Designation Offered" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="designationoffered" let-item="rowData" pTemplate type="body">
+                                {{item.designationoffered?item.designationoffered:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="salaryctcpermonth" header="Salary CTC Per Month" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="salaryctcpermonth" let-item="rowData" pTemplate type="body">
+                                {{item.salaryctcpermonth?item.salaryctcpermonth:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <!-- <p-column field="salaryinhandpermonth" header="Salary In Hand Per Month" [sortable]="true"
+                            [style]="{'width':'100px'}">
+                            <ng-template field="salaryinhandpermonth" let-item="rowData" pTemplate type="body">
+                                {{item.salaryinhandpermonth?item.salaryinhandpermonth:'-'}}
+                            </ng-template>
+                        </p-column> -->
+                        <p-column field="joiningDate" header="Joining Date" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="joiningDate" let-item="rowData" pTemplate type="body">
+                                {{item.joiningDate?item.joiningDate:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="offerLetterDate" header="Offer Latter date" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="offerLetterDate" let-item="rowData" pTemplate type="body">
+                                {{item.offerLetterDate?item.offerLetterDate:'-'}}
+                            </ng-template>
+                        </p-column>
+                        <!-- <p-column field="joiningletter" header="Joining Letter" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="joiningletter" let-item="rowData" pTemplate type="body">
+                                {{item.joiningletter?item.joiningletter:'-'}}
+                            </ng-template>
+                        </p-column> -->
+                        <p-column field="candidateDomicile" header="Address" [sortable]="true" [style]="{'width':'250px'}"></p-column>
+                        <p-column field="source" header="Source" [sortable]="true" [style]="{'width':'100px'}"></p-column>
+                        <p-column field="applied" header="View OfferLetter" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template field="applied" let-item="rowData" pTemplate type="body">
+                                <a href="{{item.imageName}}" target="_blank"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                            </ng-template>
+                        </p-column>
+                        <p-column field="jobTitle" header="Job Title" [sortable]="true" [style]="{'width':'200px'}"></p-column>
+
+                        <p-column field="status" header="Status" [sortable]="true" [style]="{'width':'200px'}"></p-column>
+
+                        <p-column header="View Profile" class="text-center" [style]="{'width':'75px'}">
+                            <ng-template let-ViewProfile="rowData" pTemplate type="body">
+                                <a href="javascript:void(0)" class="" title="View Details" (click)="openModal(ViewProfile.sourceId==0?ViewProfile.candId:ViewProfile.sourceId,ViewProfile.source)">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
+
+                            </ng-template>
+                        </p-column>
+
+
+                    </p-dataTable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-CommonView-Layout></app-CommonView-Layout>
+
+<div *ngIf="appliedcandidatedetail=='1'">
+    <div class="dash-head">
+        <p>Agent Detail</p>
+        <a href="javascript:void(0)" (click)="singleback()" class="btn pull-right btn-back-reg">
+            Back
+        </a>
+        <!-- <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="excelExport()">
+                    <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+                </a> -->
+    </div>
+    <div class="roj-panel-content">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="min-width: 300px;">Agent Name</th>
+                        <th style="min-width: 300px;">Email</th>
+                        <th style="min-width: 300px;">Mobile No.</th>
+                        <th style="min-width: 180px;">State</th>
+                        <th style="min-width: 150px;">District</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-left">{{setdata.agentName}}</td>
+                        <td class="text-left">{{setdata.Email}}</td>
+                        <td class="text-left">{{setdata.MobileNo}}</td>
+                        <td class="text-left">{{setdata.StateName}}</td>
+                        <td>{{setdata.DistrictName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dash-head">
+        <!-- <p>Applied Candidate List</p> -->
+        <p>Employer Detail</p>
+        <!-- <a href="javascript:void(0)" (click)="singleback1()" class="btn pull-right btn-back-reg">
+                Back
+            </a> -->
+        <a class="btn pull-right btn-back-reg" href="javascript:void(0)" (click)="excelExport()">
+            <i class="fa fa-file-excel m-t-3" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+        </a>
+    </div>
+    <div class="table-responsive">
+        <div class="all-jobs-list">
+            <div id="" class="searchResults">
+                <div class="ui-widget-header ui-widget-header-r">
+                    <input #gb type="text" pInputText size="50" placeholder="Search">
+                </div>
+                <p-dataTable [(value)]="PlaceCandidateDetails" [paginator]="true" [rows]="10" [pageLinks]="3"
+                    [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+                    <p-column header="S. No." [style]="{'width':'50px'}">
+                        <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                            {{i+1}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="ownername" header="Owner Name" [sortable]="true" [style]="{'width':'200px'}">
+                        {{item.ownername?item.ownername:'NA'}}
+                    </p-column>
+
+                    <p-column field="establishmentname" header="Establishment Name" [sortable]="true" [style]="{'width':'200px'}">
+                        <ng-template field="establishmentname" let-item="rowData" pTemplate type="body">
+                            {{item.establishmentname?item.establishmentname:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="mobileno" header="Mobile No." [sortable]="true" [style]="{'width':'100px'}">
+                        <ng-template field="mobileno" let-item="rowData" pTemplate type="body">
+                            {{item.mobileno?item.mobileno:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="email" header="Email" [sortable]="true" [style]="{'width':'100px'}">
+                        <ng-template field="email" let-item="rowData" pTemplate type="body">
+                            {{item.email?item.email:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="businessnature" header="Businessnature" [sortable]="true" [style]="{'width':'100px'}">
+                        <ng-template field="businessnature" let-item="rowData" pTemplate type="body">
+                            {{item.businessnature?item.businessnature:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="address" header="Address" [sortable]="true" [style]="{'width':'200px'}">
+                        <ng-template field="address" let-item="rowData" pTemplate type="body">
+                            {{item.address?item.address:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="nearby" header="Nearby" [sortable]="true" [style]="{'width':'200px'}">
+                        <ng-template field="nearby" let-item="rowData" pTemplate type="body">
+                            {{item.nearby?item.nearby:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="statename" header="State Name" [sortable]="true" [style]="{'width':'100px'}">
+                        <ng-template field="statename" let-item="rowData" pTemplate type="body">
+                            {{item.statename?item.statename:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="districtname" header="District Name" [sortable]="true" [style]="{'width':'100px'}">
+                        <ng-template field="districtname" let-item="rowData" pTemplate type="body">
+                            {{item.districtname?item.districtname:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="totaljobs" header="Total Jobs" [sortable]="true" [style]="{'width':'100px'}">
+                        <ng-template field="totaljobs" let-item="rowData" pTemplate type="body">
+                            {{item.totaljobs?item.totaljobs:'-'}}
+                        </ng-template>
+                    </p-column>
+
+                </p-dataTable>
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+<div class="form-group">
+    <ng-template #Candidate>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left"> Add Candidate</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRefSector.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="display:inline-block;width: 100%;">
+            <div class="col-md-12">
+                <form [formGroup]="CandidateRegistration" class="edit-delete-h company-profile-update">
+                    <div class="basic-profile">
+                        <div class="yuvaDivBg cardA">
+
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Job Type</label>
+                                    <select formControlName="jobtype" (change)="GetJobType($event.target.value)" class="form-control">
+                                        <option value="" class="" selected>Select Job Type</option>
+                                        <option value="Job/Walkin">Job/Walkin</option>
+                                        <option value="Event">Event</option>
+                                    </select>
+                                </div>
+
+                                <div *ngIf="ShowJobDetails">
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <label for="" class="control-label">Company name </label>
+                                        <select formControlName="COMPANYNAME" (change)="GetCompanyJobList($event.target.value)"
+                                            class="form-control">
+                                            <option value="" class="" selected>Select Company Name</option>
+                                            <option *ngFor="let companyname of companyList" [value]="companyname.companyId">{{
+                                                companyname.companyName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="form-group">
+                                <div *ngIf="ShowJobDetails">
+                                    <!-- <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Company name </label>
+                                    <select formControlName="COMPANYNAME" (change)="GetCompanyJobList($event.target.value)"
+                                        class="form-control">
+                                        <option value="" class="" selected>Select Company Name</option>
+                                        <option *ngFor="let companyname of companyList" [value]="companyname.companyId">{{
+                                            companyname.companyName}}</option>
+                                    </select>
+                                </div> -->
+
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <label for="" class="control-label">Jobs</label>
+                                        <select formControlName="jobId" class="form-control" (change)="GetOpeningList($event.target.value)">
+                                            <option value="" class="" selected>Select Job Code</option>
+                                            <option *ngFor="let list of JobList" [value]="list.JobId">{{ list.JobCode}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <label for="" class="control-label">Opening List</label>
+                                        <select formControlName="OpeningList" class="form-control" (change)="GetCandidateList($event.target.value)">
+                                            <option value="" class="" selected>Select Opening</option>
+                                            <option *ngFor="let list of OpeningList" [value]="list.jobOpeningId">{{
+                                                list.location}}</option>
+                                            <!-- <option *ngFor="let openinglist of OpeningList" [value]="openinglist.jobOpeningId">{{openinglist.location}}</option> -->
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div *ngIf="ShowEventDetails">
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <label for="" class="control-label">Event List </label>
+                                        <select formControlName="EventList" class="form-control" (change)="GetEmployerList($event.target.value)">
+                                            <option value="" class="" selected>Select Event Name</option>
+                                            <option *ngFor="let eventlist of EventList" [value]="eventlist.eventId">{{eventlist.eventName}}</option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <label for="" class="control-label">Employer List</label>
+                                        <select formControlName="employername" class="form-control">
+                                            <option value="" class="" selected>Select Employer Name</option>
+                                            <option *ngFor="let List of EmployerList" [value]="List.companyId">{{List.companyName}}</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12" *ngIf="candidatelist">
+                                    <label for="" class="control-label">Candidate List</label>
+                                    <select formControlName="candidatename" class="form-control" (change)="GetCandidateDetail($event.target.value)">
+                                        <option value="" class="" selected>Select Candidate Name</option>
+                                        <option *ngFor="let list of CandidateList" [value]="list.candidateId">{{list.candidateName}}</option>
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label class="control-label">Name </label>
+                                    <input formControlName="Candidatename" type="text" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                        class="form-control" maxlength="50" placeholder="Name">
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Date of birth </label>
+                                    <div class=" row col-xs-12 col-12 col-md-12">
+                                        <div class="input-group">
+                                            <input type="text" formControlName="DOB" placeholder="Datepicker" class="form-control"
+                                                bsDatepicker [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false,adaptivePosition: true }">
+                                            <span class="input-group-addon" (click)="valid.toggle()"
+                                                [attr.aria-expanded]="valid.isOpen"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Email id</label>
+                                    <input formControlName="emailid" type="text" maxlength="100" class="form-control"
+                                        placeholder="Email id" />
+                                    <div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Mobile </label>
+                                    <input formControlName="mobile" type="text" class="form-control RemArr" maxlength="10"
+                                        (keypress)="onlyNumber($event)" placeholder="Mobile">
+                                    <div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Gender</label>
+                                    <div>
+                                        <label class="custom-radio">
+                                            <input formControlName="Gender" type="radio" value="Male" />
+                                            <span class="checkmark"></span> Male
+                                        </label>
+                                        <label class="custom-radio">
+                                            <input formControlName="Gender" type="radio" value="Female" />
+                                            <span class="checkmark"></span> Female
+                                        </label>
+                                        <label class="custom-radio">
+                                            <input formControlName="Gender" type="radio" value="Transgender" />
+                                            <span class="checkmark"></span> Transgender
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Religion </label>
+                                    <!--formControlName="Religion"-->
+                                    <select formControlName="religion" class="form-control">
+                                        <option value="" class="" selected>--Select--</option>
+                                        <option *ngFor="let relig of religions" [value]="relig.id">{{
+                                            relig.relationName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Country of birth</label>
+                                    <!--formControlName="CountryName"-->
+                                    <input class="form-control" disabled value="India" />
+
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">State of birth </label>
+                                    <select formControlName="birthstate" (change)="GetAllDistrict($event.target.value)"
+                                        class="form-control">
+                                        <option value="" class="" selected>Select state of birth</option>
+                                        <!-- <option *ngFor="let state of states" [value]="state.id">{{ state.stateName}}</option> -->
+                                        <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label"> District of birth </label>
+                                    <select formControlName="birthdistrict" class="form-control">
+                                        <option value="" class="" selected>Select District</option>
+                                        <option *ngFor="let district of district" [value]="district.id">{{
+                                            district.districtName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--*ngIf="hidestateCity"-->
+
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">About Me </label>
+                                    <!--formControlName="AboutMe"-->
+                                    <textarea placeholder="About Me" formControlName="aboutme" contentEditable class="form-control autoExpand"
+                                        rows="4" maxlength="1000"></textarea>
+                                </div>
+
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Candidate Pic <span class="mandatory"> </span></label>
+                                    <input type="file" (change)="onUploadChange($event,'candprofile')" class=""
+                                        formControlName="ImgName">
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                </div>
+                                <!-- <div class="col-md-4 col-sm-4 col-xs-12 add-can-img">
+                                  
+                                    <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{imagename!=''?imagename:'assets/images/NoImage.png'}}"
+                                        alt="" />
+
+                                </div> -->
+                                <div class="col-md-4 col-sm-4 col-xs-12 add-can-img">
+                                    <!-- <a href="javascript:void(0)" *ngFor="let item of base64textString"><img src="{{item!=''?item:'assets/images/NoImage.png'}}" /></a> -->
+                                    <!-- <img src="{{imagename!=null?imagename:'assets/images/NoImage.png'}}" alt="" /> -->
+                                    <img src="{{imagename!=''?imagename:'assets/images/NoImage.png'}}" alt="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label class="control-label">Parter Name </label>
+                                    <input formControlName="PARTNERNAME" type="text" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                        class="form-control" maxlength="50" placeholder="PARTNER NAME">
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Traning Scheme </label>
+                                    <div class="input-group">
+                                        <input formControlName="TRAININGSCHEME" type="text" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                            class="form-control" maxlength="50" placeholder="TRAINING SCHEME">
+                                    </div>
+                                    <div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label class="control-label">Enrolment Number </label>
+                                    <!-- <input formControlName="ENROLMENTNO" type="number"  class="form-control" maxlength="50" placeholder="ENROLMENTNO"> -->
+                                    <input maxlength="50" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                        type="text" formControlName="ENROLMENTNO" class="form-control" placeholder="ENROLMENTNO" />
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Enqury Number </label>
+                                    <div class="input-group">
+                                        <!-- <input formControlName="INQUIRYNO" type="number" class="form-control" maxlength="50" placeholder="INQUIRYNO"> -->
+                                        <input maxlength="50" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                            type="text" formControlName="INQUIRYNO" class="form-control" placeholder="INQUIRYNO" />
+                                    </div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Scheme</label>
+                                    <input formControlName="SCHEME" type="text" maxlength="100" class="form-control"
+                                        placeholder="SCHEME" />
+                                    <div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!-- <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label class="control-label">Company Name<span class="mandatory"> *</span> </label>
+                                    <input formControlName="COMPANYNAME" type="text" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');" class="form-control" maxlength="50" placeholder="DOBCOMPANYNAME">
+                                    <div>
+                                    </div>
+                                </div> -->
+
+
+                                <div *ngIf="ShowEmployerList">
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                        <label for="" class="control-label"> Employer List </label>
+                                        <select formControlName="employername" class="form-control" (change)="GetWorkLocation($event.target.value)">
+                                            <option value="" class="" selected>Select Employer</option>
+                                            <option *ngFor="let employer of GetEmployer" [value]="employer.companyId">{{
+                                                employer.companyName}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <label for="" class="control-label"> Location </label>
+                                        <!-- <div class="input-group">
+                                                <input formControlName="LOCATION" type="text" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                                    class="form-control" maxlength="50" placeholder="LOCATION">
+                                            </div> -->
+                                        <select formControlName="LOCATION" class="form-control">
+                                            <option value="">Select Work Location</option>
+                                            <option *ngFor="let location of worklocation" [value]="location.locationId">{{location.location}}</option>
+                                        </select>
+                                        <div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Offer Latter Date</label>
+                                    <div class="input-group">
+                                        <input type="text" #valid1="bsDatepicker" placeholder="Select Date" disabled
+                                            bsDatepicker [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }"
+                                            value="" [minDate]="CurrentDate" class="form-control" formControlName="OFFERLETTERDATE" />
+                                        <span class="input-group-addon" (click)="valid1.toggle()" [attr.aria-expanded]="valid.isOpen"><i
+                                                class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label class="control-label">Ctc </label>
+                                    <input formControlName="CTC" type="number" class="form-control" maxlength="50"
+                                        placeholder="CTC">
+                                    <div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-4 col-sm-4 col-xs-12">
+          <label for="" class="control-label">Offer Latter Image </label>
+          <div class="input-group">
+            <input formControlName="OFFERLETTERIMAGENAME" type="text" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');" class="form-control" maxlength="50" placeholder="LOCATION">
+          </div>
+          <div>
+          </div>
+        </div> -->
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Offer Latter Image <span class="mandatory">
+                                        </span></label>
+                                    <input type="file" (change)="onUploadChange($event,'offerlatterimage')" class=""
+                                        formControlName="OFFERLETTERIMAGENAME">
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12 add-can-img">
+                                    <!-- <img src="{{imagename!=null?imagename:'assets/images/NoImage.png'}}" alt="" /> -->
+                                    <img onError="this.src='../../../../assets/images/NoImage.png'" src="{{latterimg!=''?latterimg:'assets/images/NoImage.png'}}"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <label for="" class="control-label">Remarks</label>
+                                    <input formControlName="REMARKS" type="text" maxlength="100" class="form-control"
+                                        placeholder="REMARKS" />
+                                    <div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label class="control-label">Designation </label>
+                                    <input formControlName="DESIGNATION" type="text" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                        class="form-control" maxlength="50" placeholder="DESIGNATION">
+                                    <div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <label for="" class="control-label">Joining Date </label>
+                                    <div class="input-group">
+                                        <input placement="top" type="text" #valid="bsDatepicker" placeholder="Select Date"
+                                            disabled bsDatepicker [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false,adaptivePosition: true }"
+                                            value="" [minDate]="CurrentDate" class="form-control" formControlName="JOININGDATE" />
+                                        <span class="input-group-addon" (click)="valid.toggle()" [attr.aria-expanded]="valid.isOpen"><i
+                                                class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer p-t-0 text-right">
+                        <div class="form-group m-t-10">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-w-shadow no-rd" type="button" (click)="Addcandidate()">Submit</button>
+                                <button class="btn btn-w-shadow no-rd" type="button" (click)="close()">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </ng-template>
+
+    <ng-template #template6>
+        <div class="modal-header">
+          <h6 class="modal-title pull-left">Offer Letter Detail</h6>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="CloseOfferLetter()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+      
+          <div class="edit-profile-wrapper margin-top-20">
+            <div class="box-title">
+              <p class="box-title-content">
+              </p>
+            </div>
+            <div class="box-content">
+              <div class="usersWrapper">
+                <div>
+                  <!-- {{OfferletterDetail|json}} -->
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Company Name:</span></div>
+                    <div class="col-md-8"> {{OfferletterDetail.companyName!=''?OfferletterDetail.companyName:'Not
+                      available'}}</div>
+                  </div>
+      
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Name:</span></div>
+                    <div class="col-md-8">{{OfferletterDetail.candidateName!=''?OfferletterDetail.candidateName:'Not
+                      available'}}</div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Designation: </span></div>
+                    <div class="col-md-8" title="{{OfferletterDetail.designation}}">
+                      <!-- {{OfferletterDetail.designation!=''?OfferletterDetail.designation:'Not
+                      available'}} -->
+                      {{
+                      (OfferletterDetail.designation | slice:0:40)+'...'}}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Email:</span></div>
+                    <div class="col-md-8">{{OfferletterDetail.email!=null ? OfferletterDetail.email:'Not available'}}</div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Mobile No.:</span></div>
+                    <div class="col-md-8">{{OfferletterDetail.mobileNo!=''?OfferletterDetail.mobileNo:'Not available'}}</div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Gender:</span></div>
+                    <div class="col-md-8">{{OfferletterDetail.gender}}</div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Offer Letter Date :</span></div>
+                    <div class="col-md-8">{{OfferletterDetail.offerLetterDate | date:'dd/MM/y'}}</div>
+                  </div>
+      
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Joining Date :</span></div>
+                    <div class="col-md-8">{{OfferletterDetail.joiningDate | date:'dd/MM/y'}}</div>
+                  </div>
+      
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Ctc: </span></div>
+                    <div class="col-md-8">{{OfferletterDetail?.ctc}} (Per Month)</div>
+                  </div>
+      
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">Address: </span></div>
+                    <div class="col-md-8">{{OfferletterDetail?.address}}</div>
+                  </div>
+      
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">State: </span></div>
+                    <div class="col-md-8">{{OfferletterDetail?.stateName}}</div>
+                  </div>
+      
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">District: </span></div>
+                    <div class="col-md-8">{{OfferletterDetail?.districtName}}</div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-4"><span class="text-strong">View Offer Letter: </span></div>
+                    <div class="col-md-8">
+                      <a [href]="OfferletterDetail.image" target="_blank"><span class="glyphicon glyphicon-zoom-in"></span></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="cleafix margin-bottom-20"></div>
+      
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn bl-btn" (click)="CloseOfferLetter()">Close</button>
+          </div>
+      
+        </div>
+      </ng-template>
+
+</div>

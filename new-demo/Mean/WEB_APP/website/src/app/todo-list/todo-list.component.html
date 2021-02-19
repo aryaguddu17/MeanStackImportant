@@ -1,0 +1,163 @@
+<div class="wrapper m-b-80 min-heght">
+  <div class="container">
+    <h3>Feeds</h3>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card shadow" style="height: 420px;">
+          <div class="facepages">
+            <div class="text-center" [hidden]="!listLoader">
+              <img src="../../assets/images/Celebrated.gif" class="loader-style">
+            </div>
+            <ul *ngFor="let page of pages;index as i">
+              <li  [ngClass]="{active:isSet(i)}"
+                (click)="setTab(i);getUserFbInboxs(page.access_token,page.id);">
+                <span>Page #{{i+1}}</span>
+                <img class="img-fluid img-circle" [src]="page?.picture?.data?.url"
+                  onError="this.src='https://dev.luxcreativesolutions.com/assets/images/logo.png'" style="width:30px;">
+                {{page.name}}</li>
+            </ul>
+          </div>
+          <div class="faceNoti p-4">
+            <div class="tabbbs">
+              <ng-template *ngIf="inboxs.length > 0 ; then showmessage else notshowmessage"></ng-template>
+              <ng-template #showmessage>
+                <div class="text-center" [hidden]="!inboxLoader">
+                  <img src="../../assets/images/Celebrated.gif" class="loader-style">
+                </div>
+                <ul>
+                  <span *ngFor="let inbox of inboxs;index as i" [ngClass]="{active:isSetPage(i)}"
+                    (click)="setTabPage(i);getUserFbPostedSingleData(inbox.id);">{{inbox?.message ? inbox?.message : inbox?.story | truncate:[35, '...']  }}
+                  </span>
+                </ul>
+              </ng-template>
+              <ng-template #notshowmessage>
+                <div class="text-center">
+                  <h6>No content to show</h6><br>
+                  <p>Reviews and comments on your posts will appear here.</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card shadow p-4" style="height: 420px; overflow: scroll; ">
+          <div class="postImgs">
+            <div class="col-6">
+              <div class="text-center" [hidden]="!postLoader">
+                <img src="../../assets/images/Celebrated.gif" class="loader-style">
+              </div>
+              <ng-template *ngIf="feeds?.length > 0 ; then showposts else notshowpost"></ng-template>
+              <ng-template #showposts>
+                <div *ngFor="let feed of feeds" class="row list p-4 m-2 bg-white">
+                  <div *ngIf="feed.attachments">
+                    <div *ngFor="let attachmentdata of feed.attachments.data">
+                      <ng-template *ngIf="attachmentdata.subattachments;then showBlock; else notShowBlock">
+                      </ng-template>
+
+                      <ng-template #showBlock>
+                        <span *ngFor="let subattachmentdata of attachmentdata.subattachments.data; let i = index"
+                          class="fb-post" style="padding-bottom:1px;">
+                          <ng-template [ngIf]="(i < 2)">
+                            <ng-container *ngIf="subattachmentdata.type =='photo';else videooption">
+                              <img ng-if="subattachmentdata.type == 'photo'" class="img-fluid"
+                                [src]="subattachmentdata.media.image.src"
+                                onError="this.src='https://dev.luxcreativesolutions.com/assets/images/logo.png'"
+                                style="width: 487px;" (click)="open(feed)"><br>
+                            </ng-container>
+                            <ng-container *ngIf="subattachmentdata.type == 'video';else contunavailable">
+                              <object width="500" height="270" controls autoplay
+                                [data]="this.sanitizer.bypassSecurityTrustResourceUrl('https://www.facebook.com/plugins/video.php?href='+subattachmentdata.url)">
+                              </object>
+                            </ng-container>
+                          </ng-template>
+
+                          <ng-template #contunavailable></ng-template>
+                          <span *ngIf="i > 1">
+                            <span class="huge" (click)="open(feed)" style="width: 238px !important;">
+                              {{ remainigMoreImages(attachmentdata.subattachments.data.length | number)}}
+                            </span>
+                          </span>
+                        </span>
+
+                      </ng-template>
+
+                      <ng-template #notShowBlock class="fb-post">
+                        <ng-container
+                          *ngIf="(attachmentdata.type == 'photo' || attachmentdata.type =='cover_photo' || attachmentdata.type =='profile_media');else videoopt">
+                          <img class="img-fluid" [src]="attachmentdata.media.image.src"
+                            onError="this.src='https://dev.luxcreativesolutions.com/assets/images/logo.png'"
+                            style="width: 487px;" (click)="openmod(feed.attachments.data)">
+                        </ng-container>
+
+                        <ng-template #videoopt>
+                          <ng-container
+                            *ngIf="(attachmentdata.type == 'video' || attachmentdata.type == 'video_inline');else contShare">
+                            <object width="500" height="270" preload="none"
+                              [data]="this.sanitizer.bypassSecurityTrustResourceUrl('https://www.facebook.com/plugins/video.php?href='+attachmentdata.url)">
+                            </object>
+                          </ng-container>
+                        </ng-template>
+
+                        <ng-template #contShare>
+                          <ng-container
+                            *ngIf="(attachmentdata.type == 'share' || attachmentdata.type ==goodwill_shared_card);else unavailable">
+                            <img ng-if="attachmentdata.type == 'share'" class="img-fluid"
+                              [src]="attachmentdata.media.image.src"
+                              onError="this.src='https://dev.luxcreativesolutions.com/assets/images/logo.png'"
+                              style="width: 487px;" (click)="openmod(feed.attachments.data)"><br>
+                          </ng-container>
+                        </ng-template>
+                        <ng-template #unavailable></ng-template>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+
+              </ng-template>
+              <ng-template #notshowpost>
+                <div class="text-center">
+                  <h6>No posts to show</h6><br>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+          <ng-template *ngIf="feeds?.length > 0 ; then showpostscomm"></ng-template>
+          <ng-template #showpostscomm>
+            <div class="col-12">
+              <div class="actPost">
+                <ul>
+                  <li><span class="glyphicon glyphicon-heart-empty"></span> 4 Post Engagement</li>
+                  <li><i class="fa fa-bullhorn"></i> 4 Reach</li>
+                  <li><i class="fa fa-thumbs-o-up"></i> {{likesCount}} Likes</li>
+                  <li><i class="far fa-comment-alt"></i> {{commentsCount}} Comments</li>
+                </ul>
+              </div>
+              <div class="postComments" id="postComments">
+                <div *ngFor="let comment of comments;let i=index">
+                  <div>
+                    <div class="comnts" *ngIf="loadPrevious && i >= 0">
+                      <img class="img-rounded" [src]="comment?.from?.picture?.data?.url"
+                        onError="this.src='https://dev.luxcreativesolutions.com/assets/images/logo.png'">
+                      <p>{{comment.message}}
+                        <small>{{comment.created_time | date :'HH:mm MMM dd, yyyy'}}</small>
+                      </p>
+                    </div>
+                    <div class="comnts" *ngIf="!loadPrevious && i < 2">
+                      <img class="img-rounded" [src]="comment?.from?.picture?.data?.url"
+                        onError="this.src='https://dev.luxcreativesolutions.com/assets/images/logo.png'">
+                      <p>{{comment.message}}
+                        <small>{{comment.created_time | date :'HH:mm MMM dd, yyyy'}}</small></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right" *ngIf="commentsCount !='2'"><a href="javascript:void(0)"
+                    (click)=loadAllComments();>Load previous comments</a></div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

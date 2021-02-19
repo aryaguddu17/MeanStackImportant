@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="text-center text-primary">Upload File(Only .csv)</h4>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <input type="file" (change)="upload($event.target.files)" class="form-control" accept=".csv">
+        </div>
+        <div class="form-group text-center">
+          <button class="btn btn-primary" (click)="uploadCsv()">Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="text-center text-primary">Uploaded Data</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Address1</th>
+                <th>Address2</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>Download</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of csvData | paginate: { itemsPerPage: 10, currentPage: p };let i=index">
+                <td>{{data.ID}}</td>
+                <td>{{data.FirstName}}</td>
+                <td>{{data.LastName}}</td>
+                <td>{{data.Address1}}</td>
+                <td>{{data.Address2}}</td>
+                <td>{{data.City}}</td>
+                <td>{{data.State}}</td>
+                <td>{{data.ZIP}}</td>
+                <td><a href="{{'http://localhost:8080/api/csvFile/' + filePath }}">Download</a></td>
+              </tr>
+              <tr *ngIf="csvData.length==0" class="text-center text-danger">No Data To Show
+              </tr>
+            </tbody>
+          </table>
+          <div class="float-right">
+            <pagination-controls (pageChange)="p = $event" *ngIf="csvData.length > 10"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

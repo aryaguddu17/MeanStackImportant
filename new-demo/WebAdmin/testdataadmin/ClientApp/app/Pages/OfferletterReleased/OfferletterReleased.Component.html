@@ -1,0 +1,485 @@
+<div class="dash-head" *ngIf="EListShow==1">
+    <p> Event List</p>
+    <a class="btn btn-w-shadow no-rd pull-right" tabindex="0" title="" *ngIf="Eventformshow=='0'"
+        (click)="showhide('C');">Create</a>
+</div>
+
+<div class="dash-head" *ngIf="EDetailsShow==1">
+    <p> Event Details</p>
+    <a class="btn btn-w-shadow no-rd pull-right" tabindex="0" title="Go Back" (click)="showhide('');"><i
+            aria-hidden="true" class="fa fa-arrow-left"></i></a>
+</div>
+
+<div [ngClass]="ApplyFilterShow==1?'show':'hide'">
+    <div class="page-filters">
+        <h2>
+            <a href="javascript:void(0);">
+                <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            </a>
+        </h2>
+        <form [formGroup]="FilterEventForm" (submit)="GetEventList(0,'')">
+            <div class="filter-wrapper">
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-6">
+                        <label>Event Type</label>
+                        <select class="form-control" formControlName="EvenType">
+                            <option value="" selected="selected">--Select--</option>
+                            <option *ngFor="let item of EventtypeList" value="{{item.eventId}}">{{item.eventName}}
+                            </option>
+                        </select>
+                        <errors [control]="FilterEventForm.controls.EvenType"></errors>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>State</label>
+                        <select (change)="onChangeState(FilterEventForm.value.stateId);" class="form-control"
+                            formControlName="stateId">
+                            <option value="" class="" selected>--Select--</option>
+                            <option *ngFor="let item of lstState" value="{{item.id}}">{{item.stateName}}</option>
+                        </select>
+                        <errors [control]="FilterEventForm.controls.stateId"></errors>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>District</label>
+                        <select class="form-control" formControlName="districtId">
+                            <option value="" class="" selected="selected">--Select--</option>
+                            <option *ngFor="let item of district" value="{{item.id}}">{{item.districtName}}</option>
+                        </select>
+                        <errors [control]="FilterEventForm.controls.districtId"></errors>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <label>Search Keywords<span></span></label>
+                        <input type="text" formControlName="Search" class="form-control" placeholder="Search" />
+                        <errors [control]="FilterEventForm.controls.Search"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-6">
+                        <label>Start Date</label>
+                        <div class="input-group">
+                            <input type="text" #validTo="bsDatepicker" placeholder="Select Date" disabled bsDatepicker
+                                [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }" value=""
+                                class="form-control m-b-0" formControlName="filterstartDate" />
+                            <span class="input-group-addon" (click)="validTo.toggle()"
+                                [attr.aria-expanded]="validTo.isOpen"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>End Date</label>
+                        <div class="input-group">
+                            <input type="text" #validfrom="bsDatepicker" placeholder="Select Date" disabled bsDatepicker
+                                [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false }" value=""
+                                class="form-control m-b-0" formControlName="filterendDate" />
+                            <span class="input-group-addon" (click)="validfrom.toggle()"
+                                [attr.aria-expanded]="validfrom.isOpen"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group text-center m-t-10">
+                    <button type="reset" class="btn btn-w-shadow no-rd" (click)="EventReset();">Reset</button>
+                    <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+                </div>
+                <div class="form-group text-center m-t-10">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="col-md-12" *ngIf="Eventlistshow==1">
+    <div class="all-jobs-list">
+        <div class="searchResults ">
+            <ul class="joblist-wrapper">
+                <li class="job-wrapper ps-relative approved" *ngFor="let item of GetRegisteredEventList; let i=index;">
+
+                    <div class="job-view fos">
+                        <div>
+                            <img onError="this.src='../../../../assets/images/NoImage.png'"
+                                src="{{item.imagepath!=''?item.imagepath:'assets/images/NoImage.png'}}"
+                                class="img-thumbnail" alt="Image">
+                        </div>
+                        <div>
+                            <h2 class="job-title 1a" title="{{item.eventName}}">
+                                {{item.eventName}}
+                            </h2>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12"><strong>Event Type : </strong> {{item.eventType}}</div>
+                                    <div class="col-md-12">
+                                        <strong>Venue : </strong>
+                                        {{item.address}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12"><strong>Start Date : </strong> {{item.startDate}}</div>
+                                    <div class="col-md-12"><strong>End Date : </strong> {{item.endDate}}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12"><strong>Total Employer : </strong> {{item.noofregemployer}}
+                                    </div>
+                                    <div class="col-md-12"><strong>Total Candidate : </strong> {{item.totalcandidate}}
+                                    </div>
+                                    <div class="col-md-12"><strong>Total Offered Candidate : </strong>
+                                        {{item.offerreleased}}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12"><strong>State : </strong> {{item.stateName}}</div>
+                                    <div class="col-md-12"><strong>District : </strong> {{item.districtName}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="job-list-action card-view-btns">
+                                    <a class="viewit" href="javascript:void(0)"
+                                        (click)="ViewEvent(item.eventId)">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="event-creation ">
+    <div class="" *ngIf="EventDetail==1">
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" title="Back" (click)="BackToEventList()">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <div class="col-md-12">
+            <div class="job-description">
+                <div class="searchResults" id="">
+                    <ul class="joblist-wrapper">
+                        <li class="job-wrapper ps-relative">
+                            <h2 class="job-title fnt-20" style="text-transform:capitalize">
+                                {{EventViewData.eventName}}</h2>
+                            <p class="row">
+                                <label class="col-md-4">
+                                    <span class="text-strong ">Event Type : </span>
+                                    {{EventViewData.eventType}}
+                                </label>
+                                <label class="col-md-4">
+                                    <span class="text-strong ">Start Date : </span>
+                                    {{EventViewData.startDate}}
+                                </label>
+                                <label class="col-md-4">
+                                    <span class="text-strong">Start Time : </span>
+                                    {{EventViewData.startTime}}
+                                </label>
+                            </p>
+                            <p class="row">
+                                <label class="col-md-4">
+                                    <span class="text-strong ">End Date : </span>
+                                    {{EventViewData.endDate}}
+                                </label>
+                                <label class="col-md-4">
+                                    <span class="text-strong">End Time : </span>
+                                    {{EventViewData.endTime}}
+                                </label>
+                                <label class="col-md-4">
+                                    <span class="text-strong ">Venue : </span>
+                                    {{EventViewData.address}}
+                                </label>
+                            </p>
+                            <p class="row">
+                                <label class="col-md-4">
+                                    <span class="text-strong ">State : </span>
+                                    {{EventViewData.stateName}}
+                                </label>
+                                <label class="col-md-4">
+                                    <span class="text-strong">District : </span>
+                                    {{EventViewData.districtName}}
+                                </label>
+                            </p>
+                            <p class="row ">
+                                <label class="col-md-12">
+                                    <span class="text-strong ">Description : </span>
+                                    {{EventViewData.eventDescription}}
+                                </label>
+                            </p>
+                            <p class="text-right">
+                                <a href="javascript:void(0)" (click)="togglediv()" class="text-link">{{texttoggle}}
+                                </a>
+                            </p>
+                            <div class="cleafix margin-bottom-30"></div>
+                            <div class="row location-details-wrapper">
+                            </div>
+                            <div class="cleafix margin-bottom-20"></div>
+                            <div *ngIf="toggle">
+                                <div class="dash-head dash-head-2">
+                                    <p>Facilitated By Details</p>
+                                </div>
+                                <div class="cleafix margin-bottom-30"></div>
+                                <div class="row location-details-wrapper"
+                                    *ngFor="let facilited of EventViewData.lstEventFacilitated;let i=index">
+                                    <div class="form-group">
+                                        <div class="col-md-10 col-sm-12 col-md-offset-1">
+                                            <div class="event-logo m-b-10 ng-star-inserted">
+                                                <div>
+                                                    {{facilited.facilatedBy!=''&&
+                                                    facilited.facilatedBy!=null?facilited.facilatedBy:'NA'}}
+                                                </div>
+                                                <div>
+                                                    <img onError="this.src='../../../../assets/images/NoImage.png'"
+                                                        src="{{facilited.imagePath!=''?facilited.imagePath:'assets/images/NoImage.png'}}"
+                                                        class="img-responsive m-x-auto" alt="Image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cleafix margin-bottom-20"></div>
+                                <div class="dash-head dash-head-2">
+                                    <p>
+                                        Uploaded Event Document Details
+                                    </p>
+                                </div>
+                                <div class="cleafix margin-bottom-30"></div>
+                                <div class="row location-details-wrapper"
+                                    *ngFor="let poster of EventViewData.lstEventPoster;let i=index">
+                                    <div class="form-group">
+                                        <div class="col-md-10 col-sm-12 col-md-offset-1">
+                                            <div class="event-logo m-b-10 ng-star-inserted">
+                                                <div>
+                                                    <img onError="this.src='../../../../assets/images/NoImage.png'"
+                                                        src="{{poster.posterImagePath!=''?poster.posterImagePath:'assets/images/NoImage.png'}}"
+                                                        class="" alt="Image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cleafix margin-bottom-20"></div>
+                                <div class="dash-head dash-head-2">
+                                    <p>
+                                        Chief Guest Details
+                                    </p>
+                                </div>
+                                <div class="cleafix margin-bottom-30"></div>
+                                <div class="row location-details-wrapper"
+                                    *ngFor="let guest of EventViewData.lstEventGuest;let i=index">
+                                    <div class="label-normal ps-relative location-details">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <span class="text-strong">Chief Guest Name : </span>
+                                                        {{guest.guestName!=''?guest.guestName:'NA'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix margin-bottom-20"></div>
+                                    </div>
+                                </div>
+                                <div class="cleafix margin-bottom-20"></div>
+                                <div class="dash-head dash-head-2">
+                                    <p>Event Co-ordinator Detail</p>
+                                </div>
+                                <div class="cleafix margin-bottom-30"></div>
+                                <div class="row location-details-wrapper"
+                                    *ngFor="let codinate of EventViewData.lstEventCoordinateDetail;let i=index">
+                                    <div class="label-normal ps-relative location-details">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <span class="text-strong">Name : </span>
+                                                        {{codinate.name}}
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <span class="text-strong">Designation : </span>
+                                                        {{codinate.designation}}
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <span class="text-strong">Department : </span>
+                                                        {{codinate.department!=''?codinate.department:'NA'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <span class="text-strong">Email ID : </span>
+                                                        {{codinate.email}}
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <span class="text-strong">Mobile : </span>
+                                                        {{codinate.mobile}}
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <span class="text-strong">Remarks : </span>
+                                                        {{codinate.remarks!=''?codinate.remarks:'NA'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix margin-bottom-20"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="form-group">
+                <div class="col-md-2 col-sm-3">
+                    <span class="text-strong">Select Employer</span><span class="mandatory">*</span>
+                </div>
+                <div class="col-md-4 col-sm-3">
+                    <select class="form-control" [ngModel]="EmployerId"
+                        (change)="GetEmployerId($event.target.value,EventViewData)">
+                        <option value="" selected="selected">--Select--</option>
+                        <option *ngFor="let item of employerDetail" value="{{item.employerId}}">{{item.companyName}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="" id="cantable" *ngIf="showCandidateTable==1;">
+    <div class="" id="cantable">
+        <div class="col-md-12">
+            <div class="dash-head dash-head-2">
+                <p>Candidate List</p>
+            </div>
+            <div class="cleafix"></div>
+            <div class="all-jobs-list">
+                <div id="" class="searchResults">
+                    <div class="ui-widget-header ui-widget-header-r">
+                        <input #gb type="text" pInputText size="50" placeholder="Search">
+                    </div>
+                    <p-dataTable [(value)]="getcandidatereslist" [paginator]="true" [rows]="10" [pageLinks]="3"
+                        [rowsPerPageOptions]="[10,25,50]" [responsive]="true" [globalFilter]="gb" [loading]="loading">
+
+                        <p-column header="S. No." [style]="{'width':'50px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+
+                        <!-- <p-column field="candName" header="Candidate Name" [sortable]="true" [style]="{'width':'150px'}"></p-column> -->
+                        <p-column field="candName" header="Candidate Name" [sortable]="true"
+                            [style]="{'width':'100px'}">
+                            <ng-template let-ViewProfile="rowData" pTemplate type="body">
+                                <a href="javascript:void(0)" class="mandatory" title="View Details"
+                                    (click)="viewcandidateProfile(ViewProfile.sourceId==0?ViewProfile.candId:ViewProfile.sourceId,ViewProfile.source)">{{ViewProfile.candName}}
+                                </a>
+                            </ng-template>
+
+                        </p-column>
+                        <p-column field="EmployerName" header="Employer Name" [sortable]="true"
+                            [style]="{'width':'100px'}"></p-column>
+
+                        <p-column field="email" header="Email" [sortable]="true" [style]="{'width':'269px'}">
+                            <ng-template let-item="rowData" pTemplate type="body">
+
+                                {{item.email!=null && item.email!=''?item.email:'NA'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="mobile" header="Mobile" [sortable]="true" [style]="{'width':'100px'}">
+                        </p-column>
+                        <p-column field="gender" header="Gender" [style]="{'width':'100px'}" [sortable]="true">
+                            <ng-template field="dob" let-item="rowData" pTemplate type="body">
+                                {{item.gender ? item.gender : 'NA'}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="dob" header="DOB" [style]="{'width':'100px'}" [sortable]="true">
+                            <ng-template field="dob" let-DOB="rowData" pTemplate type="body">
+                                {{DOB.dob | date: 'dd/MM/yyyy'}}
+                                <!-- {{DOB.dob}} -->
+                            </ng-template>
+
+                        </p-column>
+
+
+                        <p-column field="stateName" header="State Name" [style]="{'width':'100px'}" [sortable]="true">
+                            <ng-template field="stateName" let-item="rowData" pTemplate type="body">
+                                {{item.stateName ? item.stateName : 'NA'}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="districtName" header="District Name" [style]="{'width':'100px'}"
+                            [sortable]="true">
+                            <ng-template field="districtName" let-item="rowData" pTemplate type="body">
+                                {{item.districtName ? item.districtName : 'NA'}}
+                            </ng-template>
+                        </p-column>
+
+
+                        <p-column field="source" header="Source" [style]="{'width':'100px'}" [sortable]="true">
+                        </p-column>
+
+                        <p-column field="designation" header="Designation" [sortable]="true"
+                            [style]="{'width':'100px'}">
+                            <ng-template field="designation" let-item="rowData" pTemplate type="body">
+                                {{item.designation ? item.designation : 'NA'}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column header="Offer Date" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite let-item="rowData">
+                                <label>
+                                    {{item.offerLetterDate}}
+                                </label>
+                            </ng-template>
+                        </p-column>
+
+                        <p-column header="Offer Joining Date" [sortable]="true" [style]="{'width':'150px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite let-item="rowData">
+                                <label>
+                                    {{item.CandidateJoiningDate}}
+                                </label>
+                            </ng-template>
+                        </p-column>
+
+                        <p-column header="Joining Date" [sortable]="true" [style]="{'width':'269px'}">
+                            <ng-template pTemplate="body" field="joiningDate" let-i="rowIndex" let-suite
+                                let-item="rowData">
+                                <label>
+                                    {{item.joiningDate?item.joiningDate:'NA'}}
+                                </label>
+                            </ng-template>
+                        </p-column>
+
+                        <p-column header="Status" [sortable]="true" [style]="{'width':'200px'}">
+                            <ng-template pTemplate="body" field="Status" let-i="rowIndex" let-suite let-item="rowData">
+                                <label class="lang-ellip">
+                                    {{item.Status?item.Status:'NA'}}
+                                </label>
+                            </ng-template>
+                        </p-column>
+
+                        <p-column header=" View Offer Letter" [sortable]="true" [style]="{'width':'100px'}">
+                            <ng-template pTemplate="body" let-i="rowIndex" let-suite let-item="rowData">
+                                <label>
+                                    <a class="pan-view" title="View offer letter"
+                                        (click)="openOfferLetter(item.candId)"><i class="fa fa-eye"
+                                            aria-hidden="true"></i></a>
+                                </label>
+                            </ng-template>
+                        </p-column>
+
+                    </p-dataTable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-CommonView-Layout></app-CommonView-Layout>

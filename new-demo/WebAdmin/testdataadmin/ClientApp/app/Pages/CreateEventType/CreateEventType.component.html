@@ -1,0 +1,210 @@
+<div [ngClass]="cardview=='1'?'show':'hide'">
+    <div>
+        <div class="dash-head" style="margin-top: 0">
+            <p>
+                Create Event Type List
+            </p>
+            <a href="javascript:void(0)" (click)="OpenCreateETform()" class="btn pull-right btn-back-reg">
+                Create Event Type
+            </a>
+        </div>
+
+        <div class="page-filters">
+            <h2>
+                <a href="javascript:void(0);">
+                    <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                    <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                </a>
+            </h2>
+            <form [formGroup]="FilterCreateET">
+                <div class="filter-wrapper">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-4">
+                            <label>Search Keywords<span></span></label>
+                            <input type="text" class="form-control" formControlName="GsearchD" placeholder="Search" />
+                        </div>
+                    </div>
+                    <div class="form-group text-center m-t-5">
+                        <button type="reset" class="btn btn-w-shadow no-rd" (click)="ResetSearchCreateETlist()">Reset</button>
+                        <button type="submit" class="btn btn-w-shadow no-rd filter-toggle" (click)="SearchCreateETlist(0,'',FilterCreateET.value)">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-12">
+            <div class="all-jobs-list">
+                <div class="searchResults" id="">
+                    <ul class="joblist-wrapper">
+                        <!-- <li class="job-wrapper ps-relative" *ngFor="let item of alluserdetail" [style.background-color]="item.ID==id ? '#d4d0d0' : 'none' "> -->
+                        <li class="job-wrapper ps-relative" *ngFor="let item of SearchCreateETlistResultUse">
+                                <ng-template #templateinactive>
+                                        <div class="modal-body text-center">
+                                            <p>Are you sure you want to Inactive this Event Type?</p>
+                                            <br />
+                                            <br />
+                                            <button type="button" class="btn yl-btn no-rd" (click)="Incativeeventtype(item)">Yes</button>
+                                            <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #templateactive>
+                                        <div class="modal-body text-center">
+                                            <p>Are you sure you want to Active this Event Type?</p>
+                                            <br />
+                                            <br />
+                                            <button type="button" class="btn yl-btn no-rd" (click)="Activeeventtype(item)">Yes</button>
+                                            <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                                        </div>
+                                    </ng-template>
+                            <!-- {{SearchCreateETlistResultUse|json}} -->
+                            <!-- <h2 class="job-title  lang-ellip" title={{item.FIRSTNAME}}>{{item.FIRSTNAME}} </h2> -->
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12 "><strong>Event Type Name : </strong><span>{{item.eventName}}
+                                            </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                              
+
+                                <div class="job-list-action card-view-btns">
+                                    <a class="viewit" href="javascript:void(0)" (click)="EditCreateET(item)" title="Edit"  *ngIf="item.isActive==true">Edit</a>
+                                    <!-- <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(templateinactive)"
+                                    *ngIf="item.ISACTIVE==1 && item.ID != Adminid" title="Inactive">Inactive</a> -->
+                                    <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(templateinactive)" *ngIf="item.isActive==true"
+                                        title="Inactive">Inactive</a>
+
+                                    <!-- <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(templateactive)"
+                                    *ngIf="item.ISACTIVE==0 && item.ID != Adminid" title="Active">Active</a> -->
+
+                                    <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(templateactive)"  *ngIf="item.isActive==false"
+                                        title="Active">Active</a>
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- **************Create Event Type form(Rajeev Jha-1174)************* -->
+<div *ngIf="(formview=='0')">
+    <div>
+        <div class="legend-text" style="margin-top: 0">
+            <span>
+                Create Event Type
+            </span>
+            <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="Close()">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="cleafix margin-bottom-15"></div>
+        <div class="col-md-12">
+            <form name="myform" [formGroup]="CreateET" (ngSubmit)="CreateETR(CreateET.value)">
+                <div class="edit-profile-wrapper">
+                    <div class="box-title ps-relative">
+                        <div class="job-list-action">
+                            <a class="viewit" href="javascript:void(0)" (click)="Close()" title="Close">Close</a>
+                        </div>
+                        <p class="box-title-content">
+                            Create Event Type Details
+                        </p>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="name" name="name" class="form-control" type="text" data-validation="name"
+                                    formControlName="name" 
+                                    maxlength="100" autocomplete="off" placeholder="Name">
+                                <span id="error_name" class="text-danger"></span>
+                                <div class="alert">
+                                    <errors [control]="CreateET.controls.name"></errors>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group m-t-10">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- **************Create Event Type form -End(Rajeev Jha-1174)************* -->
+
+
+<div *ngIf="(Editview=='0')">
+    <div>
+        <div class="legend-text" style="margin-top: 0">
+            <span>
+                Update Create Event Type 
+            </span>
+            <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="Close()">Back
+            </a>
+        </div>
+        <div class="cleafix margin-bottom-15"></div>
+        <div class="col-md-12">
+            <form name="myform" [formGroup]="CETUpdateform" (ngSubmit)="UpdateCET(CETUpdateform.value)">
+                <div class="edit-profile-wrapper">
+                    <div class="box-title ps-relative">
+                        <div class="job-list-action">
+                            <a class="viewit" href="javascript:void(0)" (click)="Close()" title="Close">Close</a>
+                        </div>
+                        <p class="box-title-content">
+                            Create Event Type Details
+                        </p>
+                    </div>
+                    <div class="box-content">
+                      
+                           
+                           
+                       
+                      
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                   Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input  class="form-control" type="text" data-validation="nameupdate"
+                                    formControlName="nameupdate" maxlength="100" 
+                                    autocomplete="off"    placeholder="Name">
+                                <div class="alert">
+                                    <errors [control]="CETUpdateform.controls.nameupdate"></errors>
+                                </div>
+                                <span id="error_username" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group m-t-10">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

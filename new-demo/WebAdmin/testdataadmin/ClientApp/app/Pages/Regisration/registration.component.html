@@ -1,0 +1,2368 @@
+<div *ngIf="(backbtn=='1')">
+    <div class="legend-text" *ngIf="(BackToDashboard)">
+        <a href="javascript:void(0)" *ngIf="BackToDashboard" title="Back To Dashboard" [routerLink]="'/Dashboard'"
+            class="btn pull-right btn-back-reg">
+            Back
+        </a>
+    </div>
+    <div class="dash-head">
+        <p>Company Registration</p>
+        <a href="javascript:void(0)" (click)="previous()" class="btn pull-right btn-back-reg">
+            Company Register
+        </a>
+    </div>
+</div>
+<div class="cleafix margin-bottom-15"></div>
+<div [ngClass]="(companyfilter=='1')?'show':'hide'">
+    <div class="page-filters">
+        <h2>
+            <a href="javascript:void(0);">
+                <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            </a>
+        </h2>
+        <form (submit)="allcarddata(0,'',FilterCompanyRegistration.value)" [formGroup]="FilterCompanyRegistration">
+            <div class="filter-wrapper">
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-6">
+                        <label>Login Type</label>
+                        <select class="form-control" formControlName="logintype">
+                            <option value="" selected>--Select--</option>
+                            <option value="Agency">Agency</option>
+                            <option value="Employer">Employer</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>Company Status</label>
+                        <select class="form-control" formControlName="CompanyStatus">
+                            <option value="" selected>--Select--</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- <div class="col-md-3 col-sm-6">
+                        <label>Documents Approved</label>
+                        <select class="form-control" formControlName="DocumentsApprove">
+                            <option value="" selected>--Select--</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div> -->
+
+                    <!-- <div class="col-md-3 col-sm-6">
+                        <label>User Status</label>
+                        <select class="form-control" formControlName="UserStatus">
+                            <option value="" selected>--Select--</option>
+                            <option value="AllApproveUser">All Approved</option>
+                            <option value="AllDisapproveUser">All Disapproved</option>
+                            <option value="PartialApproveUser">Partially Approved</option>
+                            <option value="PendingUser">Pending User</option>
+                        </select>
+                    </div> -->
+
+
+
+                    <div class="col-md-3 col-sm-6">
+                        <label>State</label>
+                        <select class="form-control" formControlName="StateiD"
+                            (change)="GetAllDistrict($event.target.value)">
+                            <option value="" selected>--Select--</option>
+                            <option *ngFor="let st of states" [value]="st.id">{{st.stateName}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>District</label>
+                        <select class="form-control" #val formControlName="DistrictID">
+                            <option value="" selected="selected">--Select--</option>
+                            <option *ngFor="let district of district1" [value]="district.id">{{district.districtName}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <label>Search Keywords<span></span></label>
+                        <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+                    </div>
+                </div>
+                <div class="form-group text-center margin-top-20 ps-relative">
+                    <button type="reset" class="btn btn-w-shadow no-rd" style="margin-right:10px;"
+                        (click)="allcarddatareset()">Reset</button>
+                    <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-12" *ngIf="(searchsts=='1')">
+        <div class="col-md-12 jd-detail job-wrapper searchResults">
+            <h4>Search Result</h4>
+            <div class="form-group">
+                <p class="col-md-4">
+                    <span class="text-strong">Login Type</span>: {{ShowPushData.logintype}}
+                </p>
+                <p class="col-md-4">
+                    <span class="text-strong">Company Status</span>: {{ShowPushData.CompanyStatus}}
+                </p>
+
+                <!-- <p class="col-md-4">
+                    <span class="text-strong">Documents Approved</span>: {{ShowPushData.DocumentsApprove}}
+                </p> -->
+
+                <!-- <p class="col-md-4">
+                    <span class="text-strong">User Status</span>: {{ShowPushData.UserStatus}}
+                </p> -->
+
+                <p class="col-md-4">
+                    <span class="text-strong">Search Keywords</span>: {{ShowPushData.JobKeyword}}
+                </p>
+                <p class="col-md-4">
+                    <span class="text-strong">State</span>: {{ShowPushData.StateiD}}
+                </p>
+                <p class="col-md-4">
+                    <span class="text-strong">District</span>: {{ShowPushData.DistrictID}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" *ngIf="(listing=='1')">
+
+    <div class="form-group">
+        <!-- <div class="col-md-8 col-sm-12 col-xs-12 col-md-offset-4 p-r-0">
+            <div class="legends">
+                <ul>
+                    <li><span class="l2"></span> All users approved</li>
+                    <li><span class="l3"></span> Users partial approved</li>
+                    <li><span class="l1"></span> All users disapproved</li>
+                    <li><span class="l4"></span> User pending</li>
+                </ul>
+            </div>
+        </div> -->
+
+        <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-8 p-r-0">
+            <div class="legends">
+                <ul>
+                    <li><span class="l2"></span> Active Company</li>
+                    <li><span class="l1"></span> Inactive Company</li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="all-jobs-list">
+        <div class="searchResults">
+            <ul class="joblist-wrapper">
+
+                <!-- <li class="job-wrapper ps-relative {{(item.totalusers==item.totappusers?'approved':'')|| (item.totappusers>='1' && item.totalusers!=item.totappusers?'posted':'') || (item.totalusers==item.totdisappusers?'disapproved':'')}}"
+                    *ngFor="let item of companyregisterdata" [style.background-color]="item.companyid==Companyid ? '#d4d0d0' : 'none' "> -->
+
+                <li class="job-wrapper ps-relative {{(item.companyIsActive==true?'approved':'')|| (item.companyIsActive==false?'disapproved':'')}}"
+                    *ngFor="let item of companyregisterdata"
+                    [style.background-color]="item.companyid==Companyid ? '#d4d0d0' : 'none' ">
+                    <!-- <li class="job-wrapper ps-relative" 
+                    *ngFor="let item of companyregisterdata" [style.background-color]="item.companyid==Companyid ? '#d4d0d0' : 'none' "> -->
+
+                    <div class="job-view fos">
+                        <div>
+                            <a *ngIf="item.comapanyimgname!=null && item.companyimagepath!=null"
+                                href="javascript:void(0)" target="_blank">
+                                <img class="img-thumbnail" height="50" width="50"
+                                    src="{{ item.comapanyimgname!='' && item.companyimagepath!=''?       item.companyimagepath:'assets/images/NoImage.png'}}"
+                                    onError="this.src='../assets/images/NoImage.png'">
+                            </a>
+                        </div>
+                        <div>
+                            <h2 class="job-title" title="{{item.companyname}}">{{ (item.companyname.length>20)?
+                                (item.companyname | slice:0:20)+'..':(item.companyname) }}</h2>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12"><strong>Login Type: </strong> {{item.logintype}}</div>
+                                    <!-- <div class="col-md-12"><strong>Email : </strong>
+                                        {{item.email?item.email:'NA'}}</div>
+                                    <div class="col-md-12"><strong>Mobile : </strong>
+                                        {{item.phoneno?item.phoneno:'NA'}}</div> -->
+                                    <div class="col-md-12"><strong>GSTIN: </strong> {{item.gstno?item.gstno:'NA'|
+                                        uppercase}}</div>
+                                    <div class="col-md-12"><strong>PAN: </strong> {{item.pancard?item.pancard:'NA' |
+                                        uppercase}}</div>
+                                    <div class="col-md-12">
+                                        <strong>State: </strong>
+                                        {{item.statename?item.statename:'NA'}}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <strong>District: </strong>
+                                        {{item.districtname?item.districtname:'NA'}}
+                                    </div>
+
+                                    <div class="col-md-12"><strong>Total users: </strong> {{item.totalusers}}</div>
+                                    <div class="col-md-12"><strong>Total Approved User: </strong> {{item.totappusers}}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <strong>Total Disapproved User: </strong>
+                                        {{item.totdisappusers}}
+                                    </div>
+                                    <div class="col-md-12"><strong>Total Work Location: </strong> {{item.totworkloc}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="job-list-action card-view-btns">
+                                    <a class="viewit" href="javascript:void(0)" (click)="viewdata(item.companyid)"
+                                        title="View">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div *ngIf="(CompanyRegister=='0')">
+    <div class="legend-text" style="margin-top: 0">
+        <span>
+            Company Register
+        </span>
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="Back()">
+            Back
+        </a>
+    </div>
+    <div class="cleafix margin-bottom-15"></div>
+    <div class="col-md-12">
+        <!-- *************Registration Form************** -->
+        <form name="myform" [formGroup]="rForm" (ngSubmit)="Registration(rForm.value)">
+            <div class="edit-profile-wrapper">
+                <div class="box-title ps-relative">
+                    <div class="job-list-action">
+                        <a class="viewit" href="javascript:void(0)" (click)="Back()" title="Close">Close</a>
+                    </div>
+                    <p class="box-title-content">
+                        Company Details
+                    </p>
+                </div>
+
+                <div class="box-content">
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Company Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <!-- <input id="cname" name="cname" class="form-control" type="text" data-validation="cname"
+                                formControlName="cname" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200" autocomplete="off" [attr.disabled]="!(isname=='' || isname=='false')? false : null"
+                                placeholder="Company Name"> -->
+                            <input id="cname" name="cname" class="form-control" type="text" data-validation="cname"
+                                formControlName="cname" maxlength="200" autocomplete="off"
+                                [attr.disabled]="!(isname=='' || isname=='false')? false : null"
+                                placeholder="Company Name">
+                            <span id="error_cname" class="text-danger"></span>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.cname"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>Login Type<span class="mandatory">*</span></label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" formControlName="logintype"
+                                [attr.disabled]="!(isname=='' || isname=='false')? false : null">
+                                <option value="" selected>--Select--</option>
+                                <option value="Agency">Agency</option>
+                                <option value="Employer">Employer</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.logintype"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="firstname" name="firstname" autocomplete="off" class="form-control" type="text"
+                                formControlName="firstname"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                placeholder="Name" maxlength="200">
+                            <div class="alert">
+                                <errors [control]="rForm.controls.firstname"></errors>
+                            </div>
+                            <span id="error_firstname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Last Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="lastname" name="lastname" class="form-control" type="text" data-validation="lastname"
+                                formControlName="lastname" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                autocomplete="off" placeholder="Last Name" maxlength="200">
+                            <div class="alert">
+                                <errors [control]="rForm.controls.lastname"></errors>
+                            </div>
+                            <span id="error_lastname" class="text-danger"></span>
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Designation
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input placeholder="Designation" id="Designation" name="Designation" class="form-control"
+                                type="text" data-validation="Designation" formControlName="Designation"
+                                autocomplete="off"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200">
+                            <div class="alert">
+                                <errors [control]="rForm.controls.Designation"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Email id
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input (change)="emailcheck()" class="form-control" type="text" data-validation="email"
+                                formControlName="email" maxlength="200" autocomplete="off" placeholder="Email"
+                                appBlockCopyPaste>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.email"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Mobile No.
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input (keyup)="mobilecheck()" placeholder="Mobile" class="form-control" type="text"
+                                data-validation="mobile" formControlName="mobile" maxlength="10"
+                                (keypress)="onlyNumber($event)" autocomplete="off" appBlockCopyPaste>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.mobile"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Username
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input (change)="usernamecheck()" class="form-control" maxlength="200" type="text"
+                                data-validation="username" formControlName="username" autocomplete="off"
+                                placeholder="Username" appBlockCopyPaste (keydown)="RestrictSpace($event)">
+                            <div class="alert">
+                                <errors [control]="rForm.controls.username"></errors>
+                            </div>
+                            <span id="error_username" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Password
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="password" name="password" class="form-control" type="password"
+                                data-validation="password" formControlName="password" maxlength="24"
+                                autocomplete="new-password" placeholder="Password">
+                            <div class="hello-new">
+                                <img src="../../../assets/img/info.png" width="20" class="tool-new-img">
+                                <p class="tool-new-pass">
+                                    Atleast 1 Digit.<br>
+                                    Atleast 1 small-case letter.<br>
+                                    Atleast 1 Capital letter.<br>
+                                    Atleast 1 Special character.<br>
+                                    Length should be between 6-24 characters.
+                                </p>
+                            </div>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.password"></errors>
+                            </div>
+                            <span id="error_password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                GSTIN
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="gst" name="gst" class="form-control text-uppercase" type="text"
+                                data-validation="gst" formControlName="gst" (change)="gstncheck($event)"
+                                autocomplete="off" placeholder="GSTIN" maxlength="15" appBlockCopyPaste #input
+                                (input)="input.value=$event.target.value.toUpperCase()">
+                            <div class="alert">
+                                <errors [control]="rForm.controls.gst"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align:center"><b>OR</b></p>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                PAN
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="pancard" name="pancard" class="form-control text-uppercase" type="text"
+                                data-validation="pancard" maxlength="10" formControlName="pancard"
+                                (keyup)="pancheck($event)" autocomplete="off"
+                                [attr.disabled]="!(isPan=='' || isPan=='false')? false : null" placeholder="PAN"
+                                appBlockCopyPaste>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.pancard"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                State
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" formControlName="StateiD"
+                                (change)="GetAllDistrict($event.target.value)">
+                                <option value="" selected>--Select--</option>
+                                <option *ngFor="let st of states" [value]="st.id">{{st.stateName}}</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.StateiD"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                District
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" #val formControlName="DistrictID">
+                                <option value="" selected="selected">--Select--</option>
+                                <option *ngFor="let district of district1" [value]="district.id">
+                                    {{district.districtName}}</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="rForm.controls.DistrictID"></errors>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group m-t-10">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-w-shadow no-rd" [disabled]="!rForm.valid">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="(RegistrationView=='1')" class="col-md-12">
+    <div class="dash-head" *ngIf="(Registrationbk=='0')">
+        <p>Company Details</p>
+        <a href="javascript:void(0)" title="Go to Homepage" (click)="singleback()" class="btn pull-right btn-back-reg">
+            Back
+        </a>
+    </div>
+
+    <!-- Company Details start here -->
+    <div class="cleafix"></div>
+    <div class="update-profile">
+        <div *ngIf="(RegistrationView=='1')">
+            <div class="jd-detail job-wrapper searchResults ps-relative">
+                <ng-template #activecompanytemplate>
+                    <div class="modal-body text-center">
+                        <p>Are you sure you want to Active this Company?</p>
+                        <br />
+                        <br />
+                        <button type="button" class="btn yl-btn no-rd"
+                            (click)="ActiveInactiveCompany(CompanyData.companyId,CompanyData.companystatus)">Yes</button>
+                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                    </div>
+                </ng-template>
+                <ng-template #inactivecompanytemplate>
+                    <div class="modal-body text-center">
+                        <p>Are you sure you want to Inactive this Company?</p>
+                        <br />
+                        <br />
+                        <button type="button" class="btn yl-btn no-rd"
+                            (click)="ActiveInactiveCompany(CompanyData.companyId,CompanyData.companystatus)">Yes</button>
+                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                    </div>
+                </ng-template>
+
+
+                <ng-template #verifycompanytemplate>
+                    <div class="modal-body text-center">
+                        <p>Are you sure you want to Verify this Company?</p>
+                        <br />
+                        <br />
+                        <button type="button" class="btn yl-btn no-rd"
+                            (click)="VerifyCompany(CompanyData.companyId,CompanyData.isverifiedcomp)">Yes</button>
+                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                    </div>
+                </ng-template>
+                <ng-template #notverifycompanytemplate>
+                    <div class="modal-body text-center">
+                        <p>Are you sure you want to Not Verify this Company?</p>
+                        <br />
+                        <br />
+                        <button type="button" class="btn yl-btn no-rd"
+                            (click)="VerifyCompany(CompanyData.companyId,CompanyData.isverifiedcomp)">Yes</button>
+                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                    </div>
+                </ng-template>
+
+                <div class="job-view">
+                    <div>
+                        <a *ngIf="CompanyData.image!=null && CompanyData.imgName!=null" href="{{CompanyData.image}}"
+                            target="_blank">
+                            <img src="{{ CompanyData.image!=null?CompanyData.image:'assets/images/NoImage.png'}}"
+                                onError="this.src='../assets/images/NoImage.png'">
+                        </a>
+                        <a *ngIf="CompanyData.image==null || CompanyData.imgName==null" href="javascript:void(0)">
+                            <img src="{{ CompanyData.image!=null && CompanyData.imgName!=null?CompanyData.image:'assets/images/NoImage.png'}}"
+                                onError="this.src='../assets/images/NoImage.png'">
+                        </a>
+                    </div>
+                    <div>
+                        <div class="form-group m-b-0">
+                            <!-- <div class="col-md-4 col-sm-4">
+                                <h6 class="m-b-0 job-title text-uppercase">
+                                    Company Name
+                                </h6>
+                            </div> -->
+                            <!-- <div class="col-md-8 col-sm-8"> -->
+                            <div class="col-md-12 p-l-0">
+                                <h6 class="m-b-0 job-title text-uppercase col-md-12">
+                                    <span title={{CompanyData.companyName}}>
+                                        {{CompanyData.companyName==null?'NA':CompanyData.companyName}}
+                                    </span>
+                                </h6>
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                        <div _ngcontent-c4 class="job-list-action">
+                            <a _ngcontent-c4 class="postit" href="javascript:void(0)"
+                                (click)="UpdateCompany(CompanyData.companyId)" title="Edit"
+                                *ngIf="CompanyData.companystatus==true">Edit</a>
+                        </div>
+                        <div class="form-group m-t-10">
+                            <div class="col-md-4 col-sm-4">
+                                <span class="text-strong"> Tagline</span>
+                            </div>
+                            <div class="col-md-8 col-sm-8">
+                                {{CompanyData.tagLine==null||CompanyData.tagLine==''?'NA':CompanyData.tagLine}}
+                            </div>
+                        </div>
+
+
+                        <div class="form-group m-t-10">
+                            <div class="col-md-4 col-sm-4">
+                                <span class="text-strong"> Short Name</span>
+                            </div>
+                            <div class="col-md-8 col-sm-8">
+                                {{CompanyData.companyShortName==null?'NA':CompanyData.companyShortName}}
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> Login Type</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        {{CompanyData.loginType==null?'NA':CompanyData.loginType}}
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> Email id</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        {{CompanyData.email==null?'NA':CompanyData.email}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> Mobile No.</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        <span>{{CompanyData.mobile==null?'NA':CompanyData.mobile}}</span>
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> Landline No.</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        <span>{{CompanyData.landLineNo==null || CompanyData.landLineNo ==
+                            ''?'NA':CompanyData.landLineNo}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong">GSTIN</span>
+                    </div>
+                    <div class="col-md-3 col-sm-8">
+                        <span class="text-uppercase">
+                            {{
+                            CompanyData.gstn==null || CompanyData.gstn== ''
+                            ?'NA':CompanyData.gstn
+                            }}
+                        </span>
+                        <a *ngIf="CompanyData.gstinImage!=null && CompanyData.gstinImage!=''"
+                            class="pan-view pull-right" target="_blank" title="View GSTIN Image"
+                            href="{{CompanyData.gstinImage}}">
+                            <i aria-hidden="true" class="fa fa-eye"></i>
+                        </a>
+                        <a *ngIf="CompanyData.gstinImage==null" href="javascript:void(0)" class="pan-view pull-right"
+                            target="_blank" title="View GSTIN Image">
+                        </a>
+                    </div>
+                    <div class="col-md-2 col-md-offset-1 col-sm-4">
+                        <span class="text-strong">PAN</span>
+                    </div>
+                    <div class="col-md-3 col-sm-8">
+                        <span class="text-uppercase">{{CompanyData.pan==null?'NA':CompanyData.pan}}</span>
+                        <a *ngIf="CompanyData.panImage!=null && CompanyData.panImage!=''" class="pan-view pull-right"
+                            target="_blank" title="View PAN Image" href="{{CompanyData.panImage}}">
+
+                            <i aria-hidden="true" class="fa fa-eye"></i>
+                        </a>
+                        <a *ngIf="CompanyData.panImage==null" href="javascript:void(0)" class="pan-view pull-right"
+                            target="_blank" title="View PAN Image">
+                        </a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong">Website Address</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        {{CompanyData.website==null || CompanyData.website == ''?'NA':CompanyData.website}}
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> Industry</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        {{CompanyData.industryType==null?'NA':CompanyData.industryType}}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> State</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        {{CompanyData.stateName==null?'NA':CompanyData.stateName}}
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong">District</span>
+                    </div>
+                    <div class="col-md-4 col-sm-8">
+                        {{CompanyData.districtName==null?'NA':CompanyData.districtName}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> Description</span>
+                    </div>
+                    <div class="col-md-9 col-sm-8" align="justify">
+                        {{CompanyData.description==null || CompanyData.description == ''?'NA':CompanyData.description}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong"> About Company</span>
+                    </div>
+                    <div class="col-md-9 col-sm-8" align="justify">
+                        {{CompanyData.aboutCompany==null ||
+                        CompanyData.aboutCompany == ''?'NA':CompanyData.aboutCompany}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong">Office Address</span>
+                    </div>
+                    <div class="col-md-10 col-sm-8">
+                        {{CompanyData.officeAddress==null?'NA':CompanyData.officeAddress}}
+                    </div>
+                </div>
+
+                <!-- <div class="form-group">
+                    <div class="col-md-2 col-sm-4">
+                        <span class="text-strong">Google Map Address</span>
+                    </div>
+                    <div class="col-md-10 col-sm-8">
+                        {{CompanyData.userlocmapaddress==null?'NA':CompanyData.userlocmapaddress}}
+                    </div>
+                </div> -->
+
+
+                <div class="form-group">
+                    <div class="job-list-action card-view-btns">
+                        <div class="col-md-12 text-center"
+                            *ngIf="showSectorskillForm=='0'&& ShowCompanyWorkLocation=='1'">
+                            <a href="javascript:void(0)" class="postit"
+                                (click)="getallprofilecompany(CompanyData.companyId)"
+                                *ngIf="CompanyData.companystatus==true && CompanyData.noofworklocation!=0">
+                                View
+                                Work Location
+                            </a>
+                            <a href="javascript:void(0)" class="viewit" (click)="Addsectorbutton()"
+                                *ngIf="CompanyData.companystatus==true">
+                                Add Work
+                                Location
+                            </a>
+                            <!-- <a *ngIf="CompanyData.isverifiedcomp==false" class="postit" href="javascript:void(0)" title="Verify Company"
+                                (click)="PushedTemplated(verifycompanytemplate)">Not Verify</a>
+                            <a *ngIf="CompanyData.isverifiedcomp==true" class="postit" href="javascript:void(0)" title="Not Verify Company"
+                                (click)="PushedTemplated(notverifycompanytemplate)">Verify</a> -->
+
+                            <!-- <a class="postit" href="javascript:void(0)" title="Approve Documents" data-toggle="modal"
+                                data-target="#verifydocs" (click)="getCompanyId(CompanyData.companyId,CompanyData.ispanverified,CompanyData.isgstnverified)"
+                                *ngIf="CompanyData.companystatus==true">Approve
+                                Documents</a> -->
+
+                            <a class="postit" href="javascript:void(0)" title="Approve Documents"
+                                (click)="PushedTemplatedDocumentApprove(verifydocs,CompanyData)"
+                                *ngIf="CompanyData.companystatus==true">Approve
+                                Documents</a>
+
+                            <a *ngIf="CompanyData.companystatus==false" class="postit" href="javascript:void(0)"
+                                title="Active Company" (click)="PushedTemplated(activecompanytemplate)">Active</a>
+                            <a *ngIf="CompanyData.companystatus==true" class="viewit" href="javascript:void(0)"
+                                title="Inactive Company" (click)="PushedTemplated(inactivecompanytemplate)">Inactive</a>
+
+                            <!-- <button *ngIf="CompanyData.companystatus==true && CompanyData.loginType=='Employer' && CompanyData.noofsectorskill > 0" class="btn postit" title="Add Sector Trade"
+                                 [disabled]="(CompanyData.noofsectorskill > 0)">Add
+                                Sectors and Skills/Roles</button> -->
+
+                            <button *ngIf="CompanyData.companystatus==true" class="btn postit" title="Add Sector Trade"
+                                (click)="addsectortrade()"
+                                [disabled]="(CompanyData.loginType=='Employer' && CompanyData.noofsectorskill > 0)">Add
+                                Sectors and Skills/Roles</button>
+
+                            <a *ngIf="CompanyData.companystatus==true && CompanyData.noofsectorskill > 0" class="viewit"
+                                href="javascript:void(0)" title="View Sector Trade"
+                                (click)="Viewsectortrade(CompanyData.companyId)">View
+                                Sectors and Skills/Roles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit-profile-wrapper" *ngIf="ViewSectorTrade==1">
+        <div class="box-title ps-relative">
+            <div class="job-list-action">
+                <a class="viewit" (click)="exitSectorForm()" href="javascript:void(0)" title="Close">Close</a>
+            </div>
+            <p class="box-title-content">
+                Sectors and Skills/Roles I hire for
+            </p>
+        </div>
+        <div class="alert alert-warning" *ngIf="skilsdetails?.length == 0">
+            No record found........
+        </div>
+        <div class="all-jobs-list update-profile">
+            <div id="" class="searchResults">
+                <ul class="joblist-wrapper" *ngIf="skilsdetails?.length > 0">
+                    <li class="job-wrapper ps-relative" *ngFor="let skildeatails of skilsdetails;let i=index">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2 class="job-title">I hire for</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12"><strong>Industries : </strong> {{ skildeatails.industryName }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12"><strong>Functional Area : </strong> {{
+                                    skildeatails.functionalAreaName }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12"><strong>Levels I hire for : </strong> <span
+                                        *ngFor="let hirefordata1 of skildeatails.levelsihirefor; let isLast = last">{{hirefordata1!=''?hirefordata1.hiringName
+                                        :''}}{{isLast == true ? '' : ', '}} </span></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12"><strong>Client I hire for : </strong> {{
+                                    skildeatails.clientiHireFor }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12"><strong>Skills/Roles I hire for : </strong> {{
+                                    skildeatails.skillsRoles }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="job-list-action card-view-btns">
+                                <a class="postit" href="javascript:void(0)" title="Edit"
+                                    (click)="editsectordetails(skildeatails.skillId, skildeatails.industryId,skildeatails.functionaAreaId,skildeatails.levelsihirefor,skildeatails.clientiHireFor,skildeatails.skillsRoles)">Edit</a>
+                                <a class="viewit" href="javascript:void(0)"
+                                    (click)="confirmBox(confirm,skildeatails.skillId)" title="Delete">Delete</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #confirm>
+        <div class="modal-body text-center">
+            <p>Are you sure you want to delete sectors and skills/roles?</p>
+            <br />
+            <br />
+            <button type="button" class="btn yl-btn no-rd" (click)="deletesectordetails()">Yes</button>
+            <button type="button" class="btn bl-btn no-rd" (click)="declineBox()">No</button>
+        </div>
+    </ng-template>
+
+    <form [formGroup]="sectortradeskils" *ngIf="SectorAndSkillForm=='1'">
+        <div class="edit-profile-wrapper">
+            <div class="box-title ps-relative">
+                <div class="job-list-action">
+                    <a class="viewit" (click)="exitSectorForm()" href="javascript:void(0)" title="Close">Close</a>
+                </div>
+                <p class="box-title-content">
+                    Sectors and Skills/Roles I hire for
+                </p>
+            </div>
+            <div class="box-content">
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-4 text-right">
+                        <label>Industrial Area<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-7">
+                        <select class="form-control" required formControlName="industries">
+                            <option value="" class="" selected="selected"> -- Select --</option>
+                            <option *ngFor="let ind of industialrea" value="{{ind.id}}">{{ind.industryName}}</option>
+                        </select>
+                        <errors [control]="sectortradeskils.controls.industries"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-4 text-right">
+                        <label>Functional Area<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-7">
+                        <select class="form-control" required formControlName="functionalareas">
+                            <option value="" class="" selected="selected">-- Select --</option>
+                            <option *ngFor="let farea of functionalarea" [value]="farea.id">{{farea.functionalAreaName}}
+                            </option>
+                        </select>
+                        <errors [control]="sectortradeskils.controls.functionalareas"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-4 text-right">
+                        <label>Levels I hire for<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-7">
+                        <!-- <select class="form-control" required formControlName="levelsihirefor">
+                            <option value="" class="" selected="selected">-- Select --</option>
+                            <option *ngFor="let hlevel of gethiringlevel" [value]="hlevel.id">{{hlevel.hiringName}}</option>
+                        </select>
+                        <errors [control]="sectortradeskils.controls.levelsihirefor"></errors> -->
+
+                        <ng-multiselect-dropdown [placeholder]="'Please select level'" [data]="gethiringlevel"
+                            formControlName="levelsihirefor" [settings]="dropdownSettings"
+                            (onDeSelect)="onItemDeSelect($event)" (onSelect)="onItemSelect($event)"
+                            (onSelectAll)="onSelectAll($event)">
+                        </ng-multiselect-dropdown>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-4 text-right">
+                        <label>Client I hire for<span class="required-field">*</span> </label>
+                    </div>
+                    <div class="col-md-6 col-sm-7">
+                        <input required
+                            oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                            type="text" class="form-control" formControlName="clientihirefor" maxlength="250"
+                            placeholder="Client I hire for" />
+                        <errors [control]="sectortradeskils.controls.clientihirefor"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-4 text-right">
+                        <label>Skills/Roles I hire for<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-7">
+                        <input required
+                            oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                            type="text" class="form-control" formControlName="skillsroles" maxlength="250"
+                            placeholder="Skills/Roles I hire for" />
+                        <input type="text" style="display:none !important" class="form-control"
+                            style="display:none !important" formControlName="ID" [value]="" />
+                        <input type="text" style="display:none !important" class="form-control" formControlName="STATUS"
+                            [value]="" />
+                        <errors [control]="sectortradeskils.controls.skillsroles"></errors>
+                    </div>
+                </div>
+                <div class="form-group m-t-10">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-w-shadow no-rd" *ngIf="CompanyData.loginType=='Employer' && addsector==0"
+                            type="button" [disabled]="!(sectortradeskils.valid)" (click)="employer_save()">Save</button>
+
+                        <button class="btn btn-w-shadow no-rd" *ngIf="CompanyData.loginType=='Agency' && addsector==0"
+                            type="button" [disabled]="!(sectortradeskils.valid)" (click)="employer_save()">Save</button>
+
+                        <!-- <button class="btn btn-w-shadow no-rd" *ngIf="CompanyData.loginType=='Agency' && addsector==0"
+                            type="button" [disabled]="!(sectortradeskils.valid)" (click)="agency_save()">Add</button> -->
+                        <button class="btn btn-w-shadow no-rd" *ngIf="addsector==1" type="button"
+                            [disabled]="!(sectortradeskils.valid )" (click)="employer_save()">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div *ngIf='sectorclose==1'>
+        <div *ngIf="skilsshow?.length > 0">
+            <table *ngIf="skilsshow?.length > 0" class="table table-bordered table-striped">
+                <thead class="bg-info">
+                    <tr>
+                        <th>Industrial Area</th>
+                        <th>Functional Area</th>
+                        <th>Levels I hire for</th>
+                        <th>Client I hire for</th>
+                        <th>Skills/Roles I hire for</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let skil of skilsshow;let i=index">
+                        <td>{{ skil.industries }} </td>
+                        <td>{{ skil.functionalareas }} </td>
+                        <td>{{ skil.clientihirefor }}</td>
+                        <td>{{ skil.levelsihirefor}}</td>
+                        <td>{{ skil.skillsroles }}</td>
+                        <td><a class="mandatory" href="javascript:void(0)" (click)="PushedTemplate(sectortradetemplate)"
+                                title="Remove">Remove</a></td>
+                        <ng-template #sectortradetemplate>
+                            <div class="modal-body text-center">
+                                <p>Do you want to remove this Sector?</p>
+                                <br />
+                                <br />
+                                <button type="button" class="btn yl-btn no-rd"
+                                    (click)="OnRemoveSector($event)">Yes</button>
+                                <button type="button" (click)="declineBox1()" class="btn bl-btn no-rd">No</button>
+                            </div>
+                        </ng-template>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="col-md-12 text-center m-t-10">
+                <button class="btn btn-w-shadow no-rd" (click)="sectortradesave()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="modal fade" id="verifydocs" role="dialog"> -->
+    <ng-template #verifydocs>
+        <div class="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Company Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>Name:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.companyName==null?'NA':companydetails.companyName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>State:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.stateName==null?'NA':companydetails.stateName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>District:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.districtName==null?'NA':companydetails.districtName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>Industry:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.industryType==null?'NA':companydetails.industryType">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>Description:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.description==null?'NA':companydetails.description">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>Office Address:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.officeAddress==null?'NA':companydetails.officeAddress">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>GSTIN:</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.gstn==null?'NA':companydetails.gstn">
+                                </div>
+                                <div class="col-md-4">
+                                    <a *ngIf="companydetails.gstinImage!=null" href="{{ companydetails.gstinImage}}"
+                                        target="_blank"><img class="img-thumbnail" height="50px" width="50px"
+                                            src="{{ companydetails.gstinImage!=null?companydetails.gstinImage:'assets/images/NoImage.png'}}"
+                                            onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                    <a *ngIf="companydetails.gstinImage==null" href="javascript:void(0)"><img
+                                            class="img-thumbnail" height="50px" width="50px"
+                                            src="{{ companydetails.gstinImage!=null?companydetails.gstinImage:'assets/images/NoImage.png'}}"
+                                            onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                    &nbsp;&nbsp;<input
+                                        *ngIf="(GSTINstatus==null || GSTINstatus==0) && companydetails.gstinImage!=null"
+                                        type="checkbox" (change)="getGstValue($event)">
+
+                                    <input *ngIf="GSTINstatus==1 && companydetails.gstinImage!=null" type="checkbox"
+                                        checked disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 text-right">
+                                    <label>Pan:</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input readonly type="text" class="form-control"
+                                        [value]="companydetails.pan==null?'NA':companydetails.pan">
+                                </div>
+                                <div class="col-md-4">
+                                    <a *ngIf="companydetails.panImage!=null" href="{{companydetails.panImage}}"
+                                        target="_blank"><img class="img-thumbnail" height="50" width="50"
+                                            src="{{ companydetails.panImage!=null?companydetails.panImage:'assets/images/NoImage.png'}}"
+                                            onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                    <a *ngIf="companydetails.panImage==null" href="javascript:void(0)"><img
+                                            class="img-thumbnail" height="50" width="50"
+                                            src="{{ companydetails.panImage!=null?companydetails.panImage:'assets/images/NoImage.png'}}"
+                                            onError="this.src='../assets/images/NoImage.png'"></a>
+
+                                    &nbsp;&nbsp;<input
+                                        *ngIf="(PANstatus==null || PANstatus==0) && companydetails.panImage!=null"
+                                        type="checkbox" (change)="getPanValue($event)">
+                                    <input *ngIf="PANstatus==1 && companydetails.panImage!=null" type="checkbox"
+                                        disabled checked>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input *ngIf="(pansts==true || gstinsts == true)" type="button" value="Approve"
+                                class="btn btn-w-shadow no-rd" mwlConfirmationPopover [popoverTitle]="popoverTitle"
+                                [popoverMessage]="popoverMessage" placement="top"
+                                (confirm)="confirmClicked(companydetails.companyId)" (cancel)="cancelClicked()">
+                            <!-- <button type="button" class="btn btn-w-shadow no-rd" data-dismiss="modal" (click="close()")>Close</button> -->
+                            <button type="button" class="btn btn-w-shadow no-rd" (click)="close()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <!-- </div> -->
+
+
+    <!-- Company Details end here -->
+    <!-- User Details Start here -->
+    <div *ngIf="ShowUsers==1">
+        <div class="dash-head dash-head-2" *ngIf="(Registrationbk=='0')">
+            <p>User Detail</p>
+            <a href="javascript:void(0)" title="Add User" (click)="AddUser(CompanyData.companyId)"
+                class="btn pull-right btn-back-reg" *ngIf="CompanyData.companystatus==true">
+                Add User
+            </a>
+        </div>
+        <div class="col-md-12">
+            <div class="all-jobs-list">
+                <div class="searchResults">
+                    <ul class="joblist-wrapper">
+                        <li class="job-wrapper ps-relative " *ngFor="let item of companyregisterdatashow">
+                            <!-- {{item|json}} -->
+                            <div>
+                                <ng-template #template>
+                                    <div class="modal-body text-center">
+                                        <p>Are you sure you want to approve this User?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd"
+                                            (click)="ApproveDisapproveUser(item.USERID,item.ISVERIFIED)">Yes</button>
+                                        <button type="button" (click)="declineBox()"
+                                            class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template #templated>
+                                    <div class="modal-body text-center">
+                                        <p>Are you sure you want to disapprove this User?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd"
+                                            (click)="ApproveDisapproveUser(item.USERID,item.ISVERIFIED)">Yes</button>
+                                        <button type="button" (click)="declineBox()"
+                                            class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #activeusertemplate>
+                                    <div class="modal-body text-center">
+                                        <p>Are you sure you want to Active this User?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd"
+                                            (click)="ActiveInactiveUser(item.USERID,item.USERSTATUS)">Yes</button>
+                                        <button type="button" (click)="declineBox()"
+                                            class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #inactiveusertemplate>
+                                    <div class="modal-body text-center">
+                                        <p>Are you sure you want to Inactive this User?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd"
+                                            (click)="ActiveInactiveUser(item.USERID,item.USERSTATUS)">Yes</button>
+                                        <button type="button" (click)="declineBox()"
+                                            class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template #defaultusertemplate>
+                                    <div class="modal-body text-center">
+                                        <p>Are you sure you want to Marked as Owner this User?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd"
+                                            (click)="DefaultUser(item.Companyid,item.USERID,item.USERSTATUS,item.ISOWNERSTATUS,item.ISVERIFIED)">Yes</button>
+                                        <button type="button" (click)="declineBox()"
+                                            class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12"><strong>Name: </strong> <span>{{item.FirstName}}</span></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>Username: </strong> <span>{{item.USERNAME}}</span>
+                                    </div>
+                                    <div class="col-md-6"><strong>Designation: </strong>
+                                        <span>{{item.DESIGNATION}}</span></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>Email id: </strong> <span>{{item.EMAIL}}</span></div>
+                                    <div class="col-md-6"><strong>Mobile No.: </strong> <span>{{item.PHONENO}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>State: </strong> <span>{{item.statename ?
+                                            item.statename:'NA'}}</span></div>
+                                    <div class="col-md-6"><strong>District: </strong> <span>{{item.districtname ?
+                                            item.districtname:'NA'}}</span></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="job-list-action card-view-btns">
+                                    <a href="javascript:void(0)" class="viewit" (click)="PushedTemplate(template)"
+                                        *ngIf="item.ISVERIFIED==0 && CompanyData.companystatus==true &&item.USERSTATUS==1"
+                                        title="Approve User">Approve</a>
+                                    <a href="javascript:void(0)" class="viewit" (click)="PushedTemplated(templated)"
+                                        *ngIf="item.ISVERIFIED==1 && CompanyData.companystatus==true && item.USERSTATUS==1"
+                                        title="Disapprove User">Disapprove</a>
+
+                                    <a class="postit" href="javascript:void(0)" (click)="EditCompanyRegis(item.USERID)"
+                                        *ngIf="(EditButton=='1' && item.ISVERIFIED==0 &&CompanyData.companystatus==true && item.USERSTATUS==1)"
+                                        title="Edit">Edit</a>
+                                    <a href="javascript:void(0)" [ngClass]="(item.ISVERIFIED==1)?'postit':'viewit'"
+                                        (click)="updatePasswordId(item.USERID)" title="Update Password"
+                                        data-toggle="modal" data-target="#updatepassword"
+                                        *ngIf="CompanyData.companystatus==true && item.USERSTATUS==1">
+                                        Update Password
+                                    </a>
+                                    <a *ngIf="item.USERSTATUS==0 && CompanyData.companystatus==true" class="postit"
+                                        href="javascript:void(0)" title="Active User"
+                                        (click)="PushedTemplated(activeusertemplate)">Active</a>
+                                    <a *ngIf="item.USERSTATUS==1 && CompanyData.companystatus==true" class="postit"
+                                        href="javascript:void(0)" title="Inactive User"
+                                        (click)="PushedTemplatedApproval(inactiveusertemplate,item.ISOWNERSTATUS)">Inactive</a>
+
+                                    <a *ngIf="item.USERSTATUS==1 && CompanyData.companystatus==true && item.ISOWNERSTATUS==0"
+                                        class="viewit" href="javascript:void(0)" title="Marked Owner"
+                                        (click)="PushedTemplated(defaultusertemplate)">Marked
+                                        Owner</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- User Details End here -->
+</div>
+<!-- ****************password model starts from here***************** -->
+<div class="modal fade" id="updatepassword" role="dialog" *ngIf="updpassword=='1'">
+    <div class="modal-dialog roj-admin-login-otp">
+        <div class="modal-content box-shadow-0">
+            <div>
+                <h2>Update Password</h2>
+                <button type="button" (click)="resetform()" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div>
+                <form name="myform" [formGroup]="changepasswordForm">
+                    <div class="group-wrapper new-group">
+                        <input id="password" name="password" class="form-control" type="password"
+                            data-validation="password" formControlName="password" maxlength="24">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <errors> </errors>
+                        <label>Password <span class="mandatory">*</span></label>
+                        <div class="hello-new1">
+                            <img src="../../../assets/img/info.png" width="20" class="tool-new-img">
+                            <p class="tool-new-pass">
+                                Atleast 1 Digit.<br>
+                                Atleast 1 small-case letter.<br>
+                                Atleast 1 Capital letter.<br>
+                                Atleast 1 Special character.<br>
+                                Length should be between 6-24 characters.
+                            </p>
+                        </div>
+                        <div class="alert new-alert">
+                            <errors [control]="changepasswordForm.controls.password"></errors>
+                        </div>
+                        <span id="error_password" class="text-danger"></span>
+                    </div>
+                    <div class="group-wrapper">
+                        <input id="cnfpassword" name="cnfpassword" class="form-control" type="password"
+                            data-validation="cnfpassword" formControlName="cnfpassword" maxlength="24">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <errors> </errors>
+                        <label>Confirm Password<span class="mandatory">*</span></label>
+                    </div>
+                    <div class="form-group margin-bottom-40">
+                        <button (click)="changepassword(changepasswordForm.value)" class="btn btn-w-shadow no-rd">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***********password modal ends here************* -->
+
+<div *ngIf="(UpdateRegisterform=='0')">
+    <div class="legend-text" style="margin-top: 0">
+        <span>
+            User Update
+        </span>
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="updateBack()">
+            <!-- <i class="fa fa-arrow-left" aria-hidden="true"></i> -->
+            Back
+        </a>
+    </div>
+    <div class="cleafix margin-bottom-15"></div>
+    <div class="col-md-12">
+        <!-- ************* User Update Form********** -->
+        <form name="myform" [formGroup]="rFormupdate" (ngSubmit)="Registrationupdate(rFormupdate.value)">
+            <div class="edit-profile-wrapper">
+                <div class="box-title ps-relative">
+                    <div class="job-list-action">
+                        <a class="viewit" href="javascript:void(0)" (click)="updateBack()" title="Close">Close</a>
+                    </div>
+                    <p class="box-title-content">
+                        User Details
+                    </p>
+                </div>
+                <div class="box-content">
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Company Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="cname" name="cname" class="form-control" type="text" data-validation="cname"
+                                formControlName="cname"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200" [attr.disabled]="!(isname=='' || isname=='false')? false : null">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.cname"></errors>
+                            </div>
+                            <span id="error_cname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>Login Type <span class="mandatory">*</span></label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" formControlName="logintype"
+                                [attr.disabled]="!(isname=='' || isname=='false')? false : null">
+                                <option value="" selected readonly>--Select--</option>
+                                <option value="Agency">Agency</option>
+                                <option value="Employer">Employer</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.logintype"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="firstname" name="firstname" class="form-control" type="text"
+                                data-validation="required" formControlName="firstname"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200" placeholder="Name">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.firstname"></errors>
+                            </div>
+                            <span id="error_firstname" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Last Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="lastname" name="lastname" class="form-control" type="text" data-validation="required"
+                                formControlName="lastname" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.lastname"></errors>
+                            </div>
+                            <span id="error_lastname" class="text-danger"></span>
+                        </div>
+                    </div> -->
+
+
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Designation
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="Designation" name="Designation" class="form-control" type="text"
+                                data-validation="Designation" formControlName="Designation"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200" placeholder="Designation">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.Designation"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Email id
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="email" maxlength="200" name="email" class="form-control" type="text"
+                                data-validation="email" formControlName="email">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.email"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Mobile No.
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="mobile" name="mobile" class="form-control" type="text" data-validation="mobile"
+                                formControlName="mobile" maxlength="10" minlength="10" (keypress)="onlyNumber($event)"
+                                (keyup)="mobilecheckupdatecase($event)">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.mobile"></errors>
+                            </div>
+                            <span id="error_mobile" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Username
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="username" maxlength="200" name="username" class="form-control" type="text"
+                                data-validation="username" formControlName="username" value=''>
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.username"></errors>
+                            </div>
+                            <span id="error_username" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                GSTIN
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="gst" maxlength="15" name="gst" class="form-control text-uppercase" type="text"
+                                data-validation="gst" formControlName="gst" (change)="gstncheckupdatecase($event)"
+                                disabled placeholder="GSTIN">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.gst"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                PAN
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="pancard" maxlength="10" name="pancard" class="form-control text-uppercase"
+                                type="text" data-validation="pancard" formControlName="pancard"
+                                (change)="pancheckupdatecase($event)"
+                                [attr.disabled]="!(isPan=='' || isPan=='false')? false : null">
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.pancard"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                State
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" formControlName="StateiD"
+                                (change)="GetAllDistrictForUser($event.target.value)">
+                                <option value="" selected>--Select--</option>
+                                <option *ngFor="let st of states" [value]="st.id">{{st.stateName}}</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.StateiD"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                District
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" #val formControlName="DistrictID">
+                                <option value="" selected="selected">--Select--</option>
+                                <option *ngFor="let district of districtsuer" [value]="district.id">
+                                    {{district.districtName}}</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="rFormupdate.controls.DistrictID"></errors>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group m-t-10">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-w-shadow no-rd" [disabled]="!rFormupdate.valid">Update</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Company Update Start here -->
+<div class="col-md-12" *ngIf="companyprofileshow=='1'">
+    <div class="legend-text" style="margin-top: 0">
+        <span>
+            Company Update
+        </span>
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="exitCompanyprofile()">
+            <!-- <i class="fa fa-arrow-left" aria-hidden="true"></i> -->
+            Back
+        </a>
+    </div>
+    <form [formGroup]="CompanyProfileForm" name="myform">
+        <div class="edit-profile-wrapper">
+            <div class="box-title">
+                <div class="job-list-action">
+                    <a class="viewit" (click)="exitCompanyprofile()" *ngIf="(Exitprofile=='1')"
+                        href="javascript:void(0)" title="Close">Close</a>
+                </div>
+                <p class="box-title-content">
+                    Company Details
+                </p>
+            </div>
+            <div class="box-content">
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Company Name<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name='CompanyName' formControlName="CompanyName"
+                            autocomplete="off" readonly
+                            oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                            maxlength="200">
+                        <errors [control]="CompanyProfileForm.controls.CompanyName"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Login Type<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name='logintype' formControlName="logintype"
+                            autocomplete="off"
+                            oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                            [attr.disabled]="(CompanyData.loginType=='Agency'||CompanyData.loginType=='Employer')? true : null">
+                        <errors [control]="CompanyProfileForm.controls.logintype"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Short Name<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name='ShortCode' formControlName="ShortCode"
+                            autocomplete="off" placeholder="Short Name" maxlength="200">
+                        <errors [control]="CompanyProfileForm.controls.ShortCode"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Company Logo<span class="mandatory"></span></label>
+                    </div>
+                    <div class="col-md-6 file-upload">
+                        <label for="type-file" class="type-file">
+                            Choose File
+                            <input type="file" (change)="onUploadChangeCompanyLogo($event)" class=""
+                                formControlName="ImgName" id="type-file">
+                        </label>
+                    </div>
+                    <div class="col-sm-4 visible-sm"></div>
+                    <div class="col-md-3 recruiter-logo">
+                        <a href="javascript:void(0)" *ngFor="let item of base64textString">
+                            <img src="{{item!=''?item:'assets/images/NoImage.png'}}" />
+                        </a>
+                        <img onError="this.src='../../../../assets/images/NoImage.png'"
+                            src="{{imagename!=null?imagename:'assets/images/NoImage.png'}}" alt="" />
+                        <img onError="this.src='../../../../assets/images/NoImage.png'"
+                            src="{{imagename!=''?imagename:'assets/images/NoImage.png'}}" alt="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                            <label>Tag Line</label>
+                        <!-- <label>Tag Line<span class="required-field">*</span></label> -->
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" formControlName="TagLine" autocomplete="off"
+                            oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                            placeholder="Tag Line" maxlength="200">
+                        <!-- <errors [control]="CompanyProfileForm.controls.TagLine"></errors> -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Email id<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" formControlName="email" autocomplete="off"
+                            onPaste="return false" (blur)="emailcheckupdatecase($event)" maxlength="200"
+                            placeholder="Email" disabled>
+                        <errors [control]="CompanyProfileForm.controls.email"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Mobile No.<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <input placeholder="Mobile No." maxlength="10" minlength="10"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                            type="text" class="form-control" formControlName="mobile" onPaste="return false"
+                            (blur)="mobilecheckupdatecase($event)" disabled />
+                        <errors [control]="CompanyProfileForm.controls.mobile"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Landline No</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input placeholder="Landline No." maxlength="12" minlength="10"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                            (keypress)="onlyNumber($event)" type="text" class="form-control"
+                            formControlName="landline" />
+                        <errors [control]="CompanyProfileForm.controls.landline"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>WebSite Address</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" formControlName="website" autocomplete="off"
+                            placeholder="WebSite Address" maxlength="200">
+                        <errors [control]="CompanyProfileForm.controls.website"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>GSTIN</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input id="gstn" name="gstn" class="form-control text-uppercase" type="text"
+                            formControlName="gstn" (change)="gstncheckupdatecase($event)" autocomplete="off"
+                            [attr.disabled]="(CompanyData?.gstn)?true:null" maxlength="15" placeholder="GSTIN" #input
+                            (input)="input.value=$event.target.value.toUpperCase()">
+                        <errors [control]="CompanyProfileForm.controls.gstn"></errors>
+                    </div>
+
+                    <!-- <div class="col-md-2" *ngIf="CompanyData.gstn!='' && CompanyData.gstn!=null"> -->
+                            <div class="col-md-2" >
+                        <label for="type-file" class="type-file">
+                            Choose File
+                            <input type="file" (change)="onUploadChange($event,'gstImg')" class=""
+                                formControlName="gstImg"
+                                accept="image/x-png,image/gif,image/jpeg,image/jpg,application/pdf"> </label>
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <a [href]="gstGetImage" target="_blank" *ngIf="CompanyData.gstnImagePath"><span
+                                class="glyphicon glyphicon-zoom-in"></span></a>
+                        <!-- <a [href]="gstImage" download="{{imgGstName}}"><span class="glyphicon glyphicon-zoom-in" *ngIf="showMagGst"></span></a> -->
+                        <errors [control]="CompanyProfileForm.controls.gstImg"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>PAN<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control text-uppercase" formControlName="PAN" autocomplete="off"
+                            [attr.disabled]="(CompanyData?.pan)?true:null" maxlength="10">
+                        <errors [control]="CompanyProfileForm.controls.PAN"></errors>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="type-file" class="type-file">
+                            Choose File
+                            <input type="file" (change)="onUploadChange($event,'panImg')" class=""
+                                formControlName="panImg"
+                                accept="image/x-png,image/gif,image/jpeg,image/jpg,application/pdf">
+                        </label>
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <a [href]="panGetImage" target="_blank" *ngIf="CompanyData.panImagepath"><span
+                                class="glyphicon glyphicon-zoom-in"></span></a>
+                        <!-- <a [href]="panImage1" download="{{imgPanName}}"><span class="glyphicon glyphicon-zoom-in" *ngIf="showMagPan"></span></a> -->
+                        <errors [control]="CompanyProfileForm.controls.panImg"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Industry<span class="required-field">*</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" formControlName="IndustryType">
+                            <option value="" class="" selected="selected">-- Select --</option>
+                            <option *ngFor="let ind of industialrea" value="{{ind.id}}">{{ind.industryName}}</option>
+                        </select>
+                        <errors [control]="CompanyProfileForm.controls.IndustryType"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Description</label>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea formControlName="Description" class="form-control" placeholder="Description" rows="4"
+                            maxlength="2000"></textarea>
+                        <label for="">maximum 2000 characters allow</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>About Company</label>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea formControlName="aboutCompany" class="form-control" placeholder="About Company"
+                            rows="4" maxlength="2000"></textarea>
+                        <label for="">maximum 2000 characters allow</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="edit-profile-wrapper">
+            <div class="box-title">
+                <p class="box-title-content">
+                    Registered Office Address
+                </p>
+            </div>
+            <div class="box-content">
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>State <span class="required-field"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" required formControlName="StateiD"
+                            (change)="GetAllDistrictForCompany($event.target.value)">
+                            <option value="" class="" selected="selected">-- Select --</option>
+                            <option *ngFor="let st of states" [value]="st.id">{{st.stateName}}</option>
+                        </select>
+                        <errors [control]="CompanyProfileForm.controls.StateiD"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>District <span class="required-field"> *</span></label>
+                    </div>
+
+                    <div class="col-md-6">
+                        <select class="form-control" #val required formControlName="DistrictID">
+
+                            <option value="" class="" selected="selected">-- Select --</option>
+
+                            <option *ngFor="let district of districtcompany" [value]="district.id">
+                                {{district.districtName}}</option>
+                                
+                        </select>
+                        <errors [control]="CompanyProfileForm.controls.DistrictID"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Office Address <span class="required-field"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea formControlName="OfficeAddress" class="form-control" placeholder="Office Address"
+                            rows="4" autocomplete="off" maxlength="2000"></textarea>
+                        <label for="">maximum 2000 characters allow</label>
+                        <errors [control]="CompanyProfileForm.controls.OfficeAddress"></errors>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group m-t-10">
+                <div class="col-md-12 text-center">
+                    <input type="submit" (click)="UpdateCompanyProfile()" [disabled]="!(CompanyProfileForm.valid)"
+                        class="btn btn-primary pull-center" value="Update">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Company Update End Here -->
+<!-- Work location Start Here -->
+<div class="col-md-12">
+
+    <!-- <form novalidate [formGroup]="sectorskils" *ngIf="showSectorskillForm=='1'" class="edit-delete-h margin-top-40"
+        (ngSubmit)="addworkloc(sectorskils.value)"> -->
+
+    <form novalidate [formGroup]="sectorskils" *ngIf="showSectorskillForm=='1'" class="edit-delete-h margin-top-40">
+        <div class="edit-profile-wrapper">
+            <div class="box-title ps-relative">
+                <div class="job-list-action">
+                    <a class="viewit" *ngIf="editid==false" (click)="exitHireForm()" href="javascript:void(0)"
+                        title="Close">Close</a>
+                </div>
+                <div class="job-list-action">
+                    <a class="viewit" *ngIf="editid==true" (click)="getallprofilecompany(Companyid)"
+                        href="javascript:void(0)" title="Close">Close</a>
+                </div>
+                <p class="box-title-content">
+                    {{editid==0?'Add':'Update'}} Work Location
+                </p>
+            </div>
+            <div class="box-content">
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Users <span class="mandatory"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <select *ngIf="editid==true" class="form-control" required formControlName="Userid" disabled>
+                            <option value="" selected="selected">-- Select --</option>
+                            <option *ngFor="let user of users" [value]="user.userId">{{user.userName}}</option>
+                        </select>
+                        <select *ngIf="editid!=true" class="form-control" required formControlName="Userid">
+                            <option value="" selected="selected">-- Select --</option>
+                            <option *ngFor="let user of users" [value]="user.userId">{{user.userName}}</option>
+                        </select>
+                        <errors [control]="sectorskils.controls.Userid"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>State <span class="mandatory"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" required formControlName="StateiD"
+                            (change)="GetAllDistrictForWorkLocation($event.target.value)">
+                            <option value="" class="" selected="selected">-- Select --</option>
+                            <option *ngFor="let state of states" [value]="state.id">{{state.stateName}}</option>
+                        </select>
+                        <errors [control]="sectorskils.controls.StateiD"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>District <span class="mandatory"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" required formControlName="DistrictID">
+                            <option value="" selected="selected">-- Select --</option>
+                            <option *ngFor="let district of districtworklocation" [value]="district.id">
+                                {{district.districtName}}</option>
+                        </select>
+                        <errors [control]="sectorskils.controls.DistrictID"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Office Type <span class="required-field"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" formControlName="CtypeName" (change)='ShowTextBox($event)'>
+                            <option value="" class="" selected="selected">-- Select --</option>
+                            <option *ngFor="let type of companytype" [value]="type.id">{{type.companyType}}</option>
+                        </select>
+                        <errors [control]="sectorskils.controls.CtypeName"></errors>
+                    </div>
+                </div>
+                <div class="form-group" *ngIf='displaytextBox== 1'>
+                    <div class="col-md-3 text-right">
+                        <label>Other <span class="mandatory"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" formControlName="CompanyTypeOther" maxlength="100">
+                        <errors [control]="sectorskils.controls.CompanyTypeOther"></errors>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 text-right">
+                        <label>Address <span class="required-field"> *</span></label>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea formControlName="Caddress" class="form-control" placeholder="" rows="4"
+                            maxlength="2000"></textarea>
+                        <label for="">maximum 2000 characters allow</label>
+                        <errors [control]="sectorskils.controls.Caddress"></errors>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group m-t-10">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-w-shadow no-rd" *ngIf="editid==0" (click)="CompanyWorkLocation()"
+                    [disabled]="!(sectorskils.valid)" type="submit">
+                    Add
+                </button>
+                <button class="btn btn-w-shadow no-rd" *ngIf="editid==1" (click)="UpdateWorkLocation()"
+                    [disabled]="!(sectorskils.valid)" type="button">
+                    Update
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="(showlist==1)">
+
+            <table class="table table-striped" *ngIf="WorkLocationshow?.length > 0">
+                <thead>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Office Type</th>
+                        <th>State</th>
+                        <th>District</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let location of WorkLocationshow; let i = index">
+                        <td>{{location.Username}}</td>
+                        <td *ngIf="(location.CompanyTypeOther)">{{location.CtypeName}}({{location.CompanyTypeOther}})
+                        </td>
+                        <td *ngIf="(!location.CompanyTypeOther)">{{location.CtypeName}}</td>
+                        <td>{{location.Stateid}}</td>
+                        <td>{{location.Districtid}}</td>
+                        <td class="content-more">{{location.Caddress}}</td>
+                        <td><a class="mandatory" href="javascript:void(0)" (click)="PushedTemplate(template)"
+                                title="Delete">Remove</a></td>
+
+                        <ng-template #template>
+                            <div class="modal-body text-center">
+                                <p>Do you want to remove this work location?</p>
+                                <br />
+                                <br />
+                                <button type="button" class="btn yl-btn no-rd" (click)="onItemDeleted(i)">Yes</button>
+                                <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                            </div>
+                        </ng-template>
+                    </tr>
+                    <tr>
+                        <td> <button class="btn cr-profile-btn" [disabled]="stopper==1"
+                                (click)="SaveCompanyProfileData()">Save</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+
+<!-- Work Location End Here -->
+<!-- Update Work Location Start Here -->
+<div class="all-jobs-list update-profile" *ngIf="(hidecompanyprofile=='1')">
+    <div class="dash-head">
+        <p>WORK lOCATION DETAILS</p>
+        <a class="btn pull-right btn-back-reg" (click)="exitHireForm()" href="javascript:void(0)"
+            title="Close">Close</a>
+    </div>
+
+    <div class="alert alert-warning" *ngIf="ShowCompanyData?.length == 0">
+        No record found........
+    </div>
+    <div id="" class="searchResults col-md-12">
+        <ul class="joblist-wrapper" *ngIf="(ShowCompanyData?.length > 0)">
+            <li class="job-wrapper ps-relative" *ngFor="let companydata of ShowCompanyData;let i=index">
+                <ng-template #template>
+                    <div class="modal-body text-center">
+                        <p>Do you want to delete this work location?</p>
+                        <br />
+                        <br />
+                        <button type="button" class="btn yl-btn no-rd"
+                            (click)="deletecompanydetail(companydata.createdby,companydata.id)">Yes</button>
+                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                    </div>
+                </ng-template>
+                <div class="job-list-action">
+                    <a class="postit" href="javascript:void(0)" title="Edit"
+                        (click)="editcompanydetails(companydata.createdby,companydata.createdby,companydata.id,companydata.address,companydata.stateId,companydata.districtId,companydata.workLocationId,companydata.companyId,companydata.workLocationId,companydata.companyTypeOther);">Edit</a>
+                    <a class="viewit" href="javascript:void(0)" (click)="PushedTemplate(template)"
+                        title="Delete">Delete</a>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <h2 class="job-title m-b-5" *ngIf="(companydata.companyTypeOther)">
+                            {{companydata.companyType}}
+                            ({{companydata.companyTypeOther}})
+                        </h2>
+                        <h2 class="job-title m-b-5" *ngIf="(!companydata.companyTypeOther)">{{companydata.companyType}}
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <p><span class="text-strong">State:</span> {{companydata.stateName}}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><span class="text-strong">District:</span> {{companydata.districtName}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <p>
+                            <span class="text-strong">Address:</span>
+                            {{companydata.address}}
+                        </p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- Update Work Location End Here -->
+<!-- Add User Start Here -->
+<div *ngIf="(AddUserPage=='1')" class="col-md-12">
+    <div class="dash-head">
+        <p>COMPANY DETAILS</p>
+        <a href="javascript:void(0)" title="Go Back" (click)="viewdata(Companyid)" class="btn pull-right btn-back-reg">
+            Back
+        </a>
+    </div>
+    <div class="cleafix margin-bottom-15"></div>
+    <div class="col-md-12">
+        <!-- ************* User Registration Form************** -->
+        <form name="myform" [formGroup]="UserRegistrationForm"
+            (ngSubmit)="UserRegistration(UserRegistrationForm.value)">
+            <div class="edit-profile-wrapper">
+                <div class="box-title ps-relative">
+                    <div class="job-list-action">
+                        <a class="viewit" href="javascript:void(0)" (click)="viewdata(Companyid)"
+                            title="Close">Close</a>
+                    </div>
+                    <p class="box-title-content">
+                        Add User
+                    </p>
+                </div>
+                <div class="box-content">
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Company Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="cname" name="cname" class="form-control" type="text" data-validation="cname"
+                                formControlName="cname"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200" autocomplete="off" placeholder="Company Name" readonly>
+                            <span id="error_cname" class="text-danger"></span>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.cname"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>Login Type<span class="mandatory">*</span></label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" formControlName="logintype"
+                                [attr.disabled]="CompanyData.loginType!=''">
+                                <option value="" selected>--Select--</option>
+                                <option value="Agency">Agency</option>
+                                <option value="Employer">Employer</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.logintype"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="firstname" name="firstname" autocomplete="off" class="form-control" type="text"
+                                formControlName="firstname"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                placeholder="Name" maxlength="200">
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.firstname"></errors>
+                            </div>
+                            <span id="error_firstname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Last Name
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="lastname" name="lastname" class="form-control" type="text" data-validation="lastname"
+                                formControlName="lastname" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                autocomplete="off" placeholder="Last Name" maxlength="200">
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.lastname"></errors>
+                            </div>
+                            <span id="error_lastname" class="text-danger"></span>
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Designation
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input placeholder="Designation" id="Designation" name="Designation" class="form-control"
+                                type="text" data-validation="Designation" formControlName="Designation"
+                                autocomplete="off"
+                                oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                maxlength="200">
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.Designation"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Email id
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input (change)="useremailcheck()" class="form-control" type="text" data-validation="email"
+                                formControlName="email" maxlength="200" autocomplete="off" placeholder="Email"
+                                appBlockCopyPaste>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.email"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Mobile No.
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input (change)="usermobilecheck()" placeholder="Mobile" class="form-control" type="text"
+                                data-validation="mobile" formControlName="mobile" maxlength="10"
+                                (keypress)="onlyNumber($event)" autocomplete="off" appBlockCopyPaste>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.mobile"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Username
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input (change)="usernamecheckAddUser()" class="form-control" maxlength="200" type="text"
+                                data-validation="username" formControlName="username" autocomplete="off"
+                                placeholder="Username" appBlockCopyPaste (keydown)="RestrictSpace($event)">
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.username"></errors>
+                            </div>
+                            <span id="error_username" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                Password
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="password" name="password" class="form-control" type="password"
+                                data-validation="password" formControlName="password" maxlength="24"
+                                autocomplete="new-password" placeholder="Password">
+                            <div class="hello-new">
+                                <img src="../../../assets/img/info.png" width="20" class="tool-new-img">
+                                <p class="tool-new-pass">
+                                    Atleast 1 Digit.<br>
+                                    Atleast 1 small-case letter.<br>
+                                    Atleast 1 Capital letter.<br>
+                                    Atleast 1 Special character.<br>
+                                    Length should be between 6-24 characters.
+                                </p>
+                            </div>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.password"></errors>
+                            </div>
+                            <span id="error_password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                GSTIN
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="gst" name="gst" class="form-control text-uppercase" type="text"
+                                data-validation="gst" formControlName="gst" autocomplete="off" placeholder="GSTIN"
+                                maxlength="15" appBlockCopyPaste readonly>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.gst"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align:center"><b>OR</b></p>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                PAN
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <input id="pancard" name="pancard" class="form-control text-uppercase" type="text"
+                                data-validation="pancard" maxlength="10" formControlName="pancard" autocomplete="off"
+                                placeholder="PAN" appBlockCopyPaste readonly>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.pancard"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                State
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" formControlName="StateiD"
+                                (change)="GetAllDistrict($event.target.value)">
+                                <option value="" selected>--Select--</option>
+                                <option *ngFor="let st of states" [value]="st.id">{{st.stateName}}</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.StateiD"></errors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 text-right">
+                            <label>
+                                District
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 alert-boxing">
+                            <select class="form-control" #val formControlName="DistrictID">
+                                <option value="" selected="selected">--Select--</option>
+                                <option *ngFor="let district of district1" [value]="district.id">
+                                    {{district.districtName}}</option>
+                            </select>
+                            <div class="alert">
+                                <errors [control]="UserRegistrationForm.controls.DistrictID"></errors>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group m-t-10">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-w-shadow no-rd" [disabled]="!UserRegistrationForm.valid">Submit</button>
+                        <!-- <button (mouseover)="UserValidation()" class="btn btn-w-shadow no-rd" [disabled]="!UserRegistrationForm.valid">Submit</button> -->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Add User End here -->

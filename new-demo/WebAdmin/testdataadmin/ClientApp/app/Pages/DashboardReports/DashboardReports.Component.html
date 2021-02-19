@@ -1,0 +1,484 @@
+<div class="col-md-12">
+  <div class="update-profile">
+    <div id="" class="searchResults1">
+      <div class="clearfix"></div>
+      <div class="" style="margin-top: 0">
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="Back()">
+          Back
+        </a>
+      </div>
+      <!-- Job Post Detail -->
+      <div *ngIf="postdata == 'JobPost'">
+        <div class="dash-head">
+          <p>Job Post Detail List</p>
+          <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" (click)="ExcelExportJobPost()">
+            <i class="fa fa-file-excel m-t-2" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+          </a>
+        </div>
+        <div>
+          <div class="ui-widget-header ui-widget-header-r">
+            <input #gb type="text" pInputText size="100" placeholder="Global Filter">
+          </div>
+          <p-dataTable [value]="JobpostDetaillist" [loading]="loading" [rows]="5" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[5,10,20]" [sortField]="sortF" [sortOrder]="sortO" (onSort)="changeSort($event)"
+            [globalFilter]="gb" scrollable="true" scrollHeight="100%" scrollWidth="100%" [style]="{'margin-top':'30px'}">
+            <p-column field="i" header="S.No" [style]="{'width':'50px'}">
+              <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                {{i+1}}
+              </ng-template>
+            </p-column>
+            <p-column field="jobcode" header="Job Code" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="jobtitle" header="Job Title" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+
+            <p-column field="jobType" header="Job Type" [style]="{'width':'80px'}" [sortable]="true"></p-column>
+
+            <p-column field="functionarea" header="Functional Area" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="industryname" header="Industry Name" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="noOfVacancy" header="Number Of Vacancy" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="validupto" header="Valid Upto" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+
+            <ng-template pTemplate="paginatorLeft">
+              <button type="button" pButton icon="fa-refresh"></button>
+            </ng-template>
+            <ng-template pTemplate="paginatorRight">
+              <button type="button" pButton icon="fa-cloud-upload"></button>
+            </ng-template>
+          </p-dataTable>
+
+          <ng-template #screeningAnswerTemplate>
+            <div class="modal-header padding-bottom-0">
+              <button type="button" class="close" (click)="closeScreeningModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="legend-box m-b-5">
+                <div class="col-md-12 row">
+                  <span class="legend-title">
+                    <label class="biz-label">Screening Answer</label>
+                  </span>
+                </div>
+                <div class="alert alert-success m-t-10 p-d-0">
+                  <div class="form-group m-t-10">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Total Number of Actual Answer :</b> {{screeningAnswer.totexpctdans}}
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Total Number of Non-Actual Answer :</b> {{screeningAnswer.totnonexpctdans}}
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Candidate :</b> {{screeningAnswer.candidateName}}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                      <b>JobTitle :</b> {{screeningAnswer.jobtitle}}
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                      <b>JobCode :</b> {{screeningAnswer.jobcode}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="legend-box col-md-12 margin-top-20 m-b-5" *ngFor="let data of screeningAnswer.groupList">
+                  <div class="col-md-12 row">
+                    <span class="legend-title">
+                      <label class="biz-label">Group Name : {{data.groupname}}</label>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <div class="screening-group-wrapper">
+                      <div class="question-list-wrapper" *ngFor="let item of data.quesList; let i = index">
+                        <ul class="group-queston">
+                          <li class="question-list">
+                            <span class="q-n">{{i + 1}}</span> <span class="q-phrase">{{item.questions}}</span>
+                          </li>
+                          <li class="question-list bg-success">
+                            <span>Ans. {{item.answers == 'true' ? 'yes':'no'}}</span><br>
+                            <span class="ans-phrase">Actual Answer: {{item.expectAnswer == 'true' ? 'yes':'no'}}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer p-t-0">
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="selectSuitable('true',appliedCandidate,index)">Suitable</button>
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="selectSuitable('false',appliedCandidate,index)">Not
+                Suitable</button>
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="closeScreeningModal()">Close</button>
+            </div>
+          </ng-template>
+        </div>
+
+      </div>
+      <!-- job end here -->
+      <!--Application received candidate list by pankaj joshi-->
+      <div *ngIf="postdata == 'applicantReciept'">
+        <div class="dash-head">
+          <p>Job Applications Recieved</p>
+          <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" (click)="ExcelExportapplicationsRecieved()">
+            <i class="fa fa-file-excel m-t-2" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+          </a>
+        </div>
+        <div class="searchResults">
+          <div class="ui-widget-header ui-widget-header-r">
+            <input #gb type="text" pInputText size="100" placeholder="Global Filter">
+          </div>
+          <p-dataTable [value]="applicationsRecieved" [loading]="loading" [rows]="5" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[5,10,20]" [sortField]="sortF" [sortOrder]="sortO" (onSort)="changeSort($event)"
+            [globalFilter]="gb" scrollable="true" scrollHeight="100%" scrollWidth="100%" [style]="{'margin-top':'30px'}">
+            <p-column field="i" header="S.No" [style]="{'width':'50px'}">
+              <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                {{i+1}}
+              </ng-template>
+            </p-column>
+            <p-column field="jobCode" header="Job Code" [style]="{'width':'110px'}" [sortable]="true"></p-column>
+            <p-column field="jobTitle" header="Job Title" [style]="{'width':'200px'}" [sortable]="true"></p-column>
+            <p-column field="appliedDate" header="Applied Date" [style]="{'width':'100px'}" [sortable]="true">
+              <ng-template field="appliedDate" let-item="rowData" pTemplate type="body">
+                {{item.appliedDate ? item.appliedDate : 'NA'}}
+              </ng-template>
+            </p-column>
+
+            <p-column field="candName" header="Candidate Name" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="gender" header="Gender" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="email" header="Email" [style]="{'width':'200px'}" [sortable]="true">
+              <ng-template field="email" let-item="rowData" pTemplate type="body">
+                {{item.email ? item.email : 'NA'}}
+              </ng-template>
+            </p-column>
+            <p-column field="dob" header="DOB" [style]="{'width':'100px'}" [sortable]="true">
+              <ng-template field="dob" let-DOB="rowData" pTemplate type="body">
+                {{DOB.dob ? DOB.dob:'NA'}}
+              </ng-template>
+            </p-column>
+            <p-column field="mobile" header="Mobile" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+
+            <ng-template pTemplate="paginatorLeft">
+              <button type="button" pButton icon="fa-refresh"></button>
+            </ng-template>
+            <ng-template pTemplate="paginatorRight">
+              <button type="button" pButton icon="fa-cloud-upload"></button>
+            </ng-template>
+
+            <p-column header="View Profile" class="text-center" [style]="{'width':'75px'}">
+              <ng-template let-ViewProfile="rowData" pTemplate type="body">
+                <a href="javascript:void(0)" class="" title="View Details" (click)="viewcandidateProfile(ViewProfile.sourceid==0?ViewProfile.candidateid:ViewProfile.sourceid,ViewProfile.source)">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </a>
+
+              </ng-template>
+            </p-column>
+
+
+          </p-dataTable>
+        </div>
+      </div>
+
+
+      <!--End Application received candidate list -->
+      <!-- Registered candidate start here -->
+      <div *ngIf="postdata == 'registeredcandidate'">
+        <div class="dash-head">
+          <p>Registered Candidate List</p>
+          <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" (click)="ExcelExportRegistrationReceived()">
+            <i class="fa fa-file-excel m-t-2" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+          </a>
+        </div>
+        <div class="searchResults">
+          <div class="ui-widget-header ui-widget-header-r">
+            <input #gb type="text" pInputText size="100" placeholder="Global Filter">
+          </div>
+          <p-dataTable [value]="registrationReceived" [loading]="loading" [rows]="5" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[5,10,20]" [sortField]="sortF" [sortOrder]="sortO" (onSort)="changeSort($event)"
+            [globalFilter]="gb" scrollable="true" scrollHeight="100%" scrollWidth="100%" [style]="{'margin-top':'30px'}">
+            <p-column field="i" header="S.No" [style]="{'width':'50px'}">
+              <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                {{i+1}}
+              </ng-template>
+            </p-column>
+            <!-- <p-column field="jobCode" header="Job Code" [style]="{'width':'105px'}" [sortable]="true"></p-column>
+                  <p-column field="jobTitle" header="Job Title" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+                  <p-column field="appliedDate" header="Applied Date" [style]="{'width':'100px'}" [sortable]="true">
+                    <ng-template field="appliedDate" let-item="rowData" pTemplate type="body">
+                        {{item.appliedDate ? item.appliedDate : 'NA'}}
+                    </ng-template>
+                 </p-column> -->
+
+            <p-column field="companyName" header="Company Name" [style]="{'width':'100px'}" [sortable]="true">
+              <ng-template field="companyName" let-item="rowData" pTemplate type="body">
+                {{item.companyName ? item.companyName:'NA'}}
+              </ng-template>
+            </p-column>
+
+
+
+            <p-column field="candName" header="Candidate Name" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="gender" header="Gender" [style]="{'width':'80px'}" [sortable]="true"></p-column>
+            <p-column field="email" header="Email" [style]="{'width':'200px'}" [sortable]="true">
+              <ng-template field="email" let-item="rowData" pTemplate type="body">
+                {{item.email ? item.email : 'NA'}}
+              </ng-template>
+            </p-column>
+            <p-column field="dob" header="DOB" [style]="{'width':'100px'}" [sortable]="true">
+              <ng-template field="dob" let-DOB="rowData" pTemplate type="body">
+                {{DOB.dob ? DOB.dob:'NA'}}
+              </ng-template>
+            </p-column>
+            <p-column field="mobile" header="Mobile" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+
+            <ng-template pTemplate="paginatorLeft">
+              <button type="button" pButton icon="fa-refresh"></button>
+            </ng-template>
+            <ng-template pTemplate="paginatorRight">
+              <button type="button" pButton icon="fa-cloud-upload"></button>
+            </ng-template>
+            <p-column header="View Profile" class="text-center" [style]="{'width':'75px'}">
+              <ng-template let-ViewProfile="rowData" pTemplate type="body">
+                <a href="javascript:void(0)" class="" title="View Details" (click)="viewcandidateProfile(ViewProfile.sourceid==0?ViewProfile.candidateid:ViewProfile.sourceid,ViewProfile.source)">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </a>
+
+              </ng-template>
+            </p-column>
+          </p-dataTable>
+
+
+        </div>
+      </div>
+      <!-- Registered candidate end here -->
+
+      <!-- active jobs Post Detail -->
+      <div *ngIf="postdata == 'activejobs'">
+        <div class="dash-head">
+          <p>Active Jobs Detail List</p>
+          <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" (click)="ExcelExportActiveJobs()">
+            <i class="fa fa-file-excel m-t-2" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+          </a>
+        </div>
+        <div>
+          <div class="ui-widget-header ui-widget-header-r">
+            <input #gb type="text" pInputText size="100" placeholder="Global Filter">
+          </div>
+          <p-dataTable [value]="activeJobs" [loading]="loading" [rows]="5" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[5,10,20]" [sortField]="sortF" [sortOrder]="sortO" (onSort)="changeSort($event)"
+            [globalFilter]="gb" scrollable="true" scrollHeight="100%" scrollWidth="100%" [style]="{'margin-top':'30px'}">
+            <p-column field="i" header="S.No" [style]="{'width':'50px'}">
+              <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                {{i+1}}
+              </ng-template>
+            </p-column>
+            <p-column field="jobcode" header="Job Code" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="jobtitle" header="Job Title" [style]="{'width':'200px'}" [sortable]="true"></p-column>
+            <p-column field="functionarea" header="Functional Area" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="industryname" header="Industry Name" [style]="{'width':'200px'}" [sortable]="true"></p-column>
+            <p-column field="noOfVacancy" header="Number Of Vacancy" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="validupto" header="Valid Upto" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+
+            <ng-template pTemplate="paginatorLeft">
+              <button type="button" pButton icon="fa-refresh"></button>
+            </ng-template>
+            <ng-template pTemplate="paginatorRight">
+              <button type="button" pButton icon="fa-cloud-upload"></button>
+            </ng-template>
+          </p-dataTable>
+
+          <ng-template #screeningAnswerTemplate>
+            <div class="modal-header padding-bottom-0">
+              <button type="button" class="close" (click)="closeScreeningModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="legend-box m-b-5">
+                <div class="col-md-12 row">
+                  <span class="legend-title">
+                    <label class="biz-label">Screening Answer</label>
+                  </span>
+                </div>
+                <div class="alert alert-success m-t-10 p-d-0">
+                  <div class="form-group m-t-10">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Total Number of Actual Answer :</b> {{screeningAnswer.totexpctdans}}
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Total Number of Non-Actual Answer :</b> {{screeningAnswer.totnonexpctdans}}
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Candidate :</b> {{screeningAnswer.candidateName}}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                      <b>JobTitle :</b> {{screeningAnswer.jobtitle}}
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                      <b>JobCode :</b> {{screeningAnswer.jobcode}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="legend-box col-md-12 margin-top-20 m-b-5" *ngFor="let data of screeningAnswer.groupList">
+                  <div class="col-md-12 row">
+                    <span class="legend-title">
+                      <label class="biz-label">Group Name : {{data.groupname}}</label>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <div class="screening-group-wrapper">
+                      <div class="question-list-wrapper" *ngFor="let item of data.quesList; let i = index">
+                        <ul class="group-queston">
+                          <li class="question-list">
+                            <span class="q-n">{{i + 1}}</span> <span class="q-phrase">{{item.questions}}</span>
+                          </li>
+                          <li class="question-list bg-success">
+                            <span>Ans. {{item.answers == 'true' ? 'yes':'no'}}</span><br>
+                            <span class="ans-phrase">Actual Answer: {{item.expectAnswer == 'true' ? 'yes':'no'}}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer p-t-0">
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="selectSuitable('true',appliedCandidate,index)">Suitable</button>
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="selectSuitable('false',appliedCandidate,index)">Not
+                Suitable</button>
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="closeScreeningModal()">Close</button>
+            </div>
+          </ng-template>
+        </div>
+
+      </div>
+      <!-- active jobs end here -->
+
+      <!-- closed jobs Detail -->
+      <div *ngIf="postdata == 'closedjobs'">
+        <div class="dash-head">
+          <p>Closed Jobs Detail List</p>
+          <a class="btn btn-w-shadow no-rd pull-right" href="javascript:void(0)" (click)="ExcelExportClosedJobs()">
+            <i class="fa fa-file-excel m-t-2" aria-hidden="true"></i>&nbsp;&nbsp;Export to Excel
+          </a>
+        </div>
+        <div>
+          <div class="ui-widget-header ui-widget-header-r">
+            <input #gb type="text" pInputText size="100" placeholder="Global Filter">
+          </div>
+          <p-dataTable [value]="closedJobs" [loading]="loading" [rows]="5" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[5,10,20]" [sortField]="sortF" [sortOrder]="sortO" (onSort)="changeSort($event)"
+            [globalFilter]="gb" scrollable="true" scrollHeight="100%" scrollWidth="100%" [style]="{'margin-top':'30px'}">
+            <p-column field="i" header="S.No" [style]="{'width':'50px'}">
+              <ng-template pTemplate="body" let-i="rowIndex" let-suite>
+                {{i+1}}
+              </ng-template>
+            </p-column>
+            <p-column field="jobcode" header="Job Code" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="jobtitle" header="Job Title" [style]="{'width':'200px'}" [sortable]="true"></p-column>
+            <p-column field="jobType" header="Job Type" [style]="{'width':'200px'}" [sortable]="true"></p-column>
+            <p-column field="functionarea" header="Functional Area" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="industryname" header="Industry Name" [style]="{'width':'150px'}" [sortable]="true"></p-column>
+            <p-column field="noOfVacancy" header="Number Of Vacancy" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+            <p-column field="validupto" header="Valid Upto" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+
+            <ng-template pTemplate="paginatorLeft">
+              <button type="button" pButton icon="fa-refresh"></button>
+            </ng-template>
+            <ng-template pTemplate="paginatorRight">
+              <button type="button" pButton icon="fa-cloud-upload"></button>
+            </ng-template>
+          </p-dataTable>
+
+          <ng-template #screeningAnswerTemplate>
+            <div class="modal-header padding-bottom-0">
+              <button type="button" class="close" (click)="closeScreeningModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="legend-box m-b-5">
+                <div class="col-md-12 row">
+                  <span class="legend-title">
+                    <label class="biz-label">Screening Answer</label>
+                  </span>
+                </div>
+                <div class="alert alert-success m-t-10 p-d-0">
+                  <div class="form-group m-t-10">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Total Number of Actual Answer :</b> {{screeningAnswer.totexpctdans}}
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Total Number of Non-Actual Answer :</b> {{screeningAnswer.totnonexpctdans}}
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <b>Candidate :</b> {{screeningAnswer.candidateName}}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                      <b>JobTitle :</b> {{screeningAnswer.jobtitle}}
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                      <b>JobCode :</b> {{screeningAnswer.jobcode}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="legend-box col-md-12 margin-top-20 m-b-5" *ngFor="let data of screeningAnswer.groupList">
+                  <div class="col-md-12 row">
+                    <span class="legend-title">
+                      <label class="biz-label">Group Name : {{data.groupname}}</label>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <div class="screening-group-wrapper">
+                      <div class="question-list-wrapper" *ngFor="let item of data.quesList; let i = index">
+                        <ul class="group-queston">
+                          <li class="question-list">
+                            <span class="q-n">{{i + 1}}</span> <span class="q-phrase">{{item.questions}}</span>
+                          </li>
+                          <li class="question-list bg-success">
+                            <span>Ans. {{item.answers == 'true' ? 'yes':'no'}}</span><br>
+                            <span class="ans-phrase">Actual Answer: {{item.expectAnswer == 'true' ? 'yes':'no'}}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer p-t-0">
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="selectSuitable('true',appliedCandidate,index)">Suitable</button>
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="selectSuitable('false',appliedCandidate,index)">Not
+                Suitable</button>
+              <button type="button" class="btn btn-w-shadow no-rd" (click)="closeScreeningModal()">Close</button>
+            </div>
+          </ng-template>
+        </div>
+
+      </div>
+      <!-- closed jobs end here -->
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+
+<app-CommonView-Layout></app-CommonView-Layout>

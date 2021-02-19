@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="col-md-3 mb-2" *ngFor="let product of products; let i =index;">
+    <div class="card">
+      <div class="card-header text-center">{{product.name}}</div>
+      <div class="card-body">
+        <div class="text-center">
+          <img alt="product" class="img-responsive" [src]="fileLocation+product.imageUrl" width="200" height="100">
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="float-left mt-3">
+          <button type="button" class="btn btn-warning" (click)="updateProductDetails(template,product)">Edit</button>
+        </div>
+        <div class="text-center">
+          <span><b>{{product.price | currency}}</b></span>
+        </div>
+        <div class="float-right">
+          <button type="button" class="btn btn-danger" (click)="deleteProduct(product._id)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-2" *ngIf="products.length==0">
+    <p class="text-center text-danger">No Data To Show...</p>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateProductForm" novalidate="novalidate" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" formControlName="name" id="name" name="name" class="form-control">
+        <div *ngIf="updateProductForm.controls.name.invalid && updateProductForm.controls.name.touched">
+          <p *ngIf="updateProductForm.controls.name.errors?.required" class="error-block">You Can`t leave Empty this!.
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input type="file" formControlName="image" id="image" name="image" class="form-control"
+          (change)="onImageSelect($event.target.files)">
+        <div *ngIf="updateProductForm.controls.image.invalid && updateProductForm.controls.image.touched">
+          <p *ngIf="updateProductForm.controls.image.errors?.required" class="error-block">You Can`t leave Empty this!.
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" formControlName="price" id="price" name="price" class="form-control">
+        <div *ngIf="updateProductForm.controls.price.invalid && updateProductForm.controls.price.touched">
+          <p *ngIf="updateProductForm.controls.price.errors?.required" class="error-block">You Can`t leave Empty this!.
+          </p>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary" [disabled]="updateProductForm.invalid">Submit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

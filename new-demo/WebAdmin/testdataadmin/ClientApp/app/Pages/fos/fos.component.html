@@ -1,0 +1,974 @@
+<!-- FOS Agency Register Start here -->
+<div *ngIf="(formview=='0')">
+    <div>
+        <div class="legend-text" style="margin-top: 0">
+            <span>
+                Agent Register
+            </span>
+            <!-- <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="Back()">
+                <i class="fa fa-arrow-left" aria-hidden="true">hgh</i>
+            </a> -->
+        </div>
+        <div class="cleafix margin-bottom-15"></div>
+        <div class="col-md-12">
+            <form [formGroup]="fosForm" (ngSubmit)="fosRegistration(fosForm.value)">
+                <div class="edit-profile-wrapper">
+                    <div class="box-title ps-relative">
+                        <div class="job-list-action">
+                            <a class="viewit" href="javascript:void(0)" (click)="Close1()" title="Close">Close</a>
+                        </div>
+                        <p class="box-title-content">
+                            Agent Details
+                        </p>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input class="form-control" type="text" formControlName="name" maxlength="100"
+                                    placeholder="Name">
+                                <span id="error_name" class="text-danger"></span>
+                                <errors [control]="fosForm.controls.name"></errors>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Email Id
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input name="email" class="form-control" type="text" formControlName="email"
+                                    (blur)="checkAvail($event.target.value,'email')" autocomplete="off"
+                                    placeholder="Email" maxlength="100">
+
+                                <errors [control]="fosForm.controls.email"></errors>
+
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Profile Pic
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+
+                              <input type="file" (change)="onUploadChange($event)" formControlName="profile_pic">
+                            </div>
+
+                        </div> -->
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Profile Pic
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-6 col-sm-6 file-upload">
+                                <input type="file" (change)="onUploadChange($event)" formControlName="profile_pic">
+                                <p class="m-t-5 mandatory"><b>Note:</b> File format should be JPG, JPEG, PNG and Max.
+                                    size 2MB</p>
+
+                            </div>
+                            <div class="col-md-3 col-sm-3 recruiter-logo">
+                                <a href="javascript:void(0)" *ngFor="let item of base64textString">
+                                    <img src="{{item!=''?item:'assets/images/NoImage.png'}}" />
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Mobile No.
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input name="mobile" class="form-control" type="text" data-validation="mobile"
+                                    formControlName="mobile" maxlength="10" autocomplete="off"
+                                    (keyup)="setUserName($event)" (blur)="checkAvail($event.target.value,'mobile')"
+                                    placeholder="Mobile No." (keypress)="onlyNumber($event)">
+                                <errors [control]="fosForm.controls.mobile"></errors>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Username
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input formControlName="username" class="form-control" type="text"
+                                    (change)="Usernamecheck($event)" autocomplete="off" [readonly]="isReadOnly"
+                                    placeholder="Username">
+
+                                <errors [control]="fosForm.controls.username"></errors>
+
+                                <span id="error_username" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Password
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5 ps-relative">
+                                <input formControlName="password" class="form-control" type="password"
+                                    autocomplete="off" placeholder="Password">
+
+                                <errors [control]="fosForm.controls.password"></errors>
+
+                                <div class="hello-new1 right-10">
+                                    <img class="tool-new-img" src="../../../assets/img/info.png" width="20">
+                                    <p class="tool-new-pass">
+                                        Atleast 1 Digit.<br>
+                                        Atleast 1 small-case letter.<br>
+                                        Atleast 1 Capital letter.<br>
+                                        Atleast 1 Special character.<br>
+                                        Length should be between 6-24 characters.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Address
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <textarea formControlName="address" class="form-control" cols="10" rows="5"
+                                    maxlength="250" placeholder="Address"></textarea>
+
+                                <errors [control]="fosForm.controls.address"></errors>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    State
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-control" formControlName="state"
+                                    (change)="GetAllDistrict($event.target.value)">
+                                    <option value="" selected>--Select--</option>
+                                    <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+                                </select>
+                                <errors [control]="fosForm.controls.state"></errors>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    District
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-control" #val formControlName="district">
+                                    <option value="" selected="selected">--Select--</option>
+                                    <option *ngFor="let district of districts" [value]="district.ID">
+                                        {{district.DISTRICTNAME}}</option>
+                                </select>
+
+                                <errors [control]="fosForm.controls.district"></errors>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- && (imagesizests==false) -->
+                    <div class="form-group m-t-10">
+                        <div class="col-md-12 text-center">
+
+                            <button [disabled]="!fosForm.valid || imagetypests==false || imagesizests==false"
+                                class="btn btn-w-shadow no-rd">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- FOS Agency Register End here -->
+
+<!-- FOS Agency List Start here -->
+<div [ngClass]="cardview=='1'?'show':'hide'">
+    <div>
+
+        <div class="legend-text" *ngIf="(BackToDashboard)">
+                <a href="javascript:void(0)" *ngIf="BackToDashboard" title="Back To Dashboard" [routerLink]="'/Dashboard'" class="btn pull-right btn-back-reg" >
+                    <i class="fa fa-arrow-left" aria-hidden="true">Back</i>
+                </a>
+        </div>
+        <div class="dash-head" style="margin-top: 0">
+            <p>
+                Agent List
+            </p>
+            <a href="javascript:void(0)" (click)="Next()" class="btn pull-right btn-back-reg">
+                Agent Register
+            </a>
+        </div>
+        <div>
+            <div class="page-filters">
+                <h2>
+                    <a href="javascript:void(0);">
+                        <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                        <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                    </a>
+                </h2>
+                <form [formGroup]="AgencyList">
+                    <div class="filter-wrapper">
+                        <div class="form-group">
+
+                            <!-- <div class="col-md-3 col-sm-6">
+                                <label>State</label>
+                                <select class="form-control" formControlName="StateiD" (change)="GetAllDistrict($event.target.value)">
+                                    <option value="" selected>--Select--</option>
+                                    <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <label>District</label>
+                                <select class="form-control" #val formControlName="DistrictID">
+                                    <option value="" selected="selected">--Select--</option>
+                                    <option *ngFor="let district of district1" [value]="district.ID">{{district.DISTRICTNAME}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3">
+                                <label>Search Keywords<span></span></label>
+                                <input type="text" class="form-control" placeholder="Search" />
+                            </div> -->
+
+
+                            <div class="col-md-4 col-sm-4">
+                                <label>Email Id /Mobile No.<span></span></label>
+                                <input type="text" placeholder="Email Id / Mobile No." class="form-control"
+                                    formControlName="SearchKeyword">
+                            </div>
+
+
+                        </div>
+                        <div class="form-group text-center m-t-5">
+                            <button type="submit" class="btn btn-w-shadow no-rd filter-toggle"
+                                (click)="getFosDetails(0,'')">Search</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+
+            <div class="form-group" *ngIf="((finaldata != '' || finaldata.length!=0))">
+                <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-8 p-r-0">
+                    <div class="legends">
+                        <ul>
+                            <li><span class="l2"></span> Active Agent</li>
+                            <!-- <li><span class="l3"></span> Users partial approved</li> -->
+                            <li><span class="l1"></span> Inactive Agent</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="all-jobs-list">
+                <div class="searchResults">
+                    <ul class="joblist-wrapper">
+                        <li *ngFor="let item of finaldata
+                        " class="job-wrapper ps-relative {{(item.IsActive == '0'?'disapproved':'approved')}}"
+                            [style.background-color]="item.LoginId==id ? '#d4d0d0' : '#fff' ">
+                            <div class="job-view fos">
+                                <div>
+                                    <img class="img-thumbnail"
+                                        src="{{ item.image!='' && item.image!=null?       item.image:'assets/images/NoImage.png'}}"
+                                        onError="this.src='../assets/images/NoImage.png'">
+                                </div>
+                                <div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12"><strong>Agent Name : </strong>{{item.agentname ==
+                                                null?
+                                                'NA':(item.agentname.length>24)? (item.agentname |
+                                                slice:0:24)+'..':(item.agentname)}} </div>
+                                            <div class="col-md-12"><strong>Email Id : </strong> {{item.email ==
+                                                null?
+                                                'NA':(item.email.length>22)? (item.email |
+                                                slice:0:22)+'..':(item.email)}} </div>
+                                            <div class="col-md-12"><strong>Mobile No. : </strong> {{item.mobileno ==
+                                                null ? 'NA':item.mobileno}}</div>
+                                            <div class="col-md-12"><strong>Address : </strong> {{item.address ==
+                                                null?
+                                                'NA':(item.address.length>28)? (item.address |
+                                                slice:0:28)+'..':(item.address)}} </div>
+                                            <div class="col-md-12"><strong>State : </strong>{{item.StateName=='' ?
+                                                'NA':item.StateName}}
+                                            </div>
+                                            <div class="col-md-12"><strong>District : </strong>{{item.DistrictName==''
+                                                ?'NA':item.DistrictName}} </div>
+
+                                            <div class="col-md-12"><strong>Total no. of Employer :
+                                                </strong>{{item.NoOfEmployer}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="job-list-action card-view-btns">
+                                            <a class="viewit" href="javascript:void(0)"
+                                                (click)="getDetailsById(item.LoginId,item)" title="View">View</a>
+
+                                            <a class="postit" href="javascript:void(0)"
+                                                (click)="PushedTemplate(inactivetemplate,item.LoginId,item.IsActive)"
+                                                title="Inactive" *ngIf="item.IsActive==1"> Inactive</a>
+
+                                            <a class="postit" href="javascript:void(0)"
+                                                (click)="PushedTemplate(activetemplate,item.LoginId,item.IsActive)"
+                                                title="Active" *ngIf="item.IsActive==0"> Active</a>
+                                            <!-- <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(template,item.LoginId)"
+                                                title="Delete">Delete</a> -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="((finaldata == '' || finaldata.length==0))" class="alert alert-warning">No Record Found...</div>
+<!-- FOS Agency List End here -->
+
+<!-- FOS Agency & Employer list Start here -->
+<div *ngIf="(singledetailsview=='0')">
+    <div class="dash-head">
+        <p>Agent Detail</p>
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="singleback()">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+    </div>
+    <div class="col-md-12">
+        <div class="jd-detail job-wrapper searchResults ps-relative" *ngFor="let item of finaldatabyid">
+            <div class="job-view">
+                <div>
+                    <!-- <img src="{{item.image}}" alt="No Image"> -->
+                    <img class="img-thumbnail"
+                        src="{{ item.image!='' && item.image!=null?       item.image:'assets/images/NoImage.png'}}"
+                        onError="this.src='../assets/images/NoImage.png'">
+
+                </div>
+                <div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <p> <span class="text-strong">Agent Name : </span>{{item.agentname == null ?
+                                    'NA':item.agentname}} </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <p> <span class="text-strong"> Mobile No.: </span>{{item.mobileno ==null ?
+                                    'NA':item.mobileno}} </p>
+                            </div>
+                            <div class="col-md-7">
+                                <p> <span class="text-strong"> Email Id : </span>{{item.email == null ?
+                                    'NA':item.email}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <!-- <div class="col-md-5">
+                                <p> <span class="text-strong"> Business Nature : </span>{{item.businessnature == null ?
+                                    'NA': item.businessnature}} </p>
+                            </div> -->
+                            <div class="col-md-7">
+                                <p><span class="text-strong"> Address : </span>{{item.address == null ?
+                                    'NA':item.address}} </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <p> <span class="text-strong">State : </span>{{item.StateName=='' ?
+                                    'NA':item.StateName}}
+                                </p>
+                            </div>
+                            <div class="col-md-7">
+                                <p><span class="text-strong">District : </span>{{item.DistrictName==''
+                                    ?'NA':item.DistrictName}} </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="job-list-action card-view-btns">
+                            <a class="viewit" href="javascript:void(0)" (click)="SingleUseredit(item)"
+                                title="Edit">Edit</a>
+
+                            <a class="postit" href="javascript:void(0)" title="Update Password" data-toggle="modal"
+                                data-target="#myModal">Update Password</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dash-head dash-head-2">
+            <p>Employer Detail</p>
+        </div>
+        <div class="form-group" *ngIf="finaldatabyid1!=null">
+            <div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-5 p-r-0">
+                <div class="legends">
+                    <ul>
+                        <li><span class="l2"></span> Employer Approved</li>
+                        <li><span class="l3"></span> Employer Pending for approval</li>
+                        <li><span class="l1"></span> Employer Disapproved</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="finaldatabyid1==null" class="alert alert-warning">
+            No record found...
+        </div>
+        <div class="col-md-12">
+            <div class="all-jobs-list">
+                <div class="searchResults">
+                    <ul class="joblist-wrapper">
+                        <li *ngFor="let item of finaldatabyid1
+                        "
+                            class="job-wrapper ps-relative {{(item.IsApproved=='1'?'approved':'')|| (item.IsApproved=='0'?'disapproved':'') || (item.IsApproved==''?'posted':'')}}">
+                            <div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>Establishment Name : </strong>
+                                        <span>{{item.establishmentname==null?'NA':item.establishmentname}}</span></div>
+
+                                    <div class="col-md-6"><strong>Owner Name : </strong> <span>{{item.ownername==null?'NA':
+                                            item.ownername}}</span></div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>Email id : </strong>
+                                        <span>{{item.email==null?'NA':item.email}}</span></div>
+                                    <div class="col-md-6"><strong>Mobile No. : </strong>
+                                        <span>{{item.mobileno==null?'NA':item.mobileno}}</span></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-md-6"><strong>Business Nature : </strong>
+                                        <span>{{item.businessnature==null?'NA':item.businessnature}}</span></div>
+
+                                    <div class="col-md-6"><strong>No of Emloyee : </strong>
+                                        <span>{{item.NoOfEmloyee==null?'0':item.NoOfEmloyee}}</span></div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-md-6"><strong>Address : </strong>
+                                        <span>{{item.address==null?'NA':item.address}}</span></div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="job-list-action card-view-btns">
+                                    <!-- <a class="viewit" href="javascript:void(0)" (click)="getDetailsById(item.LoginId,item)"
+                                        title="View">View</a> -->
+                                    <a class="postit" href="javascript:void(0)" title="View" data-toggle="modal"
+                                        (click)="ViewUser(item)" data-target="#ViewUser">View</a>
+                                    <!-- <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(template,item.LoginId)"
+                                        title="Delete">Delete</a> -->
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #approveusertemplate>
+            <div class="modal-body text-center">
+                <p>Are you sure to Approve this Employer?</p>
+                <br />
+                <br />
+                <button type="button" class="btn yl-btn no-rd"
+                    (click)="ApproveDisapproveEmployer(agnetdatabyUserid,'approve')" id="modalhide">Yes</button>
+                <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+            </div>
+        </ng-template>
+
+        <ng-template #disapproveusertemplate>
+            <div class="modal-body text-center">
+                <p>Are you sure to Disapprove this Employer?</p>
+                <br />
+                <br />
+                <button type="button" class="btn yl-btn no-rd"
+                    (click)="ApproveDisapproveEmployer(agnetdatabyUserid,'disapprove')">Yes</button>
+                <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+            </div>
+        </ng-template>
+
+
+        <div class="modal fade" #popmodel id="ViewUser" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Employer Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>Establishment Name:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.establishmentname==null?'NA':agnetdatabyUserid.establishmentname"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.establishmentname ==
+                                            null ?
+                                            'NA':agnetdatabyUserid.establishmentname}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>Owner Name:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.ownername==null?'NA':agnetdatabyUserid.ownername"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.ownername == null ?
+                                            'NA':agnetdatabyUserid.ownername}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>Business Nature:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.businessnature==null?'NA':agnetdatabyUserid.businessnature"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.businessnature == null
+                                            ?
+                                            'NA':agnetdatabyUserid.businessnature}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>Email id:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.email==null?'NA':agnetdatabyUserid.email"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.email == null ?
+                                            'NA':agnetdatabyUserid.email}} </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>Mobile No.:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.mobileno==null?'NA':agnetdatabyUserid.mobileno"> -->
+
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.mobileno == null ?
+                                            'NA':agnetdatabyUserid.mobileno}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>No of Emloyee:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.noofemloyee==null?'NA':agnetdatabyUserid.noofemloyee"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.noofemloyee == null ?
+                                            'NA':agnetdatabyUserid.noofemloyee}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>State:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.statename==null?'NA':agnetdatabyUserid.statename"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.statename == null ?
+                                            'NA':agnetdatabyUserid.statename}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>District:</label>
+                                    </div>
+                                    <div class="col-md-6 col-sm-4">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.districtname==null?'NA':agnetdatabyUserid.districtname"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.districtname == null ?
+                                            'NA':agnetdatabyUserid.districtname}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4 text-right">
+                                        <label>Address:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- <input readonly type="text" class="form-control" [value]="agnetdatabyUserid.address==null?'NA':agnetdatabyUserid.address"> -->
+                                        <p> <span class="text-strong"></span>{{agnetdatabyUserid.address == null ?
+                                            'NA':agnetdatabyUserid.address}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button"
+                                    *ngIf="agnetdatabyUserid.IsApproved=='1'||agnetdatabyUserid.IsApproved==''"
+                                    class="btn btn-w-shadow no-rd btn postit"
+                                    (click)="PushedTemplated(disapproveusertemplate)">Disapprove</button>
+                                <button type="button"
+                                    *ngIf="agnetdatabyUserid.IsApproved=='0'||agnetdatabyUserid.IsApproved==''"
+                                    class="btn btn-w-shadow no-rd btn postit"
+                                    (click)="PushedTemplated(approveusertemplate)">Approve</button>
+                                <button type="button" class="btn btn-w-shadow no-rd" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FOS Agency & Employer list End here -->
+
+<!-- FOS Agency Update Start here -->
+<div *ngIf="(Editview=='0')">
+    <div>
+        <div class="legend-text" style="margin-top: 0">
+            <span>
+                Update Agent
+            </span>
+            <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="updateback()">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="cleafix margin-bottom-15"></div>
+        <div class="col-md-12">
+            <form [formGroup]="updatefosForm" (ngSubmit)="UpdateAgent(updatefosForm.value)">
+                <div class="edit-profile-wrapper">
+                    <div class="box-title ps-relative">
+                        <div class="job-list-action">
+                            <a class="viewit" href="javascript:void(0)" (click)="Close()" title="Close">Close</a>
+                        </div>
+                        <p class="box-title-content">
+                            Agent Details
+                        </p>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input class="form-control" type="text" formControlName="name" maxlength="100"
+                                    placeholder="Name">
+                                <span id="error_name" class="text-danger"></span>
+                                <errors [control]="updatefosForm.controls.name"></errors>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Email Id
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input name="email" class="form-control" type="text" formControlName="email" readonly
+                                    autocomplete="off" placeholder="Email Id" maxlength="100">
+                                <errors [control]="updatefosForm.controls.email"></errors>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Profile Pic
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-6 col-sm-6 file-upload">
+                                <input type="file" (change)="onUploadChange($event)">
+                                <p class="m-t-5"><b>Note:</b> File format should be JPG, JPEG, PNG and Max. size 2MB</p>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3 recruiter-logo">
+                                <a href="javascript:void(0)" *ngFor="let item of base64textString">
+                                    <img src="{{item!=''?item:'assets/images/NoImage.png'}}" />
+                                </a>
+                                <img src="{{imgSrc!=null?imgSrc:'assets/images/NoImage.png'}}" alt="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Mobile No.
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input name="mobile" class="form-control" type="text" formControlName="mobile"
+                                    maxlength="10" autocomplete="off" readonly placeholder="Mobile No.">
+                                <errors [control]="updatefosForm.controls.mobile"></errors>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Username
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <input formControlName="username" class="form-control" type="text" readonly
+                                    autocomplete="off" [readonly]="isReadOnly">
+                                <errors [control]="updatefosForm.controls.username"></errors>
+                                <span id="error_username" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Address
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <textarea formControlName="address" class="form-control" cols="10" rows="5"
+                                    maxlength="250" placeholder="Address"></textarea>
+                                <errors [control]="updatefosForm.controls.address"></errors>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    State
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-control" formControlName="state"
+                                    (change)="GetAllDistrict($event.target.value)">
+                                    <option value="" selected>--Select--</option>
+                                    <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+                                </select>
+
+                                <errors [control]="updatefosForm.controls.state"></errors>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    District
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-control" #val formControlName="district">
+                                    <option value="" selected="selected">--Select--</option>
+                                    <option *ngFor="let district of districts" [value]="district.ID">
+                                        {{district.DISTRICTNAME}}</option>
+                                </select>
+                                <errors [control]="updatefosForm.controls.district"></errors>
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Profile Pic
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+
+                              <input type="file" (change)="onUploadChange($event)" formControlName="profile_pic">
+
+                            </div>
+                            <img src="{{imgSrc!=null?imgSrc:'assets/images/NoImage.png'}}" alt="" />
+
+                        </div> -->
+
+
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group m-t-10">
+                        <div class="col-md-12 text-center">
+                            <!-- <button [disabled]="!temp && (!updatefosForm.valid || imagetypests==false || imagesizests==false)" class="btn btn-w-shadow no-rd">Update</button> -->
+
+                            <button [disabled]="!updatefosForm.valid || imagetypests==false || imagesizests==false"
+                                class="btn btn-w-shadow no-rd">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- FOS Agency Update End here -->
+
+<!--update Password Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button (click)="resetupdatepasswordForm()" type="button" class="close"
+                    data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Update Password</h4>
+            </div>
+            <div class="col-md-12">
+                <form [formGroup]="updatepasswordForm"
+                    (ngSubmit)="Updatepassword(updatepasswordForm.value,finaldatabyid)">
+                    <br><br>
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <label>
+                                New Password
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-6 ps-relative">
+                            <input formControlName="new_password" class="form-control" type="password"
+                                autocomplete="off">
+
+                            <errors [control]="updatepasswordForm.controls.new_password"></errors>
+
+                            <div class="hello-new1 right-10">
+                                <img class="tool-new-img" src="../../../assets/img/info.png" width="20">
+                                <p class="tool-new-pass">
+                                    Atleast 1 Digit.<br>
+                                    Atleast 1 small-case letter.<br>
+                                    Atleast 1 Capital letter.<br>
+                                    Atleast 1 Special character.<br>
+                                    Length should be between 6-24 characters.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="col-md-4 text-right">
+                            <label>
+                                Confirm Password
+                                <span class="mandatory">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-6">
+                            <input formControlName="confirm_password" class="form-control" type="password"
+                                autocomplete="off">
+
+                            <errors [control]="updatepasswordForm.controls.confirm_password"></errors>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group m-t-10">
+                            <div class="col-md-12 text-center">
+                                <button [disabled]="!updatepasswordForm.valid"
+                                    class="btn btn-w-shadow no-rd">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #activetemplate>
+    <div class="modal-body text-center">
+        <p>Are you sure to Active this Agent?</p>
+        <br />
+        <br />
+        <button type="button" class="btn yl-btn no-rd" (click)="ActiveInactiveAgent()">Yes</button>
+        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+    </div>
+</ng-template>
+
+<ng-template #inactivetemplate>
+    <div class="modal-body text-center">
+        <p>Are you sure to Inactive this Agent?</p>
+        <br />
+        <br />
+        <button type="button" class="btn yl-btn no-rd" (click)="ActiveInactiveAgent()">Yes</button>
+        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+    </div>
+</ng-template>

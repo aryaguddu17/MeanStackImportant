@@ -1,0 +1,33 @@
+<nav class="navbar navbar-default admin-header">
+    <div class="container-fluid row">
+        <div class="col-md-4 col-sm-5 col-xs-4">
+
+            <div class="admin-logo">
+                <a href="javascript:void(0)">
+                    <span class="hidden-xs"><img src="assets/images/rojgaar-logo.png" alt="image" /></span>
+                    <span class="visible-xs"><img src="assets/images/rojgaar-xs-logo.png" alt="image" /></span>
+                </a>
+            </div>
+            <a href="javascript:void(0)" id="sidebarCollapse" class="navbar-btn" title="Toggle Sidemenu">
+                <i class="glyphicon glyphicon-align-left"></i>
+                <span></span>
+            </a>
+        </div>
+        <div class="col-md-8 col-sm-7 col-xs-8">
+            <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- <li><a href="javascript:void(0)" (click)="logout()"><span class="hidden-xs">Welcome</span> <b>{{fname}}</b></a></li> -->
+
+                    <li><a href="javascript:void(0)" [routerLink]="'/Dashboard'"><span class="hidden-xs">Welcome</span>
+                            <b>{{fname}}</b></a></li>
+
+
+                    <li><a title="Dashboard" href="javascript:void(0)" [routerLink]="'/Dashboard'"><i aria-hidden="true"
+                                class="fa fa-home m-t-5"></i></a></li>
+                    <li><a title="Logout" href="javascript:void(0)" (click)="logout()"><i class="fa fa-power-off m-t-5"></i>
+                            <span class="hidden-xs"></span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

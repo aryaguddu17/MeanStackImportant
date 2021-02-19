@@ -1,0 +1,158 @@
+<div class="dash-head">
+    <p>
+        <span *ngIf="(filtershow=='1')">Feedback List</span>
+        <span *ngIf="(filtershow!='1')">Feedback Detail</span>
+    </p>
+    <span *ngIf="(hide1=='0')">
+        <a href="javascript:void(0)" (click)="previous()" class="btn pull-right btn-back-reg">
+            Back
+        </a>
+    </span>
+</div>
+
+<!-- <div *ngIf="(filtershow=='1')"> -->
+<div [ngClass]="(filtershow=='1')?'show':'hide'">
+    <div class="page-filters">
+        <h2>
+            <a href="javascript:void(0);">
+                <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            </a>
+        </h2>
+        <form (submit)="allfeedbackdata(0,'',FilterFeedbackview.value)" [formGroup]="FilterFeedbackview">
+            <div class="filter-wrapper">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4">
+                        <label>From Date<span></span></label>
+                        <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="fromdate"
+                             [maxDate]="maxDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}" (bsValueChange)="MinDate($event);"
+                            bsDatepicker>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <label>To Date<span></span></label>
+                        <input readonly type="text" placeholder="Select Date" class="form-control" formControlName="todate"
+                            [minDate]="minDate" (bsValueChange)="MaxDate($event);" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY',showWeekNumbers:false}"
+                            bsDatepicker>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <label>Search Keywords<span></span></label>
+                        <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+                    </div>
+                </div>
+                <div class="form-group text-center m-t-5">
+                        <button type="reset" class="btn btn-w-shadow no-rd filter-toggle" (click)="resetcall()">Reset</button>
+                    <button type="submit" class="btn btn-w-shadow no-rd filter-toggle">Search</button>
+                   
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="(show1=='1')">
+    <!-- {{allfeedbackdatashowres|json}} -->
+    <div class="col-md-12">
+        <div class="all-jobs-list">
+            <div class="searchResults" id="">
+                  
+                <ul class="joblist-wrapper">
+                       
+                    <li class="job-wrapper ps-relative" *ngFor="let item of allfeedbackdatashowres"
+                        [style.background-color]="item.ID==id ? '#d4d0d0' : 'none' ">
+                        <!-- <div>{{item.COMPANYNAME?'':'No record'}}</div> -->
+                        <h2 class="job-title lang-ellip"><span title={{item.COMPANYNAME}}> {{item.COMPANYNAME?item.COMPANYNAME:'NA'}}</span></h2>
+                       
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6 lang-ellip"><strong>Name : </strong> {{item.NAME?item.NAME:'NA'}}</div> 
+                                <div class="col-md-6 "><strong>Mobile : </strong> {{item.PHONENO?item.PHONENO:'NA'}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6 lang-ellip"><strong>Email : </strong><span title={{item.EMAIL}}> {{item.EMAIL?item.EMAIL:'NA'}}</span></div>
+                                <div class="col-md-6"><strong>Login Type : </strong> {{item.USERTYPE?item.USERTYPE:'NA'}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6"><strong>Posted on : </strong> {{item.CREATEDDATE?item.CREATEDDATE:'NA'}}</div>
+                                <div class="col-md-6"><strong>Time : </strong> {{item.CREATEDTIME?item.CREATEDTIME:'NA'}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6"><strong>Feedback For : </strong> {{item.FEEDBACKTYPE?item.FEEDBACKTYPE:'NA'}}</div>
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="job-list-action card-view-btns">
+                                <a class="viewit" href="javascript:void(0)" (click)="viewfeedbackdata(item.ID)" title="View">View</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="(hide1=='0')">
+    <!-- {{allfeedbackviewdatashow|json}} -->
+    <div *ngFor="let item of allfeedbackviewdatashow">
+        <div class="col-md-12">
+            <div class="searchResults" id="">
+                <ul class="joblist-wrapper">
+                    <li class="job-wrapper ps-relative">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4 ">
+                                    <p> <span class="text-strong">Company Name:</span><span title={{item.COMPANYNAME}}> {{item.COMPANYNAME?item.COMPANYNAME:'NA'}} </span></p>
+                                </div>
+                                <div class="col-md-4 lang-ellip">
+                                    <p> <span class="text-strong">Name:</span> <span title={{item.NAME}}>{{item.NAME?item.NAME:'NA'}}</span></p>
+                                </div>
+                                <div class="col-md-4 lang-ellip">
+                                    <p> <span class="text-strong">Email:</span><span title={{item.EMAIL}}>{{item.EMAIL?item.EMAIL:'NA'}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p> <span class="text-strong">User Type:</span> {{item.USERTYPE?item.USERTYPE:'NA'}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> <span class="text-strong">Mobile:</span> {{item.PHONENO?item.PHONENO:'NA'}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> <span class="text-strong">Landline no:</span> {{item.LANDLINENO?item.LANDLINENO:'NA'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p> <span class="text-strong">Posted on:</span> {{item.CREATEDDATE?item.CREATEDDATE:'NA'}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> <span class="text-strong"> Time:</span> {{item.CREATEDTIME?item.CREATEDTIME:'NA'}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> <span class="text-strong"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <p><span class="text-strong">Feedback:</span> <span title={{item.FEEDBACK}}>{{item.FEEDBACK?item.FEEDBACK:'NA'}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

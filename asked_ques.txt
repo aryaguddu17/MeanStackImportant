@@ -1,0 +1,28 @@
+1) What is fat arrow? Write a program.
+2) Difference between Function Declarations and Function Expressions
+function declaration is used to reusable code and less coding while function expression used to data binding porpose
+
+
+
+
+5) Write program with async await?
+async await is used by obserable to get latest value it has emited.
+exp:
+
+6) What is IIFE?
+
+
+-Fork
+-isNaN in detail
+-es6 feature
+-browsermodule and common module
+-ng-template and ng-container
+-how to lazy loading and it configuration
+-dynamic lazy loading and lazyloading
+-boxmodal css
+-class and id selector in css
+-data on behalf of rol ? 20 and name like start with "a"
+-increase api call fast and improve performance of website
+-firebase
+-proxy
+

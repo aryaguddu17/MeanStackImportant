@@ -1,0 +1,374 @@
+<div *ngIf="(formview=='0')">
+    <div>
+        <div class="legend-text" style="margin-top: 0">
+            <span>
+                User Register
+            </span>
+            <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="Back()">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="cleafix margin-bottom-15"></div>
+        <div class="col-md-12">
+            <form name="myform" [formGroup]="rForm" (ngSubmit)="UserRegistration(rForm.value)">
+                <div class="edit-profile-wrapper">
+                    <div class="box-title ps-relative">
+                        <div class="job-list-action">
+                            <a class="viewit" href="javascript:void(0)" (click)="Close()" title="Close">Close</a>
+                        </div>
+                        <p class="box-title-content">
+                            User Management Details
+                        </p>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="name" name="name" class="form-control" type="text" data-validation="name"
+                                    formControlName="name" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                    maxlength="100" autocomplete="off" placeholder="Name">
+                                <span id="error_name" class="text-danger"></span>
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.name"></errors>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Email
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="email" name="email" class="form-control" type="email" data-validation="email"
+                                    formControlName="email" (keyup)="Emailcheck($event)" autocomplete="off" onPaste="return false"
+                                    maxlength="100" placeholder="Email">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.email"></errors>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Mobile
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="mobile" name="mobile" class="form-control" type="text" data-validation="mobile"
+                                    formControlName="mobile" maxlength="10" (keypress)="onlyNumber($event)" (change)="Mobilecheck($event)"
+                                    autocomplete="off" onPaste="return false" placeholder="Mobile">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.mobile"></errors>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Username
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="username" name="username" class="form-control" type="text" data-validation="username"
+                                    formControlName="username" (change)="Usernamecheck($event)" autocomplete="off"
+                                    maxlength="100" placeholder="Username">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.username"></errors>
+                                </div>
+                                <span id="error_username" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Designation
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="designation" name="designation" class="form-control" type="text"
+                                    data-validation="designation" formControlName="designation" autocomplete="off"
+                                    oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                    maxlength="100" placeholder="Designation">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.designation"></errors>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group m-t-10">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div [ngClass]="cardview=='1'?'show':'hide'">
+    <div>
+        <div class="dash-head" style="margin-top: 0">
+            <p>
+                User Management List
+            </p>
+            <a href="javascript:void(0)" (click)="UserRegister()" class="btn pull-right btn-back-reg">
+                User Register
+            </a>
+        </div>
+
+        <div class="page-filters">
+            <h2>
+                <a href="javascript:void(0);">
+                    <i class="fa fa-filter" aria-hidden="true"></i> Apply Filters
+                    <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                </a>
+            </h2>
+            <form [formGroup]="FilterUsers">
+                <div class="filter-wrapper">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-4">
+                            <label>Email<span></span></label>
+                            <input type="text" class="form-control" formControlName="Email" placeholder="Email" />
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Mobile<span></span></label>
+                            <input type="text" class="form-control" formControlName="Mobile" placeholder="Mobile"
+                                (keypress)="onlyNumber($event)" maxlength="10" />
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Search Keywords<span></span></label>
+                            <input type="text" class="form-control" formControlName="JobKeyword" placeholder="Search" />
+                        </div>
+                    </div>
+                    <div class="form-group text-center m-t-5">
+                        <button type="reset" class="btn btn-w-shadow no-rd" (click)="ResetUser()">Reset</button>
+                        <button type="submit" class="btn btn-w-shadow no-rd filter-toggle" (click)="AllUserRegistrationDetails(0,'',FilterUsers.value)">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-12">
+            <div class="all-jobs-list">
+                <div class="searchResults" id="">
+                <div *ngIf="norecord"> No Record Found..</div>
+                    <ul class="joblist-wrapper">
+                        <li class="job-wrapper ps-relative" *ngFor="let item of alluserdetail" [style.background-color]="item.ID==id ? '#d4d0d0' : 'none' ">
+                            <h2 class="job-title  lang-ellip" *ngIf="item.FIRSTNAME!='' ||item.FIRSTNAME!=null" title={{item.FIRSTNAME}}>{{item.FIRSTNAME}} </h2>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6 lang-ellip"><strong>Username : </strong><span title={{item.USERNAME}}>{{item.USERNAME}}</span>
+                                    </div>
+                                    <div class="col-md-6 lang-ellip"><strong>Email : </strong><span title={{item.EMAIL}}>{{item.Email}}
+                                        </span></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6"><strong>Mobile : </strong><span title={{item.PHONENO}}>
+                                            {{item.PHONENO}}</span></div>
+                                    <div class="col-md-6 lang-ellip"><strong>Designation : </strong><span title={{item.DESIGNATION}}>{{item.DESIGNATION}}
+                                        </span></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <ng-template #templateinactive>
+                                    <div class="modal-body text-center">
+                                        <p>Are you sure you want to Inactive this User?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd" (click)="ActiveInactiveeuser(item.ID,item.ISACTIVE)">Yes</button>
+                                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #templateactive>
+                                    <div class="modal-body text-center">
+                                        <p>Are you sure you want to Active this User?</p>
+                                        <br />
+                                        <br />
+                                        <button type="button" class="btn yl-btn no-rd" (click)="ActiveInactiveeuser(item.ID,item.ISACTIVE)">Yes</button>
+                                        <button type="button" (click)="declineBox()" class="btn bl-btn no-rd">No</button>
+                                    </div>
+                                </ng-template>
+                                <div class="job-list-action card-view-btns">
+                                    <!-- <a class="viewit" href="javascript:void(0)" (click)="SingleUserRegistrationDetails(item.ID)"
+                                        title="View">View</a> -->
+                                    <a class="viewit" href="javascript:void(0)" (click)="SingleUseredit(item.ID,item.ISACTIVE)"
+                                        title="Edit" *ngIf="item.ISACTIVE==1">Edit</a>
+                                    <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(templateinactive)"
+                                        *ngIf="item.ISACTIVE==1 && item.ID != Adminid" title="Inactive">Inactive</a>
+                                    <a class="postit" href="javascript:void(0)" (click)="PushedTemplate(templateactive)"
+                                        *ngIf="item.ISACTIVE==0 && item.ID != Adminid" title="Active">Active</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="(singledetailsview=='0')">
+    <div class="dash-head">
+        <p>User Details</p>
+        <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="singleback()">Back
+        </a>
+    </div>
+    <div class="col-md-12">
+        <div class="jd-detail job-wrapper searchResults ps-relative" *ngFor="let item of singleuserdetail">
+            <div class="job-list-action">
+                <a class="viewit" href="javascript:void(0)" (click)="SingleUseredit(item.ID,item.ISACTIVE)" title="Edit">Edit</a>
+            </div>
+            <h4>User Details</h4>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <p> <span class="text-strong">Name:</span><span>{{item.FIRSTNAME}}</span> </p>
+                </div>
+                <div class="col-md-4">
+                    <p> <span class="text-strong"> Username:</span><span>{{item.USERNAME}} </span></p>
+                </div>
+                <div class="col-md-4">
+                    <p> <span class="text-strong"> Mobile:</span><span>{{item.PHONENO}}</span> </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <p><span class="text-strong"> Email:</span><span>{{item.EMAIL}} </span></p>
+                </div>
+                <div class="col-md-4">
+                    <p><span class="text-strong"> Designation:</span><span>{{item.DESIGNATION}}</span> </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="(Editview=='0')">
+    <div>
+        <div class="legend-text" style="margin-top: 0">
+            <span>
+                Update User
+            </span>
+            <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="updateback()">Back
+            </a>
+        </div>
+        <div class="cleafix margin-bottom-15"></div>
+        <div class="col-md-12">
+            <form name="myform" [formGroup]="rForm" (ngSubmit)="Updateuser(rForm.value)">
+                <div class="edit-profile-wrapper">
+                    <div class="box-title ps-relative">
+                        <div class="job-list-action">
+                            <a class="viewit" href="javascript:void(0)" (click)="updateback()" title="Close">Close</a>
+                        </div>
+                        <p class="box-title-content">
+                            User Management Details
+                        </p>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="name" name="name" class="form-control" type="text" data-validation="name"
+                                    formControlName="name" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');"
+                                    maxlength="100" autocomplete="off" placeholder="Name">
+                                <span id="error_name" class="text-danger"></span>
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.name"></errors>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Email
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="email" name="email" class="form-control" type="email" data-validation="email"
+                                    formControlName="email" (keyup)="Emailcheck($event)" maxlength="100" autocomplete="off"
+                                    onPaste="return false" placeholder="Email">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.email"></errors>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Mobile
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="mobile" name="mobile" class="form-control" type="text" data-validation="mobile"
+                                    formControlName="mobile" maxlength="10" (keypress)="onlyNumber($event)" (change)="Mobilecheck($event)"
+                                    autocomplete="off" onPaste="return false" placeholder="Mobile">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.mobile"></errors>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Username
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="username" name="username" class="form-control" type="text" data-validation="username"
+                                    formControlName="username" maxlength="100" (change)="Usernamecheck($event)"
+                                    autocomplete="off" readonly placeholder="Username">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.username"></errors>
+                                </div>
+                                <span id="error_username" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Designation
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="designation" name="designation" maxlength="100" class="form-control" type="text"
+                                    data-validation="designation" formControlName="designation" autocomplete="off"
+                                    oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');" placeholder="Designation">
+                                <div class="alert">
+                                    <errors [control]="rForm.controls.designation"></errors>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group m-t-10">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

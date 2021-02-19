@@ -1,0 +1,286 @@
+<style>
+
+    .btn {
+        margin-right: 7px;
+    }
+</style>
+<div>
+    <!-- class="legend-text"  -->
+    <div class="dash-head">
+        <p>User Details</p>
+        <!-- <span>Company Registration</span> -->
+        <!--<a href="javascript:void(0)" (click)="EditCompanyRegis()" *ngIf="(EditButton=='1')" class="btn pull-right btn-back-reg">
+            Edit
+        </a>-->
+        <!-- <a href="javascript:void(0)" class="btn pull-right btn-back-reg" [routerLink]="'/Register'"> -->
+            <a href="javascript:void(0)" class="btn pull-right btn-back-reg" (click)="BackToRegistration()">            
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
+<div *ngIf="(RegistrationView=='1')" class="col-md-12">    
+    <div class="jd-detail job-wrapper searchResults ps-relative" *ngFor="let item of companyregisterdatashow">
+
+        <div class="job-list-action" *ngIf="(item.ISVERIFIED=='0')">
+            <a class="viewit" href="javascript:void(0)" (click)="EditCompanyRegis()" *ngIf="(EditButton=='1')" title="Edit">Edit</a> 
+
+            <!-- <button type="button"  class="btn btn-w-shadow no-rd" (click)="EditCompanyRegis()" [disabled]="(item.ISVERIFIED=='1')">Edit</button>             -->
+        </div>
+        <h4>User Details</h4>
+        <div class="form-group">
+            <div class="col-md-4">
+                <p> <span class="text-strong">Company Name:</span> {{item.COMPANYNAME}}</p>
+            </div>
+            <div class="col-md-4">
+                <p> <span class="text-strong"> Name:</span> {{item.FIRSTNAME}}</p>
+            </div>
+            <div class="col-md-4">
+                <p> <span class="text-strong"> Login Type:</span> {{item.LOGINTYPE}}</p>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                <p><span class="text-strong"> Email:</span> {{item.EMAIL}}</p>
+            </div>
+            <div class="col-md-4">
+                <p><span class="text-strong"> Mobile:</span> {{item.PHONENO}}</p>
+            </div>
+            <div class="col-md-4">
+                <p> <span class="text-strong"> Username:</span> {{item.USERNAME}}</p>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                <p><span class="text-strong"> Designation:</span> {{item.DESIGNATION}}</p>
+            </div>
+            <div class="col-md-4">
+                <p><span class="text-strong"> GSTN:</span> {{item.GSTNO}}</p>
+            </div>
+            <div class="col-md-4">
+                <p> <span class="text-strong"> Pancard:</span> {{item.PANCARD}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                <p> <span class="text-strong"> State:</span> {{item.STATENAME}}</p>
+            </div>
+            <div class="col-md-4">
+                <p> <span class="text-strong"> District:</span> {{item.DISTRICTNAME}}</p>
+            </div>
+        </div>
+        <div class="col-md-12 m-t-10 text-center">
+            <button type="button" class="btn btn-w-shadow no-rd" (click)="ApproveCompany()" [disabled]="(item.ISVERIFIED=='1')">{{item.ISVERIFIED=='1'?'Verified':'Verify'}}</button>
+            <button type="button"  class="btn btn-w-shadow no-rd" (click)="DisapproveCompany()" [disabled]="(item.ISVERIFIED=='0')">Not Verified</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="(RegistrationUpdate=='0')">
+    <div *ngFor="let item of companydata">
+        <div class="col-md-12">
+            <!-- </div> *ngIf="(profileshow1==0)"> -->
+            <form name="myform" [formGroup]="rForm" (ngSubmit)="Registration(rForm.value)">
+                <div class="edit-profile-wrapper">
+                    <div class="box-title ps-relative">
+                        <div class="job-list-action">
+                            <!----><a class="viewit" href="javascript:void(0)" (click)="Back()" title="Close">Close</a>
+                        </div>
+                        <p class="box-title-content">
+                            Company Details
+
+                        </p>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Company Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="cname" name="cname" class="form-control" type="text" data-validation="cname" formControlName="cname" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?]/g, '').replace(/(\..*)\./g, '$1');" maxlength="100">
+                                <!-- <div class="alert" *ngIf="!rForm.controls['cname'].valid && rForm.controls['cname'].touched">{{"Company name "+titleAlert }}</div> -->
+                                <div class="alert">	<errors [control]="rForm.controls.cname"></errors></div>
+                                <span id="error_cname" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>Login Type	<span class="mandatory">*</span></label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <select class="form-control" formControlName="logintype" [(ngModel)]="item.LOGINTYPE">
+                                    <option value="" selected>--Select--</option>
+                                    <option value="Agency">Agency</option>
+                                    <option value="Employer">Employer</option>
+                                </select>
+                                <!-- <div class="alert" *ngIf="!rForm.controls['logintype'].valid && rForm.controls['logintype'].touched">{{"Login Type "+titleAlert }}</div> -->
+                                <div class="alert">	<errors [control]="rForm.controls.logintype"></errors></div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Name
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="firstname" name="firstname" class="form-control" type="text" data-validation="required" formControlName="firstname" oninput="this.value = this.value.replace(/[!@#$%\^&*()+=\-\[\]\\';,/{}|\\':<>\?'0-9']/g, '').replace(/(\..*)\./g, '$1');" [(ngModel)]="item.FIRSTNAME">
+                                <!-- <div class="alert" *ngIf="!rForm.controls['firstname'].valid && rForm.controls['firstname'].touched">{{"First name "+titleAlert }}</div> -->
+                                <div class="alert">	<errors [control]="rForm.controls.firstname"></errors></div>
+                                <span id="error_firstname" class="text-danger"></span>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Designation
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="Designation" name="Designation" class="form-control" type="text" data-validation="Designation" formControlName="Designation" [(ngModel)]="item.DESIGNATION">
+                                <!-- <div class="alert" *ngIf="!rForm.controls['Designation'].valid && rForm.controls['gst'].touched">{{"Designation "+titleAlert }}</div> -->
+                                <div class="alert">	<errors [control]="rForm.controls.Designation"></errors></div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Email
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="email" name="email" class="form-control" type="email" data-validation="email" formControlName="email" (change)="emailcheck($event)" [(ngModel)]="item.EMAIL">
+
+                                <div class="alert"><errors [control]="rForm.controls.email"></errors></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Mobile
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="mobile" name="mobile" class="form-control" type="text" data-validation="mobile" formControlName="mobile" maxlength="10" minlength="10" (keypress)="onlyNumber($event)" (change)="mobilecheck($event)" [(ngModel)]="item.PHONENO">
+                                <!-- <div class="alert" *ngIf="!rForm.controls['mobile'].valid && rForm.controls['mobile'].touched">{{"Mobile "+titleAlert }}</div> -->
+                                <div class="alert">	<errors [control]="rForm.controls.mobile"></errors></div>
+
+                                <span id="error_mobile" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Username
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="username" name="username" class="form-control" type="text" data-validation="username" formControlName="username" (change)="usernamecheck($event)" [(ngModel)]="item.USERNAME" readonly>
+                                <!-- <div class="alert" *ngIf="!rForm.controls['username'].valid && rForm.controls['username'].touched">{{"Username "+titleAlert }}</div> -->
+                                <div class="alert">	<errors [control]="rForm.controls.username"></errors></div>
+                                <span id="error_username" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Password
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="password" name="password" class="form-control" type="password" data-validation="password" formControlName="password" [(ngModel)]="item.USERPASSWORD" readonly>
+                                
+                                <div class="alert">	<errors [control]="rForm.controls.password"></errors></div>
+                                <span id="error_password" class="text-danger"></span>
+
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                   GSTN
+                                    <!-- <span class="mandatory">*</span> -->
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="gst" name="gst" class="form-control" type="text" data-validation="gst" formControlName="gst" (change)="gstncheck($event)" [(ngModel)]="item.GSTNO"   [attr.disabled]="!(isGst=='' || isGst=='false')? false : null">
+
+                                <div class="alert"><errors [control]="rForm.controls.gst"></errors></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    Pancard
+                                    <!-- <span class="mandatory">*</span> -->
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <input id="pancard" name="pancard" class="form-control" type="text" data-validation="pancard" formControlName="pancard" (change)="pancheck($event)" [(ngModel)]="item.PANCARD"   [attr.disabled]="!(isPan=='' || isPan=='false')? false : null">
+
+                                <!-- <span id="error_pancard" class="text-danger"></span> -->
+                                <div class="alert">	<errors [control]="rForm.controls.pancard"></errors></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    State
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+
+                            <div class="col-md-9 alert-boxing">
+                                <select class="form-control" required formControlName="StateiD" (change)="GetAllDistrict($event.target.value)">
+                                    <option value="" selected>--Select--</option>
+                                    <option *ngFor="let st of states" [value]="st.ID">{{st.STATENAME}}</option>
+                                </select>
+                                <div class="alert">	<errors [control]="rForm.controls.StateiD"></errors></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 text-right">
+                                <label>
+                                    District
+                                    <span class="mandatory">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-9 alert-boxing">
+                                <select class="form-control" #val required formControlName="DistrictID">
+                                    <option value="" selected="selected">--Select--</option>
+                                    <option *ngFor="let district of district1" [value]="district.ID">{{district.DISTRICTNAME}}</option>
+                                </select>
+                                <div class="alert">	<errors [control]="rForm.controls.DistrictID"></errors></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group m-t-10">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-w-shadow no-rd">Update</button>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
